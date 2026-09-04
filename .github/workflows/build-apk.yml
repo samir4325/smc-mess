@@ -34,13 +34,18 @@ jobs:
       - name: Build Debug APK
         run: |
           cd android
-          ./gradlew assembleDebug --stacktrace 2>&1 | tee ../gradle_build.log
+          ./gradlew assembleDebug --stacktrace > ../gradle_build.log 2>&1 || BUILD_FAILED=1
+          cat ../gradle_build.log
+          if [ "$BUILD_FAILED" = "1" ]; then
+            echo "Gradle build failed!"
+            exit 1
+          fi
 
-      - name: Upload Build Log on Failure
-        if: failure()
+      - name: Upload Build Log
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: gradle_error_log
+          name: gradle_build_log
           path: gradle_build.log
 
       - name: Locate and Copy APK
