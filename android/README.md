@@ -1,4 +1,4 @@
-﻿# 📱 SMC GEC Palanpur — Android Application
+# 📱 SMC GEC Palanpur — Android Application
 
 Production-ready native Android wrapper for the **Hostel Students Mess Committee (SMC), Government Engineering College, Palanpur**.
 

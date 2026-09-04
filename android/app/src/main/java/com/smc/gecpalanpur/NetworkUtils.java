@@ -1,4 +1,4 @@
-﻿package com.smc.gecpalanpur;
+package com.smc.gecpalanpur;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
