@@ -41,12 +41,16 @@ jobs:
             exit 1
           fi
 
-      - name: Upload Build Log
+      - name: Commit Log to debug-build-log Branch
         if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: gradle_build_log
-          path: gradle_build.log
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git checkout -B debug-build-log
+          cp gradle_build.log ./build_result.txt
+          git add build_result.txt
+          git commit -m "Upload build log [skip ci]" || true
+          git push origin debug-build-log --force
 
       - name: Locate and Copy APK
         run: |
