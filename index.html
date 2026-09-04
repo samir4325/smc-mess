@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SMC â€” Hostel Students Mess Committee | GEC Palanpur</title>
+  <title>SMC — Hostel Students Mess Committee | GEC Palanpur</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -83,7 +83,7 @@
       .card { border-radius: 0.625rem; }
     }
 
-    /* Responsive table wrapper â€” horizontal scroll on mobile */
+    /* Responsive table wrapper — horizontal scroll on mobile */
     .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
     .table-responsive table { min-width: 560px; }
 
@@ -107,12 +107,12 @@
       .stat-grid { grid-template-columns: repeat(2, 1fr) !important; }
     }
 
-    /* Admin sidebar â€” ensure content scrolls independently on mobile */
+    /* Admin sidebar — ensure content scrolls independently on mobile */
     @media (max-width: 1023px) {
       main { height: calc(100dvh - 57px); overflow-y: auto; }
     }
 
-    /* Non-admin horizontal nav â€” hide scrollbar but keep scroll */
+    /* Non-admin horizontal nav — hide scrollbar but keep scroll */
     nav { scrollbar-width: none; -ms-overflow-style: none; }
     nav::-webkit-scrollbar { display: none; }
 
@@ -444,7 +444,7 @@
       el.className = `fixed bottom-5 right-5 z-50 px-4 py-3 rounded-lg shadow-xl text-white font-medium text-sm flex items-center gap-2 transform transition-all duration-300 ${
         type === 'success' ? 'bg-emerald-600' : type === 'error' ? 'bg-red-600' : type === 'warning' ? 'bg-amber-600' : 'bg-blue-600'
       }`;
-      el.innerHTML = `<span>${type === 'success' ? 'âœ“' : type === 'error' ? 'âœ•' : 'â„¹'}</span> <span>${msg}</span>`;
+      el.innerHTML = `<span>${type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ'}</span> <span>${msg}</span>`;
       document.body.appendChild(el);
       setTimeout(() => { el.style.opacity = '0'; setTimeout(() => el.remove(), 300); }, 3500);
     }
@@ -520,37 +520,37 @@
         cancelled: 'bg-red-100 text-red-800',
       };
       const label = {
-        in_stock: 'ðŸŸ¢ In Stock',
-        low_stock: 'ðŸŸ¡ Low Stock',
-        out_of_stock: 'ðŸ”´ Out of Stock',
-        paid: 'âœ… Paid',
-        partially_paid: 'ðŸŸ¡ Partial Paid',
+        in_stock: '🟢 In Stock',
+        low_stock: '🟡 Low Stock',
+        out_of_stock: '🔴 Out of Stock',
+        paid: '✅ Paid',
+        partially_paid: '🟡 Partial Paid',
         pending: 'Pending',
-        pending_approval: 'â³ Pending Admin Approval',
-        pending_admin_approval: 'â³ Pending Admin Approval',
-        completed: 'âœ“ Approved / Issued',
-        pending_verification: 'â³ Pending Verification',
-        approved: 'âœ“ Approved',
+        pending_approval: '⏳ Pending Admin Approval',
+        pending_admin_approval: '⏳ Pending Admin Approval',
+        completed: '✓ Approved / Issued',
+        pending_verification: '⏳ Pending Verification',
+        approved: '✓ Approved',
         ordered: 'Ordered',
         partially_received: 'Partial Received',
         fully_received: 'Fully Received',
-        verified: 'âœ“ Verified',
-        forwarded_for_payment: 'âœ“ Verified & Forwarded',
-        rejected: 'âœ• Rejected',
+        verified: '✓ Verified',
+        forwarded_for_payment: '✓ Verified & Forwarded',
+        rejected: '✕ Rejected',
         open: 'Open',
         resolved: 'Resolved',
         active: 'Active',
         inactive: 'Inactive',
         // Procurement
-        market_research: 'ðŸ” Market Research',
-        rfq_sent: 'ðŸ“¤ RFQ Sent',
-        quotations_received: 'ðŸ“¨ Quotations Received',
-        comparative_done: 'ðŸ“Š Comparative Done',
-        vendor_selected: 'âœ… Vendor Selected',
-        negotiation: 'ðŸ¤ Negotiation',
-        contract_signed: 'ðŸ“ Contract Signed',
-        procurement_completed: 'ðŸŽ‰ Completed',
-        cancelled: 'âœ• Cancelled',
+        market_research: '🔍 Market Research',
+        rfq_sent: '📤 RFQ Sent',
+        quotations_received: '📨 Quotations Received',
+        comparative_done: '📊 Comparative Done',
+        vendor_selected: '✅ Vendor Selected',
+        negotiation: '🤝 Negotiation',
+        contract_signed: '📝 Contract Signed',
+        procurement_completed: '🎉 Completed',
+        cancelled: '✕ Cancelled',
       }[status] || status;
 
       return <span className={`badge ${styles[status] || 'bg-gray-100 text-gray-700'}`}>{label}</span>;
@@ -625,18 +625,18 @@
             <div className="w-full max-w-md">
               <div className="text-center mb-6 text-white">
                 <div className="w-16 h-16 bg-white/10 backdrop-blur rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-xl border border-white/20">
-                  <span className="text-3xl">ðŸ²</span>
+                  <span className="text-3xl">🍲</span>
                 </div>
                 <h1 className="text-2xl font-extrabold tracking-tight">SMC Management Portal</h1>
-                <p className="text-primary-200 text-xs font-medium mt-1">Hostel Students Mess Committee Â· GEC Palanpur</p>
+                <p className="text-primary-200 text-xs font-medium mt-1">Hostel Students Mess Committee · GEC Palanpur</p>
                 <div className="inline-flex items-center gap-1.5 mt-2.5 bg-emerald-500/20 text-emerald-300 px-3 py-1 rounded-full text-xs border border-emerald-400/30 font-medium">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> ðŸŸ¢ Cloud Database Live
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> 🟢 Cloud Database Live
                 </div>
               </div>
               <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-white/10">
                 <div className="flex border-b border-gray-100">
-                  <button onClick={() => setLoginTab('committee')} className={`flex-1 py-3.5 text-sm font-semibold transition-colors ${loginTab === 'committee' ? 'bg-primary-50 text-primary-700 border-b-2 border-primary-600' : 'text-gray-500 hover:bg-gray-50'}`}>ðŸ‘¥ Committee Login</button>
-                  <button onClick={() => setLoginTab('admin')} className={`flex-1 py-3.5 text-sm font-semibold transition-colors ${loginTab === 'admin' ? 'bg-primary-50 text-primary-700 border-b-2 border-primary-600' : 'text-gray-500 hover:bg-gray-50'}`}>ðŸ›¡ï¸ Admin Login</button>
+                  <button onClick={() => setLoginTab('committee')} className={`flex-1 py-3.5 text-sm font-semibold transition-colors ${loginTab === 'committee' ? 'bg-primary-50 text-primary-700 border-b-2 border-primary-600' : 'text-gray-500 hover:bg-gray-50'}`}>👥 Committee Login</button>
+                  <button onClick={() => setLoginTab('admin')} className={`flex-1 py-3.5 text-sm font-semibold transition-colors ${loginTab === 'admin' ? 'bg-primary-50 text-primary-700 border-b-2 border-primary-600' : 'text-gray-500 hover:bg-gray-50'}`}>🛡️ Admin Login</button>
                 </div>
                 {loginTab === 'committee' ? (
                   <form onSubmit={handleCommitteeLogin} className="p-6 space-y-4">
@@ -648,7 +648,7 @@
                 ) : (
                   <form onSubmit={handleAdminLogin} className="p-6 space-y-4">
                     <div><label className="form-label">Admin Username</label><input type="text" value={adminUser} onChange={e => setAdminUser(e.target.value)} className="form-input" placeholder="Enter admin username" required autoComplete="off" /></div>
-                    <div><label className="form-label">Admin Password</label><input type="password" value={adminPass} onChange={e => setAdminPass(e.target.value)} className="form-input" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required autoComplete="new-password" /></div>
+                    <div><label className="form-label">Admin Password</label><input type="password" value={adminPass} onChange={e => setAdminPass(e.target.value)} className="form-input" placeholder="••••••••" required autoComplete="new-password" /></div>
                     <button type="submit" className="btn-primary w-full justify-center py-2.5 shadow-md bg-slate-800 hover:bg-slate-900">Admin Sign In</button>
                   </form>
                 )}
@@ -662,7 +662,7 @@
       const isAdmin = role === 'admin';
 
       // ============================================================
-      // ADMIN LAYOUT â€” Left sidebar (desktop) + hamburger (mobile)
+      // ADMIN LAYOUT — Left sidebar (desktop) + hamburger (mobile)
       // ============================================================
       if (isAdmin) {
         return (
@@ -689,7 +689,7 @@
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Cloud Synced
                     </span>
                   </div>
-                  <p className="text-slate-500 text-xs">GEC Palanpur Â· <span className="font-semibold text-purple-700">ðŸ›¡ï¸ Super Admin</span></p>
+                  <p className="text-slate-500 text-xs">GEC Palanpur · <span className="font-semibold text-purple-700">🛡️ Super Admin</span></p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -698,10 +698,10 @@
                   <p className="text-[11px] text-slate-400 font-mono mt-0.5">ADMIN</p>
                 </div>
                 <button onClick={() => { showToast('Syncing cloud data...', 'success'); setTimeout(() => window.location.reload(), 300); }} className="hidden sm:inline-flex items-center gap-1 text-xs px-2.5 py-1.5 text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg font-semibold transition-colors">
-                  ðŸ”„ Sync
+                  🔄 Sync
                 </button>
                 <button onClick={handleLogout} className="btn-secondary text-xs px-3 py-1.5 text-red-600 hover:bg-red-50 hover:border-red-200">
-                  ðŸ”’ <span className="hidden xs:inline">Logout</span>
+                  🔒 <span className="hidden xs:inline">Logout</span>
                 </button>
               </div>
             </header>
@@ -753,34 +753,34 @@
       }
 
       // ============================================================
-      // NON-ADMIN LAYOUT â€” hamburger (mobile) + horizontal tabs (desktop)
+      // NON-ADMIN LAYOUT — hamburger (mobile) + horizontal tabs (desktop)
       // ============================================================
 
       // Build nav items per role
       const navItems = [
-        { label: 'ðŸ“Š Dashboard', view: 'dashboard', always: true },
+        { label: '📊 Dashboard', view: 'dashboard', always: true },
         ...(role === 'storage' ? [
-          { label: 'ðŸ“¦ Stock Items', view: 'items' },
-          { label: 'ðŸ“¥ Stock Out', view: 'stockout' },
-          { label: 'ðŸšš GRN Receipts', view: 'grn' },
-          { label: 'ðŸ“ Request to Procurement', view: 'requests' },
-          { label: 'âš ï¸ Short Supply', view: 'shortsupply' },
-          { label: 'ðŸ“‘ Reports', view: 'reports' },
+          { label: '📦 Stock Items', view: 'items' },
+          { label: '📥 Stock Out', view: 'stockout' },
+          { label: '🚚 GRN Receipts', view: 'grn' },
+          { label: '📝 Request to Procurement', view: 'requests' },
+          { label: '⚠️ Short Supply', view: 'shortsupply' },
+          { label: '📑 Reports', view: 'reports' },
         ] : []),
         ...(role === 'procurement' ? [
-          { label: 'ðŸ“‹ Storage Requests', view: 'requests' },
-          { label: 'ðŸ”„ Procurement Workflow', view: 'procurement' },
-          { label: 'ðŸ›’ Purchases', view: 'purchases' },
-          { label: 'ðŸª Vendors', view: 'vendors' },
-          { label: 'ðŸ§¾ Bills & Upload', view: 'bills' },
-          { label: 'âš ï¸ Short Supply', view: 'shortsupply' },
-          { label: 'ðŸ“‘ Reports', view: 'reports' },
+          { label: '📋 Storage Requests', view: 'requests' },
+          { label: '🔄 Procurement Workflow', view: 'procurement' },
+          { label: '🛒 Purchases', view: 'purchases' },
+          { label: '🏪 Vendors', view: 'vendors' },
+          { label: '🧾 Bills & Upload', view: 'bills' },
+          { label: '⚠️ Short Supply', view: 'shortsupply' },
+          { label: '📑 Reports', view: 'reports' },
         ] : []),
         ...(role === 'account' ? [
-          { label: 'ðŸ›¡ï¸ Bill Verification', view: 'bills' },
-          { label: 'ðŸª Vendor Ledgers', view: 'vendorledgers' },
-          { label: 'ðŸšš GRN Inspector', view: 'grninspect' },
-          { label: 'ðŸ“‘ Financial Reports', view: 'reports' },
+          { label: '🛡️ Bill Verification', view: 'bills' },
+          { label: '🏪 Vendor Ledgers', view: 'vendorledgers' },
+          { label: '🚚 GRN Inspector', view: 'grninspect' },
+          { label: '📑 Financial Reports', view: 'reports' },
         ] : []),
       ];
 
@@ -807,10 +807,10 @@
                 <div className="flex items-center gap-1.5 flex-wrap">
                   <h1 className="font-bold text-slate-900 text-sm leading-tight">Hostel Mess Committee</h1>
                   <span className="inline-flex items-center gap-1 bg-emerald-50 border border-emerald-200 text-emerald-700 px-2 py-0.5 rounded-full text-[10px] font-semibold">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> ðŸŸ¢ Cloud Synced
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> 🟢 Cloud Synced
                   </span>
                 </div>
-                <p className="text-slate-500 text-xs">GEC Palanpur Â· <span className="font-semibold text-primary-700 uppercase">{`${role} Committee`}</span></p>
+                <p className="text-slate-500 text-xs">GEC Palanpur · <span className="font-semibold text-primary-700 uppercase">{`${role} Committee`}</span></p>
               </div>
             </div>
 
@@ -822,9 +822,9 @@
               <button
                 onClick={() => { Object.keys(localStorage).forEach(k => { if (k.startsWith('smc_gec_live_v2_')) localStorage.removeItem(k); }); showToast('Cache cleared! Syncing clean real data...', 'success'); setTimeout(() => window.location.reload(), 300); }}
                 className="hidden sm:inline-flex items-center gap-1 text-xs px-2.5 py-1.5 text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg font-semibold transition-colors"
-              >ðŸ”„ Refresh</button>
+              >🔄 Refresh</button>
               <button onClick={handleLogout} className="btn-secondary text-xs px-3 py-1.5 text-red-600 hover:bg-red-50 hover:border-red-200">
-                ðŸ”’ <span className="hidden xs:inline">Logout</span>
+                🔒 <span className="hidden xs:inline">Logout</span>
               </button>
             </div>
           </header>
@@ -874,7 +874,7 @@
             {/* Drawer footer */}
             <div className="p-3 border-t border-slate-100 bg-slate-50 shrink-0">
               <button onClick={handleLogout} className="w-full flex items-center gap-2 px-3 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-50 rounded-xl transition-colors">
-                ðŸ”’ Sign Out
+                🔒 Sign Out
               </button>
             </div>
           </div>
@@ -897,10 +897,10 @@
 
           {/* MOBILE CURRENT VIEW INDICATOR */}
           <div className="sm:hidden bg-white border-b border-slate-100 px-4 py-2 flex items-center gap-2 shrink-0">
-            <span className="text-sm">{activeNavItem?.label.split(' ')[0] || 'ðŸ“Š'}</span>
+            <span className="text-sm">{activeNavItem?.label.split(' ')[0] || '📊'}</span>
             <span className="text-xs font-semibold text-slate-700">{activeNavItem?.label.split(' ').slice(1).join(' ') || 'Dashboard'}</span>
             <button onClick={() => setMobileSidebarOpen(true)} className="ml-auto text-xs text-primary-600 font-semibold flex items-center gap-1 px-2 py-1 rounded-lg bg-primary-50 hover:bg-primary-100">
-              â˜° Menu
+              ☰ Menu
             </button>
           </div>
 
@@ -954,12 +954,12 @@
       });
 
       const groups = [
-        { id: 'overview', label: 'Overview', icon: 'ðŸ“Š', items: [{ id: 'dashboard', label: 'Dashboard', icon: 'ðŸ“Š' }] },
-        { id: 'inventory', label: 'Inventory', icon: 'ðŸ“¦', items: [{ id: 'items', label: 'Stock Items', icon: 'ðŸ“¦' }, { id: 'approvals', label: 'Stock Out Approvals', icon: 'ðŸ›¡ï¸' }] },
-        { id: 'procurement', label: 'Procurement', icon: 'ðŸ›’', items: [{ id: 'procurement', label: 'Procurement Workflow', icon: 'ðŸ”„' }, { id: 'requests', label: 'Storage Requests', icon: 'ðŸ“‹' }, { id: 'purchases', label: 'Purchases', icon: 'ðŸ›’' }, { id: 'vendors', label: 'Vendors', icon: 'ðŸª' }] },
-        { id: 'finance', label: 'Finance', icon: 'ðŸ’°', items: [{ id: 'bills', label: 'Bills & Invoices', icon: 'ðŸ§¾' }, { id: 'payments', label: 'Disburse Payments', icon: 'ðŸ’³' }, { id: 'grn', label: 'GRN Records', icon: 'ðŸšš' }] },
-        { id: 'insights', label: 'Insights & Reports', icon: 'ðŸ”—', items: [{ id: 'trace', label: 'Transaction Trace', icon: 'ðŸ”—' }, { id: 'reports', label: 'Reports & Export', icon: 'ðŸ“‘' }] },
-        { id: 'admin', label: 'Administration', icon: 'âš™ï¸', items: [{ id: 'users', label: 'Manage Members', icon: 'ðŸ‘¥' }, { id: 'activitylogs', label: 'Activity Log', icon: 'ðŸ“œ' }, { id: 'trash', label: 'Trash Bin', icon: 'ðŸ—‘ï¸' }] },
+        { id: 'overview', label: 'Overview', icon: '📊', items: [{ id: 'dashboard', label: 'Dashboard', icon: '📊' }] },
+        { id: 'inventory', label: 'Inventory', icon: '📦', items: [{ id: 'items', label: 'Stock Items', icon: '📦' }, { id: 'approvals', label: 'Stock Out Approvals', icon: '🛡️' }] },
+        { id: 'procurement', label: 'Procurement', icon: '🛒', items: [{ id: 'procurement', label: 'Procurement Workflow', icon: '🔄' }, { id: 'requests', label: 'Storage Requests', icon: '📋' }, { id: 'purchases', label: 'Purchases', icon: '🛒' }, { id: 'vendors', label: 'Vendors', icon: '🏪' }] },
+        { id: 'finance', label: 'Finance', icon: '💰', items: [{ id: 'bills', label: 'Bills & Invoices', icon: '🧾' }, { id: 'payments', label: 'Disburse Payments', icon: '💳' }, { id: 'grn', label: 'GRN Records', icon: '🚚' }] },
+        { id: 'insights', label: 'Insights & Reports', icon: '🔗', items: [{ id: 'trace', label: 'Transaction Trace', icon: '🔗' }, { id: 'reports', label: 'Reports & Export', icon: '📑' }] },
+        { id: 'admin', label: 'Administration', icon: '⚙️', items: [{ id: 'users', label: 'Manage Members', icon: '👥' }, { id: 'activitylogs', label: 'Activity Log', icon: '📜' }, { id: 'trash', label: 'Trash Bin', icon: '🗑️' }] },
       ];
 
       const isViewActive = (itemId) => {
@@ -975,7 +975,7 @@
               <div className="w-8 h-8 rounded-lg bg-primary-500 flex items-center justify-center text-white font-bold text-xs shrink-0">SA</div>
               <div className="min-w-0">
                 <p className="text-white font-bold text-xs truncate">Super Admin Panel</p>
-                <p className="text-slate-400 text-[10px] truncate">GEC Palanpur Â· SMC</p>
+                <p className="text-slate-400 text-[10px] truncate">GEC Palanpur · SMC</p>
               </div>
             </div>
           </div>
@@ -1072,33 +1072,33 @@
           <div className="bg-gradient-to-r from-primary-700 to-indigo-800 rounded-2xl p-6 text-white shadow-lg flex flex-wrap justify-between items-center gap-4">
             <div>
               <h2 className="text-xl font-bold">Welcome, {currentUser.name}!</h2>
-              <p className="text-primary-100 text-xs mt-1">Hostel Students Mess Committee Â· {role.toUpperCase()} Workspace</p>
+              <p className="text-primary-100 text-xs mt-1">Hostel Students Mess Committee · {role.toUpperCase()} Workspace</p>
             </div>
             <div className="flex gap-2">
               {role === 'storage' && (
                 <>
                   <button onClick={() => setView('requests')} className="btn-primary bg-white text-primary-800 hover:bg-primary-50 text-xs font-semibold">+ New Grouped Request</button>
-                  <button onClick={() => setView('grn')} className="btn-primary bg-white/20 text-white hover:bg-white/30 text-xs font-semibold">ðŸšš Create GRN</button>
+                  <button onClick={() => setView('grn')} className="btn-primary bg-white/20 text-white hover:bg-white/30 text-xs font-semibold">🚚 Create GRN</button>
                 </>
               )}
-              {role === 'procurement' && <button onClick={() => setView('bills')} className="btn-primary bg-white text-primary-800 hover:bg-primary-50 text-xs font-semibold">ðŸ“ Upload Bill File</button>}
-              {role === 'account' && <button onClick={() => setView('bills')} className="btn-primary bg-white text-primary-800 hover:bg-primary-50 text-xs font-semibold">ðŸ›¡ï¸ Verify Bills & Print</button>}
-              {role === 'admin' && <button onClick={() => setView('payments')} className="btn-primary bg-white text-primary-800 hover:bg-primary-50 text-xs font-semibold">ðŸ’³ Disburse Payments</button>}
+              {role === 'procurement' && <button onClick={() => setView('bills')} className="btn-primary bg-white text-primary-800 hover:bg-primary-50 text-xs font-semibold">📁 Upload Bill File</button>}
+              {role === 'account' && <button onClick={() => setView('bills')} className="btn-primary bg-white text-primary-800 hover:bg-primary-50 text-xs font-semibold">🛡️ Verify Bills & Print</button>}
+              {role === 'admin' && <button onClick={() => setView('payments')} className="btn-primary bg-white text-primary-800 hover:bg-primary-50 text-xs font-semibold">💳 Disburse Payments</button>}
             </div>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <StatCard title="Total Stock Items" value={items.length} icon="ðŸ“¦" color="blue" />
-            <StatCard title="Low Stock Items" value={lowStock} icon="ðŸŸ¡" color="amber" subtitle="Restock required" />
-            <StatCard title="Out of Stock" value={outOfStock} icon="ðŸ”´" color="red" subtitle="Critical shortage" />
-            <StatCard title="Pending Requests" value={requests.filter(r => r.status === 'pending').length} icon="ðŸ“" color="indigo" />
+            <StatCard title="Total Stock Items" value={items.length} icon="📦" color="blue" />
+            <StatCard title="Low Stock Items" value={lowStock} icon="🟡" color="amber" subtitle="Restock required" />
+            <StatCard title="Out of Stock" value={outOfStock} icon="🔴" color="red" subtitle="Critical shortage" />
+            <StatCard title="Pending Requests" value={requests.filter(r => r.status === 'pending').length} icon="📝" color="indigo" />
 
             {role !== 'storage' && (
               <>
-                <StatCard title="Total Purchases" value={purchases.length} icon="ðŸ›’" color="purple" />
-                <StatCard title="Uploaded Bills" value={bills.length} icon="ðŸ§¾" color="blue" />
-                <StatCard title="Total Paid" value={`â‚¹${totalPaid.toLocaleString()}`} icon="ðŸ’³" color="green" />
-                <StatCard title="Pending Payments" value={`â‚¹${totalPending.toLocaleString()}`} icon="â³" color="red" />
+                <StatCard title="Total Purchases" value={purchases.length} icon="🛒" color="purple" />
+                <StatCard title="Uploaded Bills" value={bills.length} icon="🧾" color="blue" />
+                <StatCard title="Total Paid" value={`₹${totalPaid.toLocaleString()}`} icon="💳" color="green" />
+                <StatCard title="Pending Payments" value={`₹${totalPending.toLocaleString()}`} icon="⏳" color="red" />
               </>
             )}
           </div>
@@ -1219,7 +1219,7 @@
               </select>
             </div>
             <div className="flex gap-2">
-              <button onClick={() => exportExcel(items, 'SMC_Hostel_Stock_Inventory')} className="btn-secondary text-xs">ðŸ“Š Export Excel</button>
+              <button onClick={() => exportExcel(items, 'SMC_Hostel_Stock_Inventory')} className="btn-secondary text-xs">📊 Export Excel</button>
               {(role === 'storage' || role === 'admin') && (
                 <button onClick={() => setModalItem({ name: '', brand: '', categoryId: 'CAT-001', unit: 'kg', packSize: 'Not Specified', currentStock: 0, minStockLimit: 10, upperLimit: '', remarks: '' })} className="btn-primary text-xs">+ Add New Item</button>
               )}
@@ -1266,7 +1266,7 @@
                       <td className="table-td">
                         {i.upperLimit && Number(i.upperLimit) > 0 ? (
                           <span className="badge bg-amber-50 text-amber-800 border border-amber-200 font-semibold" title="Stock Out exceeding this requires Admin approval">
-                            ðŸ›¡ï¸ {i.upperLimit} {i.unit}
+                            🛡️ {i.upperLimit} {i.unit}
                           </span>
                         ) : (
                           <span className="text-slate-400 italic">No Upper Limit</span>
@@ -1276,11 +1276,11 @@
                       <td className="table-td">
                         <div className="flex items-center gap-2">
                           <button onClick={() => setEditItemModal(i)} className="text-primary-600 font-semibold hover:underline">
-                            âœï¸ Edit
+                            ✏️ Edit
                           </button>
                           {role === 'admin' && (
                             <button onClick={() => handleDeleteItem(i)} className="text-red-600 font-semibold hover:underline" title="Move to Trash Bin">
-                              ðŸ—‘ï¸ Delete
+                              🗑️ Delete
                             </button>
                           )}
                         </div>
@@ -1297,8 +1297,8 @@
             <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
               <form onSubmit={handleSaveEdit} className="bg-white rounded-xl p-6 max-w-md w-full space-y-3 shadow-2xl">
                 <div className="flex justify-between items-center border-b pb-2">
-                  <h3 className="font-bold text-slate-800 text-sm">Edit Item â€” {editItemModal.id}</h3>
-                  <button type="button" onClick={() => setEditItemModal(null)} className="text-slate-400 hover:text-slate-600 font-bold">âœ•</button>
+                  <h3 className="font-bold text-slate-800 text-sm">Edit Item — {editItemModal.id}</h3>
+                  <button type="button" onClick={() => setEditItemModal(null)} className="text-slate-400 hover:text-slate-600 font-bold">✕</button>
                 </div>
 
                 <div>
@@ -1367,7 +1367,7 @@
               <form onSubmit={handleAddItem} className="bg-white rounded-xl p-6 max-w-md w-full space-y-3 shadow-2xl">
                 <div className="flex justify-between items-center border-b pb-2">
                   <h3 className="font-bold text-slate-800 text-sm">Add New Inventory Item</h3>
-                  <button type="button" onClick={() => setModalItem(null)} className="text-slate-400 hover:text-slate-600 font-bold">âœ•</button>
+                  <button type="button" onClick={() => setModalItem(null)} className="text-slate-400 hover:text-slate-600 font-bold">✕</button>
                 </div>
 
                 <div>
@@ -1598,9 +1598,9 @@
                         </td>
                         <td className="table-td">
                           {totalShort > 0 ? (
-                            <span className="font-bold text-red-600">âš ï¸ {totalShort} Qty Short</span>
+                            <span className="font-bold text-red-600">⚠️ {totalShort} Qty Short</span>
                           ) : (
-                            <span className="badge bg-emerald-100 text-emerald-800">âœ“ Complete</span>
+                            <span className="badge bg-emerald-100 text-emerald-800">✓ Complete</span>
                           )}
                         </td>
                         <td className="table-td text-slate-400">{g.receivedDate}</td>
@@ -1617,7 +1617,7 @@
             <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
               <form onSubmit={handleCreateGRN} className="bg-white rounded-xl p-6 max-w-2xl w-full space-y-4 shadow-2xl max-h-[90vh] flex flex-col">
                 <div className="flex justify-between items-center border-b pb-2">
-                  <h3 className="font-bold text-slate-800 text-sm">Create Goods Received Note (GRN) â€” Multi-Item</h3>
+                  <h3 className="font-bold text-slate-800 text-sm">Create Goods Received Note (GRN) — Multi-Item</h3>
                   <span className="badge bg-primary-100 text-primary-800 font-mono">Storage</span>
                 </div>
 
@@ -1629,7 +1629,7 @@
                       {purchases.filter(p => p.status === 'ordered' || p.status === 'partially_received').map(p => {
                         const pItems = normalizeItems(p);
                         const names = pItems.map(it => `${it.itemName} (${it.orderedQty} ${it.unit})`).join(', ');
-                        return <option key={p.id} value={p.id}>{p.id} â€” {names}</option>;
+                        return <option key={p.id} value={p.id}>{p.id} — {names}</option>;
                       })}
                     </select>
                   </div>
@@ -1807,7 +1807,7 @@
             `Storage member ${currentUser.name} requested issue of ${issuedItemsList.map(i => `${i.itemName} (${i.qty} ${i.unit})`).join(', ')}. Reason: ${approvalRemark.trim()}`
           );
 
-          showToast(`âš ï¸ Stock Out ${id} exceeds Upper Limit and has been submitted to Admin for approval! (Stock will be deducted after Admin approves)`, 'warning');
+          showToast(`⚠️ Stock Out ${id} exceeds Upper Limit and has been submitted to Admin for approval! (Stock will be deducted after Admin approves)`, 'warning');
         } else {
           // Within limits -> Deduct Stock Immediately
           let updatedItems = [...items];
@@ -1886,7 +1886,7 @@
                         <span className="text-[11px] font-bold text-slate-600">Item #{idx + 1}</span>
                         {outRows.length > 1 && (
                           <button type="button" onClick={() => handleRemoveRow(idx)} className="text-red-500 hover:text-red-700 text-xs font-bold">
-                            âœ• Remove
+                            ✕ Remove
                           </button>
                         )}
                       </div>
@@ -1900,7 +1900,7 @@
                         <option value="">Select store item...</option>
                         {items.map(i => (
                           <option key={i.id} value={i.id}>
-                            {i.name} {i.brand && i.brand !== 'Not Specified' ? `(${i.brand})` : ''} â€” Stock: {i.currentStock} {i.unit} {i.upperLimit > 0 ? `[Limit: ${i.upperLimit} ${i.unit}]` : ''}
+                            {i.name} {i.brand && i.brand !== 'Not Specified' ? `(${i.brand})` : ''} — Stock: {i.currentStock} {i.unit} {i.upperLimit > 0 ? `[Limit: ${i.upperLimit} ${i.unit}]` : ''}
                           </option>
                         ))}
                       </select>
@@ -1929,10 +1929,10 @@
                         <span className="text-xs font-semibold text-slate-600 whitespace-nowrap">{row.unit}</span>
                       </div>
 
-                      {isStockShort && <p className="text-red-600 text-[10px] font-bold">âš ï¸ Exceeds currently available stock ({sel.currentStock} {sel.unit})!</p>}
+                      {isStockShort && <p className="text-red-600 text-[10px] font-bold">⚠️ Exceeds currently available stock ({sel.currentStock} {sel.unit})!</p>}
                       {isLimitExceeded && !isStockShort && (
                         <div className="bg-amber-100 text-amber-900 border border-amber-300 rounded p-1.5 text-[10px] font-semibold">
-                          ðŸ›¡ï¸ Exceeds Upper Limit ({limit} {sel.unit}) â€” Requires Super Admin Approval!
+                          🛡️ Exceeds Upper Limit ({limit} {sel.unit}) — Requires Super Admin Approval!
                         </div>
                       )}
                     </div>
@@ -1944,7 +1944,7 @@
               {hasAnyExceededLimit && (
                 <div className="bg-amber-50 border-2 border-amber-300 rounded-xl p-3.5 space-y-2 animate-pulse">
                   <div className="flex items-center gap-1.5 text-amber-900 font-bold text-xs">
-                    <span>âš ï¸</span>
+                    <span>⚠️</span>
                     <span>Admin Approval Required</span>
                   </div>
                   <p className="text-[11px] text-amber-800">
@@ -1969,7 +1969,7 @@
                   hasAnyExceededLimit ? 'btn-warning bg-amber-600 hover:bg-amber-700' : 'btn-danger'
                 }`}
               >
-                {hasAnyExceededLimit ? 'ðŸ›¡ï¸ Submit for Admin Approval' : 'Confirm & Issue Items'}
+                {hasAnyExceededLimit ? '🛡️ Submit for Admin Approval' : 'Confirm & Issue Items'}
               </button>
             </form>
           </div>
@@ -2005,7 +2005,7 @@
                             <div className="space-y-1">
                               {soItems.map((it, idx) => (
                                 <div key={idx} className="flex items-center gap-1.5">
-                                  <span className="font-semibold text-slate-800">â€¢ {it.itemName}:</span>
+                                  <span className="font-semibold text-slate-800">• {it.itemName}:</span>
                                   <span className={`font-bold ${isPending ? 'text-amber-700' : 'text-red-600'}`}>
                                     {it.qty} {it.unit}
                                   </span>
@@ -2029,9 +2029,9 @@
                           <td className="table-td text-slate-600">{so.purpose}</td>
                           <td className="table-td text-slate-500 font-medium">{so.issuedBy}</td>
                           <td className="table-td">
-                            {isPending && <span className="badge bg-amber-100 text-amber-800 border border-amber-300">â³ Pending Approval</span>}
-                            {isApproved && <span className="badge bg-emerald-100 text-emerald-800">âœ“ Approved / Issued</span>}
-                            {isRejected && <span className="badge bg-red-100 text-red-800">âœ• Rejected</span>}
+                            {isPending && <span className="badge bg-amber-100 text-amber-800 border border-amber-300">⏳ Pending Approval</span>}
+                            {isApproved && <span className="badge bg-emerald-100 text-emerald-800">✓ Approved / Issued</span>}
+                            {isRejected && <span className="badge bg-red-100 text-red-800">✕ Rejected</span>}
                           </td>
                           <td className="table-td text-slate-400 whitespace-nowrap">
                             <div>{so.date}</div>
@@ -2226,7 +2226,7 @@
                           <div className="space-y-1">
                             {norm.map((it, idx) => (
                               <div key={idx} className="flex items-center gap-2">
-                                <span className="font-semibold text-slate-800">â€¢ {it.itemName}:</span>
+                                <span className="font-semibold text-slate-800">• {it.itemName}:</span>
                                 <span className="font-bold text-primary-700">{it.requiredQty} {it.unit}</span>
                                 {it.packSize && it.packSize !== 'Not Specified' && (
                                   <span className="text-slate-400 text-[10px]">({it.packSize})</span>
@@ -2241,11 +2241,11 @@
                         <td className="table-td">
                           <div className="flex gap-2 items-center">
                             <button onClick={() => setViewingReq(r)} className="btn-secondary text-xs py-1 px-2">
-                              ðŸ‘ï¸ View
+                              👁️ View
                             </button>
                             {role === 'procurement' && r.status === 'pending' && (
                               <button onClick={() => openPurchaseModal(r)} className="btn-primary text-xs py-1 px-2.5 shadow-sm">
-                                ðŸ›’ Order Purchase
+                                🛒 Order Purchase
                               </button>
                             )}
                             {r.purchaseId && <span className="font-mono text-slate-500 font-medium">Order: {r.purchaseId}</span>}
@@ -2311,7 +2311,7 @@
                         <div className="sm:col-span-1 pt-3 text-right">
                           {reqItems.length > 1 && (
                             <button type="button" onClick={() => handleRemoveReqRow(idx)} className="text-red-500 hover:text-red-700 text-xs font-bold">
-                              âœ•
+                              ✕
                             </button>
                           )}
                         </div>
@@ -2407,8 +2407,8 @@
             <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
               <div className="bg-white rounded-xl p-6 max-w-lg w-full space-y-4 shadow-2xl">
                 <div className="flex justify-between items-center border-b pb-2">
-                  <h3 className="font-bold text-slate-800 text-sm">Request Details â€” {viewingReq.id}</h3>
-                  <button onClick={() => setViewingReq(null)} className="text-slate-400 hover:text-slate-600 font-bold">âœ•</button>
+                  <h3 className="font-bold text-slate-800 text-sm">Request Details — {viewingReq.id}</h3>
+                  <button onClick={() => setViewingReq(null)} className="text-slate-400 hover:text-slate-600 font-bold">✕</button>
                 </div>
 
                 <div className="space-y-2 text-xs">
@@ -2464,7 +2464,7 @@
               <h3 className="font-bold text-slate-800 text-sm">Purchase Orders (Procurement)</h3>
               <p className="text-xs text-slate-500">Track purchase orders placed with suppliers.</p>
             </div>
-            <button onClick={() => exportExcel(purchases, 'SMC_Purchases')} className="btn-secondary text-xs">ðŸ“Š Export Excel</button>
+            <button onClick={() => exportExcel(purchases, 'SMC_Purchases')} className="btn-secondary text-xs">📊 Export Excel</button>
           </div>
 
           <div className="card overflow-x-auto">
@@ -2494,7 +2494,7 @@
                           <div className="space-y-1">
                             {norm.map((it, idx) => (
                               <div key={idx} className="flex items-center gap-1.5">
-                                <span>â€¢ {it.itemName}:</span>
+                                <span>• {it.itemName}:</span>
                                 <span className="font-bold text-slate-900">{it.orderedQty} {it.unit}</span>
                               </div>
                             ))}
@@ -2556,7 +2556,7 @@
                     <td className="table-td font-semibold text-slate-800">{v.name}</td>
                     <td className="table-td">{v.contactPerson}</td>
                     <td className="table-td font-mono">{v.mobile}</td>
-                    <td className="table-td font-mono text-[11px]">{v.bankName} (A/C: {v.accountNumber || 'â€”'})</td>
+                    <td className="table-td font-mono text-[11px]">{v.bankName} (A/C: {v.accountNumber || '—'})</td>
                     <td className="table-td text-slate-500 max-w-xs truncate">{v.address}</td>
                   </tr>
                 ))}
@@ -2621,7 +2621,7 @@
       const [viewingBill, setViewingBill] = useState(null);
       const [deleteModalBill, setDeleteModalBill] = useState(null);
 
-      // Google Drive Integration State â€” stored in Firebase so ALL devices share the same URL
+      // Google Drive Integration State — stored in Firebase so ALL devices share the same URL
       const [gdriveScriptUrl, setGdriveScriptUrl] = useState(() => ls_get('gdrive_script_url', '') || '');
       const [isConfiguringDrive, setIsConfiguringDrive] = useState(false);
       const [tempScriptUrl, setTempScriptUrl] = useState(gdriveScriptUrl);
@@ -2673,10 +2673,10 @@
       const handleSaveDriveUrl = (e) => {
         e.preventDefault();
         const clean = tempScriptUrl.trim();
-        // Save to Firebase-synced storage â€” ALL devices will auto-get this URL
+        // Save to Firebase-synced storage — ALL devices will auto-get this URL
         ls_set('gdrive_script_url', clean);
         setGdriveScriptUrl(clean);
-        showToast('âœ… Google Drive connected! All devices will now upload to your Drive automatically.', 'success');
+        showToast('✅ Google Drive connected! All devices will now upload to your Drive automatically.', 'success');
         setIsConfiguringDrive(false);
       };
 
@@ -2741,7 +2741,7 @@
         const updated = [...bills, newBill];
         ls_set('bills', updated);
         setBills(updated);
-        logActivity('Uploaded Bill & Invoice', 'PROCUREMENT', `${id} (Inv: ${billNo})`, `Vendor: ${selVendor.name}, Amount: â‚¹${Number(billAmt).toLocaleString()}`);
+        logActivity('Uploaded Bill & Invoice', 'PROCUREMENT', `${id} (Inv: ${billNo})`, `Vendor: ${selVendor.name}, Amount: ₹${Number(billAmt).toLocaleString()}`);
         showToast(`Bill ${id} with vendor ${selVendor.name} uploaded!`, 'success');
         setIsUploading(false);
         setSelectedVendorId('');
@@ -2774,7 +2774,7 @@
       // Bill Delete Permission (Admin and Account can both delete bills -> MOVES TO TRASH)
       const handleConfirmDeleteBill = () => {
         if (!deleteModalBill) return;
-        moveToTrash('bills', deleteModalBill, `Bill No: ${deleteModalBill.billNumber} (â‚¹${Number(deleteModalBill.billAmount || 0).toLocaleString()}) - ${deleteModalBill.vendorName || 'Vendor'}`);
+        moveToTrash('bills', deleteModalBill, `Bill No: ${deleteModalBill.billNumber} (₹${Number(deleteModalBill.billAmount || 0).toLocaleString()}) - ${deleteModalBill.vendorName || 'Vendor'}`);
         const updated = bills.filter(b => b.id !== deleteModalBill.id);
         ls_set('bills', updated);
         setBills(updated);
@@ -2801,11 +2801,11 @@
                 className="btn-secondary text-xs flex items-center gap-1.5"
                 title="Connect Google Drive to save bills in personal Google Drive"
               >
-                <span>ðŸ“</span>
-                <span>{gdriveScriptUrl ? 'ðŸŸ¢ Google Drive Connected' : 'âš™ï¸ Connect Google Drive'}</span>
+                <span>📁</span>
+                <span>{gdriveScriptUrl ? '🟢 Google Drive Connected' : '⚙️ Connect Google Drive'}</span>
               </button>
               {(role === 'procurement' || role === 'admin') && (
-                <button onClick={() => setIsUploading(true)} className="btn-primary text-xs">ðŸ“ Upload New Bill</button>
+                <button onClick={() => setIsUploading(true)} className="btn-primary text-xs">📁 Upload New Bill</button>
               )}
             </div>
           </div>
@@ -2839,23 +2839,23 @@
                           <div className="space-y-1">
                             {normItems.map((it, idx) => (
                               <div key={idx} className="text-slate-700">
-                                â€¢ {it.itemName} ({it.orderedQty || it.qty} {it.unit})
+                                • {it.itemName} ({it.orderedQty || it.qty} {it.unit})
                               </div>
                             ))}
                           </div>
                         </td>
                         <td className="table-td font-medium font-mono">{b.billNumber}</td>
-                        <td className="table-td font-bold text-slate-900">â‚¹{Number(b.billAmount).toLocaleString()}</td>
+                        <td className="table-td font-bold text-slate-900">₹{Number(b.billAmount).toLocaleString()}</td>
                         <td className="table-td">
                           <div className="space-y-1">
                             {b.driveUrl && (
                               <a href={b.driveUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 px-2 py-1 rounded bg-emerald-50 text-emerald-700 font-semibold text-[11px] hover:bg-emerald-100 border border-emerald-200">
-                                ðŸ“ Drive File â†—
+                                📁 Drive File ↗
                               </a>
                             )}
                             {b.fileData ? (
                               <button onClick={() => setViewingBill(b)} className="inline-flex items-center gap-1 px-2 py-1 rounded bg-blue-50 text-blue-700 font-semibold text-[11px] hover:bg-blue-100 border border-blue-200">
-                                ðŸ‘ï¸ View File
+                                👁️ View File
                               </button>
                             ) : !b.driveUrl && (
                               <span className="text-slate-400 italic">No File</span>
@@ -2872,17 +2872,17 @@
                           <div className="flex flex-wrap gap-1.5 items-center">
                             {/* View / Print button */}
                             <button onClick={() => setViewingBill(b)} className="btn-secondary text-xs py-1 px-2" title="View details and print voucher">
-                              ðŸ‘ï¸ View / ðŸ–¨ï¸ Print
+                              👁️ View / 🖨️ Print
                             </button>
 
                             {/* Account Verification & Forwarding Actions (NO payment action) */}
                             {role === 'account' && b.verificationStatus !== 'verified' && (
                               <>
                                 <button onClick={() => handleVerifyAndForward(b.id)} className="btn-success text-xs py-1 px-2" title="Verify and forward to payment">
-                                  âœ“ Verify & Forward
+                                  ✓ Verify & Forward
                                 </button>
                                 <button onClick={() => handleReject(b.id)} className="btn-danger text-xs py-1 px-2" title="Mark rejected">
-                                  âœ• Reject
+                                  ✕ Reject
                                 </button>
                               </>
                             )}
@@ -2890,7 +2890,7 @@
                             {/* Bill Delete Permission: ADMIN and ACCOUNT/ACCOUNTANT both have permission */}
                             {(role === 'admin' || role === 'account') && (
                               <button onClick={() => setDeleteModalBill(b)} className="inline-flex items-center gap-1 px-2 py-1 bg-red-50 hover:bg-red-100 text-red-700 rounded text-xs font-semibold" title="Delete this bill record">
-                                ðŸ—‘ï¸ Delete
+                                🗑️ Delete
                               </button>
                             )}
                           </div>
@@ -2933,7 +2933,7 @@
                   {selectedVendorId && (
                     <div className="border border-blue-200 bg-blue-50/50 rounded-xl p-3 space-y-2">
                       <p className="text-xs font-bold text-blue-900 flex items-center gap-1.5">
-                        ðŸ“¦ Ordered Items from this Vendor (Auto-Detected):
+                        📦 Ordered Items from this Vendor (Auto-Detected):
                       </p>
                       {vendorOrderedItems.length === 0 ? (
                         <p className="text-xs text-slate-500 italic">No previous purchase records found for this vendor.</p>
@@ -2941,7 +2941,7 @@
                         <div className="bg-white rounded-lg border border-blue-100 p-2 space-y-1.5 text-xs">
                           {vendorOrderedItems.map((it, idx) => (
                             <div key={idx} className="flex justify-between items-center py-1 border-b border-slate-100 last:border-0">
-                              <span className="font-semibold text-slate-800">â€¢ {it.itemName}</span>
+                              <span className="font-semibold text-slate-800">• {it.itemName}</span>
                               <span className="font-bold text-primary-700">{it.orderedQty} {it.unit}</span>
                             </div>
                           ))}
@@ -2956,7 +2956,7 @@
                       <input type="text" value={billNo} onChange={e => setBillNo(e.target.value)} className="form-input text-xs font-mono" placeholder="e.g. INV-9042" required />
                     </div>
                     <div>
-                      <label className="form-label">3. Bill Amount (â‚¹) *</label>
+                      <label className="form-label">3. Bill Amount (₹) *</label>
                       <input type="number" step="0.01" value={billAmt} onChange={e => setBillAmt(e.target.value)} className="form-input text-xs font-bold" placeholder="Total Amount" required />
                     </div>
                   </div>
@@ -2973,7 +2973,7 @@
                         required 
                       />
                       <label htmlFor="billFileInput" className="cursor-pointer block">
-                        <div className="text-3xl mb-1">ðŸ“„</div>
+                        <div className="text-3xl mb-1">📄</div>
                         <p className="text-xs font-semibold text-primary-700">Click to Select Invoice Document from Computer/Phone</p>
                         <p className="text-[10px] text-slate-400 mt-0.5">Supports PDF, JPG, PNG, WEBP</p>
                       </label>
@@ -2999,7 +2999,7 @@
             <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
               <div className="bg-white rounded-xl p-6 max-w-sm w-full space-y-3 shadow-2xl">
                 <h3 className="font-bold text-red-600 text-sm flex items-center gap-1.5">
-                  âš ï¸ Delete Bill Confirmation
+                  ⚠️ Delete Bill Confirmation
                 </h3>
                 <p className="text-xs text-slate-600">
                   Are you sure you want to permanently delete Bill <strong>{deleteModalBill.id} (Invoice: {deleteModalBill.billNumber})</strong> for Vendor <strong>{deleteModalBill.vendorName}</strong>?
@@ -3018,10 +3018,10 @@
               <div className="bg-white rounded-2xl p-6 max-w-3xl w-full space-y-4 shadow-2xl max-h-[95vh] flex flex-col">
                 <div className="flex justify-between items-center border-b pb-3 no-print">
                   <div>
-                    <h3 className="font-bold text-slate-900 text-sm">Invoice Voucher & Document Preview â€” {viewingBill.id}</h3>
-                    <p className="text-xs text-slate-500">Vendor: <strong>{viewingBill.vendorName || 'General Supplier'}</strong> Â· Bill No: {viewingBill.billNumber} Â· Amount: â‚¹{Number(viewingBill.billAmount).toLocaleString()}</p>
+                    <h3 className="font-bold text-slate-900 text-sm">Invoice Voucher & Document Preview — {viewingBill.id}</h3>
+                    <p className="text-xs text-slate-500">Vendor: <strong>{viewingBill.vendorName || 'General Supplier'}</strong> · Bill No: {viewingBill.billNumber} · Amount: ₹{Number(viewingBill.billAmount).toLocaleString()}</p>
                   </div>
-                  <button onClick={() => setViewingBill(null)} className="text-slate-400 hover:text-slate-600 text-xl font-bold">âœ•</button>
+                  <button onClick={() => setViewingBill(null)} className="text-slate-400 hover:text-slate-600 text-xl font-bold">✕</button>
                 </div>
 
                 {/* Printable Voucher Section (Formatted cleanly for print or screen) */}
@@ -3037,7 +3037,7 @@
                     <p>Bill Date: <strong>{viewingBill.billDate}</strong></p>
                     <p>Vendor Name: <strong className="text-slate-900">{viewingBill.vendorName || 'General Supplier'}</strong></p>
                     <p>Invoice / Bill No: <strong className="font-mono">{viewingBill.billNumber}</strong></p>
-                    <p>Total Bill Amount: <strong className="text-emerald-700 text-sm">â‚¹{Number(viewingBill.billAmount).toLocaleString()}</strong></p>
+                    <p>Total Bill Amount: <strong className="text-emerald-700 text-sm">₹{Number(viewingBill.billAmount).toLocaleString()}</strong></p>
                     <p>Verification Status: <StatusBadge status={viewingBill.verificationStatus} /></p>
                   </div>
 
@@ -3089,12 +3089,12 @@
                     {/* Print Option for Accountant & Admin */}
                     {(role === 'account' || role === 'admin') && (
                       <button onClick={triggerPrint} className="btn-primary text-xs bg-slate-800 hover:bg-slate-900">
-                        ðŸ–¨ï¸ Print Voucher
+                        🖨️ Print Voucher
                       </button>
                     )}
                     {viewingBill.fileData && (
                       <a href={viewingBill.fileData} download={viewingBill.fileName || `Invoice_${viewingBill.id}`} className="btn-secondary text-xs">
-                        â¬‡ï¸ Download File
+                        ⬇️ Download File
                       </a>
                     )}
                   </div>
@@ -3110,19 +3110,19 @@
               <div className="bg-white rounded-2xl p-6 max-w-lg w-full space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
                 <div className="flex justify-between items-center border-b pb-2">
                   <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                    <span>ðŸ“</span> <span>Central Google Drive Setup</span>
+                    <span>📁</span> <span>Central Google Drive Setup</span>
                   </h3>
-                  <button onClick={() => setIsConfiguringDrive(false)} className="text-slate-400 hover:text-slate-600 font-bold">âœ•</button>
+                  <button onClick={() => setIsConfiguringDrive(false)} className="text-slate-400 hover:text-slate-600 font-bold">✕</button>
                 </div>
 
                 <div className="text-xs text-slate-600 space-y-3">
                   <div className="bg-emerald-50 p-3 rounded-lg border border-emerald-200 text-emerald-900 leading-relaxed">
-                    <strong>âœ… Central Drive for ALL Devices:</strong> Once you paste the URL below, every phone, laptop, or tablet that opens this website will automatically upload bills to <strong>your Google Drive</strong>. No one else needs to configure anything.
+                    <strong>✅ Central Drive for ALL Devices:</strong> Once you paste the URL below, every phone, laptop, or tablet that opens this website will automatically upload bills to <strong>your Google Drive</strong>. No one else needs to configure anything.
                   </div>
 
                   {gdriveScriptUrl && (
                     <div className="bg-blue-50 p-2 rounded-lg border border-blue-200 text-blue-800 text-[11px]">
-                      <strong>ðŸŸ¢ Currently Connected:</strong> <span className="font-mono break-all">{gdriveScriptUrl.slice(0, 60)}...</span>
+                      <strong>🟢 Currently Connected:</strong> <span className="font-mono break-all">{gdriveScriptUrl.slice(0, 60)}...</span>
                     </div>
                   )}
 
@@ -3137,31 +3137,31 @@
                         placeholder="https://script.google.com/macros/s/.../exec" 
                         required 
                       />
-                      <p className="text-[10px] text-slate-400 mt-1">This URL is saved in the cloud database â€” all devices get it automatically.</p>
+                      <p className="text-[10px] text-slate-400 mt-1">This URL is saved in the cloud database — all devices get it automatically.</p>
                     </div>
                     <div className="flex justify-between gap-2">
                       {gdriveScriptUrl && (
                         <button type="button" onClick={() => { ls_set('gdrive_script_url', ''); setGdriveScriptUrl(''); setTempScriptUrl(''); setIsConfiguringDrive(false); showToast('Google Drive disconnected.', 'info'); }} className="btn-secondary text-xs text-red-600 hover:bg-red-50">
-                          ðŸ”Œ Disconnect Drive
+                          🔌 Disconnect Drive
                         </button>
                       )}
                       <div className="flex gap-2 ml-auto">
                         <button type="button" onClick={() => setIsConfiguringDrive(false)} className="btn-secondary text-xs">Cancel</button>
-                        <button type="submit" className="btn-primary text-xs">âœ… Save & Connect for All Devices</button>
+                        <button type="submit" className="btn-primary text-xs">✅ Save & Connect for All Devices</button>
                       </div>
                     </div>
                   </form>
 
                   <div className="border-t pt-3 space-y-2">
-                    <p className="font-bold text-slate-800">ðŸ“‹ One-Time Setup Guide (Takes 3 minutes):</p>
+                    <p className="font-bold text-slate-800">📋 One-Time Setup Guide (Takes 3 minutes):</p>
                     <ol className="list-decimal pl-4 space-y-1.5 text-slate-600">
-                      <li>Open <a href="https://script.google.com" target="_blank" rel="noreferrer" className="text-primary-600 underline font-semibold">script.google.com</a> â†’ Click <strong>New Project</strong>.</li>
+                      <li>Open <a href="https://script.google.com" target="_blank" rel="noreferrer" className="text-primary-600 underline font-semibold">script.google.com</a> → Click <strong>New Project</strong>.</li>
                       <li>Delete existing code, paste the SMC Drive Script (ask Admin for the script), click <strong>Save (Ctrl+S)</strong>.</li>
-                      <li>Click <strong>Deploy â†’ New deployment</strong>.</li>
-                      <li>Type: <strong>Web app</strong> Â· Execute as: <strong>Me</strong> Â· Who has access: <strong>Anyone</strong>.</li>
+                      <li>Click <strong>Deploy → New deployment</strong>.</li>
+                      <li>Type: <strong>Web app</strong> · Execute as: <strong>Me</strong> · Who has access: <strong>Anyone</strong>.</li>
                       <li>Click <strong>Deploy</strong>, authorize, copy the <strong>Web App URL</strong>.</li>
                       <li>Paste that URL in the box above and click <strong>Save & Connect</strong>.</li>
-                      <li>âœ… Done! All devices (mobile, laptop, tablet) will now auto-upload to your Drive!</li>
+                      <li>✅ Done! All devices (mobile, laptop, tablet) will now auto-upload to your Drive!</li>
                     </ol>
                     <div className="bg-amber-50 p-2 rounded-lg border border-amber-200 text-amber-800 text-[11px]">
                       <strong>Note:</strong> You only do this once. The URL is stored in the central cloud database and shared with all devices automatically. No other person needs to configure Google Drive separately.
@@ -3215,7 +3215,7 @@
         ls_set('bills', updatedBills);
         setBills(updatedBills);
 
-        showToast(`Payment ${payId} of â‚¹${payNum.toLocaleString()} processed!`, 'success');
+        showToast(`Payment ${payId} of ₹${payNum.toLocaleString()} processed!`, 'success');
         setPayModalBill(null);
         setAmount('');
         onUpdate();
@@ -3252,15 +3252,15 @@
                     <tr key={b.id} className="hover:bg-slate-50">
                       <td className="table-td font-mono font-bold text-indigo-700">{b.id}</td>
                       <td className="table-td font-semibold text-slate-800">{b.vendorName || 'General Supplier'}</td>
-                      <td className="table-td font-semibold">â‚¹{Number(b.billAmount).toLocaleString()}</td>
-                      <td className="table-td font-bold text-emerald-600">â‚¹{paid.toLocaleString()}</td>
-                      <td className="table-td font-bold text-red-600">â‚¹{rem.toLocaleString()}</td>
+                      <td className="table-td font-semibold">₹{Number(b.billAmount).toLocaleString()}</td>
+                      <td className="table-td font-bold text-emerald-600">₹{paid.toLocaleString()}</td>
+                      <td className="table-td font-bold text-red-600">₹{rem.toLocaleString()}</td>
                       <td className="table-td"><StatusBadge status={b.verificationStatus} /></td>
                       <td className="table-td"><StatusBadge status={rem <= 0 ? 'paid' : paid > 0 ? 'partially_paid' : 'pending'} /></td>
                       <td className="table-td">
                         {role === 'admin' && rem > 0 && (
                           <button onClick={() => { setPayModalBill(b); setAmount(rem); }} className="btn-primary text-xs py-1 px-2.5">
-                            ðŸ’³ Pay â‚¹{rem.toLocaleString()}
+                            💳 Pay ₹{rem.toLocaleString()}
                           </button>
                         )}
                         {role !== 'admin' && rem > 0 && (
@@ -3279,7 +3279,7 @@
               <form onSubmit={handlePay} className="bg-white rounded-xl p-6 max-w-md w-full space-y-3 shadow-2xl">
                 <h3 className="font-bold text-slate-800 text-sm">Process Payment for {payModalBill.id}</h3>
                 <div>
-                  <label className="form-label">Payment Amount (â‚¹) *</label>
+                  <label className="form-label">Payment Amount (₹) *</label>
                   <input type="number" step="0.01" value={amount} onChange={e => setAmount(e.target.value)} className="form-input" required />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
@@ -3318,7 +3318,7 @@
               <h3 className="font-bold text-slate-800 text-sm">Vendor Payment Ledgers & Statements</h3>
               <p className="text-xs text-slate-500">Summary of total billed, cleared payments, and pending dues per vendor.</p>
             </div>
-            <button onClick={() => window.print()} className="btn-secondary text-xs">ðŸ–¨ï¸ Print Statement</button>
+            <button onClick={() => window.print()} className="btn-secondary text-xs">🖨️ Print Statement</button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -3337,14 +3337,14 @@
                       <p className="text-xs text-slate-400">Contact: {v.contactPerson} ({v.mobile})</p>
                     </div>
                     <span className={`badge ${pending === 0 && totalBilled > 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}`}>
-                      {pending === 0 && totalBilled > 0 ? 'All Cleared' : `â‚¹${pending.toLocaleString()} Pending`}
+                      {pending === 0 && totalBilled > 0 ? 'All Cleared' : `₹${pending.toLocaleString()} Pending`}
                     </span>
                   </div>
 
                   <div className="bg-slate-50 p-3 rounded-lg grid grid-cols-3 text-center text-xs">
-                    <div><p className="text-slate-400">Billed</p><p className="font-bold text-slate-800">â‚¹{totalBilled.toLocaleString()}</p></div>
-                    <div><p className="text-slate-400">Paid</p><p className="font-bold text-emerald-600">â‚¹{totalPaid.toLocaleString()}</p></div>
-                    <div><p className="text-slate-400">Pending</p><p className="font-bold text-red-600">â‚¹{pending.toLocaleString()}</p></div>
+                    <div><p className="text-slate-400">Billed</p><p className="font-bold text-slate-800">₹{totalBilled.toLocaleString()}</p></div>
+                    <div><p className="text-slate-400">Paid</p><p className="font-bold text-emerald-600">₹{totalPaid.toLocaleString()}</p></div>
+                    <div><p className="text-slate-400">Pending</p><p className="font-bold text-red-600">₹{pending.toLocaleString()}</p></div>
                   </div>
                 </div>
               );
@@ -3364,7 +3364,7 @@
               <h3 className="font-bold text-slate-800 text-sm">Goods Received Notes (GRN) Inspector for Account Verification</h3>
               <p className="text-xs text-slate-500">Inspect physical quantities received before verifying invoices.</p>
             </div>
-            <button onClick={() => window.print()} className="btn-secondary text-xs">ðŸ–¨ï¸ Print GRN Sheet</button>
+            <button onClick={() => window.print()} className="btn-secondary text-xs">🖨️ Print GRN Sheet</button>
           </div>
 
           <div className="card overflow-x-auto">
@@ -3391,7 +3391,7 @@
                         <div className="space-y-1">
                           {gItems.map((it, idx) => (
                             <div key={idx} className="flex items-center gap-1.5">
-                              <span className="font-semibold text-slate-800">â€¢ {it.itemName}:</span>
+                              <span className="font-semibold text-slate-800">• {it.itemName}:</span>
                               <span className="font-bold text-emerald-600">+{it.receivedQty} {it.unit}</span>
                             </div>
                           ))}
@@ -3399,9 +3399,9 @@
                       </td>
                       <td className="table-td">
                         {totalShort > 0 ? (
-                          <span className="font-bold text-red-600">âš ï¸ {totalShort} Short</span>
+                          <span className="font-bold text-red-600">⚠️ {totalShort} Short</span>
                         ) : (
-                          <span className="badge bg-emerald-100 text-emerald-800">âœ“ Complete</span>
+                          <span className="badge bg-emerald-100 text-emerald-800">✓ Complete</span>
                         )}
                       </td>
                       <td className="table-td text-slate-400">{g.receivedDate}</td>
@@ -3491,7 +3491,7 @@
                       <td className="table-td">
                         {role === 'procurement' && s.status === 'open' && (
                           <button onClick={() => { setCompleteModalSS(s); setOrderedQty(s.shortQty); }} className="btn-primary text-xs py-1 px-2">
-                            ðŸ›’ Complete Short Supply
+                            🛒 Complete Short Supply
                           </button>
                         )}
                         {s.resolvedByPurchaseId && <span className="font-mono text-slate-400">Pur: {s.resolvedByPurchaseId}</span>}
@@ -3554,13 +3554,13 @@
                 <div key={req.id} className="card p-4 space-y-3">
                   <div className="flex items-center gap-2 flex-wrap text-xs">
                     <span className="bg-blue-100 text-blue-800 font-bold px-2 py-1 rounded font-mono">{req.id} (Grouped Request)</span>
-                    <span>âž”</span>
+                    <span>➔</span>
                     <span className={`font-mono px-2 py-1 rounded font-bold ${p ? 'bg-purple-100 text-purple-800' : 'bg-slate-100 text-slate-400'}`}>{p ? p.id : 'No Purchase'}</span>
-                    <span>âž”</span>
+                    <span>➔</span>
                     <span className={`font-mono px-2 py-1 rounded font-bold ${b ? 'bg-indigo-100 text-indigo-800' : 'bg-slate-100 text-slate-400'}`}>{b ? b.id : 'No Bill'}</span>
-                    <span>âž”</span>
+                    <span>➔</span>
                     <span className={`font-mono px-2 py-1 rounded font-bold ${payList.length > 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-400'}`}>{payList.length > 0 ? payList.map(x => x.id).join(', ') : 'No Payment'}</span>
-                    <span>âž”</span>
+                    <span>➔</span>
                     <span className={`font-mono px-2 py-1 rounded font-bold ${gList.length > 0 ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-400'}`}>{gList.length > 0 ? gList.map(x => x.id).join(', ') : 'No GRN'}</span>
                   </div>
                 </div>
@@ -3659,10 +3659,10 @@
                       {u.id !== 'USR-001' ? (
                         <div className="flex gap-2">
                           <button onClick={() => setEditUser(u)} className="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded text-[11px] font-semibold">
-                            âœï¸ Edit
+                            ✏️ Edit
                           </button>
                           <button onClick={() => setDeleteUser(u)} className="inline-flex items-center gap-1 px-2 py-1 bg-red-50 hover:bg-red-100 text-red-700 rounded text-[11px] font-semibold">
-                            ðŸ—‘ï¸ Delete
+                            🗑️ Delete
                           </button>
                         </div>
                       ) : (
@@ -3712,7 +3712,7 @@
           {editUser && (
             <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
               <form onSubmit={handleSaveEdit} className="bg-white rounded-xl p-6 max-w-sm w-full space-y-3 shadow-2xl">
-                <h3 className="font-bold text-slate-800 text-sm">Edit Member â€” {editUser.id}</h3>
+                <h3 className="font-bold text-slate-800 text-sm">Edit Member — {editUser.id}</h3>
                 <div>
                   <label className="form-label">Full Name *</label>
                   <input type="text" value={editUser.name} onChange={e => setEditUser({ ...editUser, name: e.target.value })} className="form-input" required />
@@ -3746,7 +3746,7 @@
             <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
               <div className="bg-white rounded-xl p-6 max-w-sm w-full space-y-3 shadow-2xl">
                 <h3 className="font-bold text-red-600 text-sm flex items-center gap-1.5">
-                  âš ï¸ Move Member to Trash Bin
+                  ⚠️ Move Member to Trash Bin
                 </h3>
                 <p className="text-xs text-slate-600">
                   Are you sure you want to remove <strong>{deleteUser.name} ({deleteUser.enrollmentNumber})</strong> from {deleteUser.committee.toUpperCase()} Committee? This can be restored from the Trash Bin.
@@ -3839,7 +3839,7 @@
           <div className="bg-gradient-to-r from-amber-600 to-orange-700 rounded-2xl p-6 text-white shadow-lg flex flex-wrap justify-between items-center gap-4">
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-2xl">ðŸ›¡ï¸</span>
+                <span className="text-2xl">🛡️</span>
                 <h2 className="text-xl font-bold">Stock Out Approval Management</h2>
               </div>
               <p className="text-amber-100 text-xs mt-1">Review and approve or reject material issues that exceed the configured Upper Limits.</p>
@@ -3873,7 +3873,7 @@
                   {pendingList.length === 0 ? (
                     <tr>
                       <td colSpan={7} className="text-center py-12 text-slate-400">
-                        <div className="text-3xl mb-2">âœ…</div>
+                        <div className="text-3xl mb-2">✅</div>
                         <p className="font-semibold text-slate-600">No pending Stock Out approvals.</p>
                         <p className="text-[11px] text-slate-400">All Stock Out requests are either within limits or already processed.</p>
                       </td>
@@ -3920,10 +3920,10 @@
                           <td className="table-td">
                             <div className="flex flex-col gap-1.5 min-w-[110px]">
                               <button onClick={() => handleApprove(so)} className="btn-success text-xs py-1.5 px-3 justify-center shadow-sm">
-                                âœ“ Approve
+                                ✓ Approve
                               </button>
                               <button onClick={() => { setRejectModal(so); setRejectReason(''); }} className="btn-danger text-xs py-1.5 px-3 justify-center shadow-sm">
-                                âœ• Reject
+                                ✕ Reject
                               </button>
                             </div>
                           </td>
@@ -3942,9 +3942,9 @@
               <form onSubmit={handleReject} className="bg-white rounded-xl p-6 max-w-md w-full space-y-3 shadow-2xl">
                 <div className="flex justify-between items-center border-b pb-2">
                   <h3 className="font-bold text-red-600 text-sm flex items-center gap-1.5">
-                    âœ• Reject Stock Out Request â€” {rejectModal.id}
+                    ✕ Reject Stock Out Request — {rejectModal.id}
                   </h3>
-                  <button type="button" onClick={() => setRejectModal(null)} className="text-slate-400 hover:text-slate-600 font-bold">âœ•</button>
+                  <button type="button" onClick={() => setRejectModal(null)} className="text-slate-400 hover:text-slate-600 font-bold">✕</button>
                 </div>
                 <p className="text-xs text-slate-600">
                   Are you sure you want to reject the Stock Out request requested by <strong>{rejectModal.issuedBy}</strong> for <strong>{rejectModal.purpose}</strong>?
@@ -4031,10 +4031,10 @@
           l.userRole?.toUpperCase(),
           l.section,
           l.action,
-          l.relatedRecord || 'â€”',
-          l.details || 'â€”'
+          l.relatedRecord || '—',
+          l.details || '—'
         ]);
-        exportPDF(headers, rows, 'SMC GEC Palanpur â€” Activity Log Audit Report', 'SMC_Activity_Logs');
+        exportPDF(headers, rows, 'SMC GEC Palanpur — Activity Log Audit Report', 'SMC_Activity_Logs');
       };
 
       const handleClearLogs = () => {
@@ -4056,7 +4056,7 @@
           <div className="bg-gradient-to-r from-slate-800 to-indigo-900 rounded-2xl p-6 text-white shadow-lg flex flex-wrap justify-between items-center gap-4">
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-2xl">ðŸ“œ</span>
+                <span className="text-2xl">📜</span>
                 <h2 className="text-xl font-bold">Activity Log Report & Audit Trail</h2>
                 <span className="badge bg-indigo-500/30 text-indigo-200 border border-indigo-400/30 text-[10px]">Admin Only</span>
               </div>
@@ -4064,22 +4064,22 @@
             </div>
             <div className="flex flex-wrap gap-2">
               <button onClick={handleExportExcel} className="btn-primary bg-emerald-600 hover:bg-emerald-700 text-xs font-semibold">
-                ðŸ“Š Export Excel (.xlsx)
+                📊 Export Excel (.xlsx)
               </button>
               <button onClick={handleExportPDF} className="btn-secondary bg-white/10 hover:bg-white/20 text-white border-white/20 text-xs font-semibold">
-                ðŸ“„ Export PDF
+                📄 Export PDF
               </button>
               <button onClick={() => setShowClearConfirm(true)} className="btn-secondary bg-red-500/20 hover:bg-red-500/30 text-red-200 border-red-400/30 text-xs font-semibold">
-                ðŸ—‘ï¸ Clear History
+                🗑️ Clear History
               </button>
             </div>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <StatCard title="Total Activities Logged" value={logs.length} icon="ðŸ“œ" color="blue" subtitle="All-time audit records" />
-            <StatCard title="Today's Activity Count" value={todayCount} icon="âš¡" color="indigo" subtitle="Actions recorded today" />
-            <StatCard title="Member Logins Today" value={loginsToday} icon="ðŸ”‘" color="green" subtitle="Successful sign-ins" />
-            <StatCard title="Deletions & Trashed" value={deletionsCount} icon="ðŸ—‘ï¸" color="red" subtitle="Items moved to trash" />
+            <StatCard title="Total Activities Logged" value={logs.length} icon="📜" color="blue" subtitle="All-time audit records" />
+            <StatCard title="Today's Activity Count" value={todayCount} icon="⚡" color="indigo" subtitle="Actions recorded today" />
+            <StatCard title="Member Logins Today" value={loginsToday} icon="🔑" color="green" subtitle="Successful sign-ins" />
+            <StatCard title="Deletions & Trashed" value={deletionsCount} icon="🗑️" color="red" subtitle="Items moved to trash" />
           </div>
 
           {/* Filter Bar */}
@@ -4174,7 +4174,7 @@
                   {filteredLogs.length === 0 ? (
                     <tr>
                       <td colSpan={8} className="text-center py-12 text-slate-400">
-                        <div className="text-3xl mb-2">ðŸ”</div>
+                        <div className="text-3xl mb-2">🔍</div>
                         <p className="font-semibold text-slate-600">No activity logs matching your filter criteria.</p>
                       </td>
                     </tr>
@@ -4220,8 +4220,8 @@
                               {l.action}
                             </span>
                           </td>
-                          <td className="table-td font-mono text-slate-700 max-w-xs truncate">{l.relatedRecord || 'â€”'}</td>
-                          <td className="table-td text-slate-500 max-w-xs truncate">{l.details || 'â€”'}</td>
+                          <td className="table-td font-mono text-slate-700 max-w-xs truncate">{l.relatedRecord || '—'}</td>
+                          <td className="table-td text-slate-500 max-w-xs truncate">{l.details || '—'}</td>
                         </tr>
                       );
                     })
@@ -4236,8 +4236,8 @@
             <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
               <div className="bg-white rounded-xl p-6 max-w-lg w-full space-y-4 shadow-2xl">
                 <div className="flex justify-between items-center border-b pb-2">
-                  <h3 className="font-bold text-slate-800 text-sm">Activity Log Details â€” {selectedLog.id}</h3>
-                  <button onClick={() => setSelectedLog(null)} className="text-slate-400 hover:text-slate-600 font-bold">âœ•</button>
+                  <h3 className="font-bold text-slate-800 text-sm">Activity Log Details — {selectedLog.id}</h3>
+                  <button onClick={() => setSelectedLog(null)} className="text-slate-400 hover:text-slate-600 font-bold">✕</button>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 text-xs">
@@ -4285,7 +4285,7 @@
           {showClearConfirm && (
             <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
               <div className="bg-white rounded-xl p-6 max-w-sm w-full space-y-3 shadow-2xl">
-                <h3 className="font-bold text-red-600 text-sm">âš ï¸ Clear Activity Logs History</h3>
+                <h3 className="font-bold text-red-600 text-sm">⚠️ Clear Activity Logs History</h3>
                 <p className="text-xs text-slate-600">
                   Are you sure you want to purge all activity audit records? This action cannot be reversed.
                 </p>
@@ -4355,7 +4355,7 @@
           <div className="bg-gradient-to-r from-red-700 to-rose-900 rounded-2xl p-6 text-white shadow-lg flex flex-wrap justify-between items-center gap-4">
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-2xl">ðŸ—‘ï¸</span>
+                <span className="text-2xl">🗑️</span>
                 <h2 className="text-xl font-bold">Super Admin Trash Bin</h2>
                 <span className="badge bg-red-500/30 text-red-200 border border-red-400/30 text-[10px]">Admin Only</span>
               </div>
@@ -4364,7 +4364,7 @@
             <div>
               {trash.length > 0 && (
                 <button onClick={() => setShowEmptyConfirm(true)} className="btn-danger bg-white text-red-800 hover:bg-rose-50 text-xs font-semibold shadow-md">
-                  ðŸ—‘ï¸ Empty Entire Trash ({trash.length})
+                  🗑️ Empty Entire Trash ({trash.length})
                 </button>
               )}
             </div>
@@ -4409,7 +4409,7 @@
                   {filteredTrash.length === 0 ? (
                     <tr>
                       <td colSpan={7} className="text-center py-12 text-slate-400">
-                        <div className="text-3xl mb-2">ðŸ—‘ï¸</div>
+                        <div className="text-3xl mb-2">🗑️</div>
                         <p className="font-semibold text-slate-600">Trash Bin is empty.</p>
                         <p className="text-[11px] text-slate-400">Any record deleted from the portal will appear here for safe restoration.</p>
                       </td>
@@ -4434,13 +4434,13 @@
                         <td className="table-td">
                           <div className="flex gap-2">
                             <button onClick={() => handleRestore(t.id)} className="btn-success text-xs py-1 px-2.5">
-                              â™»ï¸ Restore
+                              ♻️ Restore
                             </button>
                             <button onClick={() => handlePermanentDelete(t.id)} className="btn-danger text-xs py-1 px-2.5">
-                              âœ• Purge
+                              ✕ Purge
                             </button>
                             <button onClick={() => setViewPayload(t)} className="btn-secondary text-xs py-1 px-2">
-                              ðŸ‘ï¸ Data
+                              👁️ Data
                             </button>
                           </div>
                         </td>
@@ -4457,15 +4457,15 @@
             <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
               <div className="bg-white rounded-xl p-6 max-w-lg w-full space-y-3 shadow-2xl">
                 <div className="flex justify-between items-center border-b pb-2">
-                  <h3 className="font-bold text-slate-800 text-sm">Trashed Record Payload â€” {viewPayload.id}</h3>
-                  <button onClick={() => setViewPayload(null)} className="text-slate-400 hover:text-slate-600 font-bold">âœ•</button>
+                  <h3 className="font-bold text-slate-800 text-sm">Trashed Record Payload — {viewPayload.id}</h3>
+                  <button onClick={() => setViewPayload(null)} className="text-slate-400 hover:text-slate-600 font-bold">✕</button>
                 </div>
                 <div className="text-xs bg-slate-900 text-emerald-400 p-4 rounded-lg font-mono overflow-auto max-h-80">
                   <pre>{JSON.stringify(viewPayload.data, null, 2)}</pre>
                 </div>
                 <div className="flex justify-between items-center pt-2">
                   <button onClick={() => { handleRestore(viewPayload.id); setViewPayload(null); }} className="btn-success text-xs">
-                    â™»ï¸ Restore to Live Database
+                    ♻️ Restore to Live Database
                   </button>
                   <button onClick={() => setViewPayload(null)} className="btn-secondary text-xs">Close</button>
                 </div>
@@ -4477,7 +4477,7 @@
           {showEmptyConfirm && (
             <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
               <div className="bg-white rounded-xl p-6 max-w-sm w-full space-y-3 shadow-2xl">
-                <h3 className="font-bold text-red-600 text-sm">âš ï¸ Empty Trash Bin Permanently</h3>
+                <h3 className="font-bold text-red-600 text-sm">⚠️ Empty Trash Bin Permanently</h3>
                 <p className="text-xs text-slate-600">
                   Are you sure you want to permanently delete all <strong>{trash.length}</strong> items in the Trash Bin? None of these records can be recovered.
                 </p>
@@ -4507,30 +4507,30 @@
             </div>
             {(role === 'account' || role === 'admin') && (
               <button onClick={() => window.print()} className="btn-primary text-xs bg-slate-800 hover:bg-slate-900">
-                ðŸ–¨ï¸ Print Entire Report Sheet
+                🖨️ Print Entire Report Sheet
               </button>
             )}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
             <div className="border border-slate-200 rounded-xl p-4 space-y-3 bg-slate-50">
-              <p className="font-bold text-xs text-slate-800">ðŸ“¦ Inventory Stock Report ({items.length} Items)</p>
+              <p className="font-bold text-xs text-slate-800">📦 Inventory Stock Report ({items.length} Items)</p>
               <button onClick={() => exportExcel(items, 'SMC_Stock_Report')} className="btn-primary w-full justify-center text-xs">Export Excel</button>
-              <button onClick={() => exportPDF(['Item', 'Brand', 'Unit', 'Stock', 'Pack Size'], items.map(i => [i.name, i.brand || 'Not Specified', i.unit, String(i.currentStock), i.packSize || 'Not Specified']), 'SMC GEC Palanpur â€” Stock Report', 'SMC_Stock')} className="btn-secondary w-full justify-center text-xs">Export PDF</button>
+              <button onClick={() => exportPDF(['Item', 'Brand', 'Unit', 'Stock', 'Pack Size'], items.map(i => [i.name, i.brand || 'Not Specified', i.unit, String(i.currentStock), i.packSize || 'Not Specified']), 'SMC GEC Palanpur — Stock Report', 'SMC_Stock')} className="btn-secondary w-full justify-center text-xs">Export PDF</button>
             </div>
 
             {role !== 'storage' && (
               <>
                 <div className="border border-slate-200 rounded-xl p-4 space-y-3 bg-slate-50">
-                  <p className="font-bold text-xs text-slate-800">ðŸ›’ Purchases Report</p>
+                  <p className="font-bold text-xs text-slate-800">🛒 Purchases Report</p>
                   <button onClick={() => exportExcel(purchases, 'SMC_Purchases_Report')} className="btn-primary w-full justify-center text-xs">Export Excel</button>
-                  <button onClick={() => exportPDF(['Purchase ID', 'Vendor', 'Items', 'Status'], purchases.map(p => [p.id, p.vendorName || p.vendorId, normalizeItems(p).map(it => `${it.itemName} (${it.orderedQty} ${it.unit})`).join(', '), p.status]), 'SMC GEC Palanpur â€” Purchases Report', 'SMC_Purchases')} className="btn-secondary w-full justify-center text-xs">Export PDF</button>
+                  <button onClick={() => exportPDF(['Purchase ID', 'Vendor', 'Items', 'Status'], purchases.map(p => [p.id, p.vendorName || p.vendorId, normalizeItems(p).map(it => `${it.itemName} (${it.orderedQty} ${it.unit})`).join(', '), p.status]), 'SMC GEC Palanpur — Purchases Report', 'SMC_Purchases')} className="btn-secondary w-full justify-center text-xs">Export PDF</button>
                 </div>
 
                 <div className="border border-slate-200 rounded-xl p-4 space-y-3 bg-slate-50">
-                  <p className="font-bold text-xs text-slate-800">ðŸ’³ Payments & Bills Report</p>
+                  <p className="font-bold text-xs text-slate-800">💳 Payments & Bills Report</p>
                   <button onClick={() => exportExcel(bills, 'SMC_Bills_Report')} className="btn-primary w-full justify-center text-xs">Export Excel</button>
-                  <button onClick={() => exportPDF(['Bill ID', 'Vendor', 'Bill No', 'Amount', 'Status'], bills.map(b => [b.id, b.vendorName || 'General', b.billNumber, `Rs. ${b.billAmount}`, b.verificationStatus]), 'SMC GEC Palanpur â€” Bills Report', 'SMC_Bills')} className="btn-secondary w-full justify-center text-xs">Export PDF</button>
+                  <button onClick={() => exportPDF(['Bill ID', 'Vendor', 'Bill No', 'Amount', 'Status'], bills.map(b => [b.id, b.vendorName || 'General', b.billNumber, `Rs. ${b.billAmount}`, b.verificationStatus]), 'SMC GEC Palanpur — Bills Report', 'SMC_Bills')} className="btn-secondary w-full justify-center text-xs">Export PDF</button>
                 </div>
               </>
             )}
@@ -4540,17 +4540,17 @@
     }
 
     // ===========================================================
-    // PROCUREMENT MODULE â€” LIST VIEW
+    // PROCUREMENT MODULE — LIST VIEW
     // ===========================================================
     const PROC_STEPS = [
-      { key: 'market_research', label: 'Market Research', icon: 'ðŸ”', desc: 'Research market rates & requirements' },
-      { key: 'rfq_sent', label: 'RFQ Sent', icon: 'ðŸ“¤', desc: 'Request for Quotation sent to vendors' },
-      { key: 'quotations_received', label: 'Quotations Received', icon: 'ðŸ“¨', desc: 'Vendor quotations collected' },
-      { key: 'comparative_done', label: 'Comparative Statement', icon: 'ðŸ“Š', desc: 'Rates compared across vendors' },
-      { key: 'vendor_selected', label: 'Vendor Selected', icon: 'âœ…', desc: 'Best vendor chosen' },
-      { key: 'negotiation', label: 'Negotiation', icon: 'ðŸ¤', desc: 'Price negotiation completed' },
-      { key: 'contract_signed', label: 'Contract Signed', icon: 'ðŸ“', desc: '3-month contract executed' },
-      { key: 'procurement_completed', label: 'Completed', icon: 'ðŸŽ‰', desc: 'Procurement process complete' },
+      { key: 'market_research', label: 'Market Research', icon: '🔍', desc: 'Research market rates & requirements' },
+      { key: 'rfq_sent', label: 'RFQ Sent', icon: '📤', desc: 'Request for Quotation sent to vendors' },
+      { key: 'quotations_received', label: 'Quotations Received', icon: '📨', desc: 'Vendor quotations collected' },
+      { key: 'comparative_done', label: 'Comparative Statement', icon: '📊', desc: 'Rates compared across vendors' },
+      { key: 'vendor_selected', label: 'Vendor Selected', icon: '✅', desc: 'Best vendor chosen' },
+      { key: 'negotiation', label: 'Negotiation', icon: '🤝', desc: 'Price negotiation completed' },
+      { key: 'contract_signed', label: 'Contract Signed', icon: '📝', desc: '3-month contract executed' },
+      { key: 'procurement_completed', label: 'Completed', icon: '🎉', desc: 'Procurement process complete' },
     ];
 
     const PROC_STEP_ORDER = PROC_STEPS.map(s => s.key);
@@ -4605,7 +4605,7 @@
         const updated = [proc, ...procurements];
         ls_set('procurements', updated);
         setProcurements(updated);
-        logActivity('Created Procurement', 'PROCUREMENT', `${id} â€” ${proc.title}`, `Created by ${currentUser.name}`);
+        logActivity('Created Procurement', 'PROCUREMENT', `${id} — ${proc.title}`, `Created by ${currentUser.name}`);
         showToast(`Procurement ${id} created successfully!`, 'success');
         setShowNewModal(false);
         setNewProc({ title: '', description: '', items: [{ itemName: '', unit: 'kg', estimatedQty: '' }] });
@@ -4625,10 +4625,10 @@
           <div className="bg-gradient-to-r from-violet-700 to-indigo-800 rounded-2xl p-6 text-white shadow-lg flex flex-wrap justify-between items-center gap-4">
             <div>
               <div className="flex items-center gap-2.5">
-                <span className="text-2xl">ðŸ”„</span>
+                <span className="text-2xl">🔄</span>
                 <h2 className="text-xl font-bold">Procurement Workflow</h2>
               </div>
-              <p className="text-violet-200 text-xs mt-1">End-to-end procurement: Market Research â†’ RFQ â†’ Quotations â†’ Vendor Selection â†’ Contract â†’ Completion</p>
+              <p className="text-violet-200 text-xs mt-1">End-to-end procurement: Market Research → RFQ → Quotations → Vendor Selection → Contract → Completion</p>
             </div>
             <button onClick={() => setShowNewModal(true)} className="btn-primary bg-white text-violet-800 hover:bg-violet-50 font-bold shadow-lg">
               + New Procurement
@@ -4637,10 +4637,10 @@
 
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <StatCard title="Total Procurements" value={stats.total} icon="ðŸ“‹" color="blue" />
-            <StatCard title="Active / In Progress" value={stats.active} icon="ðŸ”„" color="amber" subtitle="Ongoing workflows" />
-            <StatCard title="Completed" value={stats.completed} icon="ðŸŽ‰" color="green" />
-            <StatCard title="Early Stage" value={stats.pending} icon="ðŸ”" color="indigo" subtitle="Research / RFQ stage" />
+            <StatCard title="Total Procurements" value={stats.total} icon="📋" color="blue" />
+            <StatCard title="Active / In Progress" value={stats.active} icon="🔄" color="amber" subtitle="Ongoing workflows" />
+            <StatCard title="Completed" value={stats.completed} icon="🎉" color="green" />
+            <StatCard title="Early Stage" value={stats.pending} icon="🔍" color="indigo" subtitle="Research / RFQ stage" />
           </div>
 
           {/* Filters */}
@@ -4649,7 +4649,7 @@
             <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="form-select text-xs w-auto">
               <option value="ALL">All Statuses</option>
               {PROC_STEPS.map(s => <option key={s.key} value={s.key}>{s.icon} {s.label}</option>)}
-              <option value="cancelled">âœ• Cancelled</option>
+              <option value="cancelled">✕ Cancelled</option>
             </select>
           </div>
 
@@ -4676,7 +4676,7 @@
                 <tbody className="divide-y divide-slate-100">
                   {filtered.length === 0 ? (
                     <tr><td colSpan={8} className="text-center py-12 text-slate-400">
-                      <div className="text-3xl mb-2">ðŸ”„</div>
+                      <div className="text-3xl mb-2">🔄</div>
                       <p className="font-semibold text-slate-600">No procurements found.</p>
                       <p className="text-[11px]">Create a new procurement to start the workflow.</p>
                     </td></tr>
@@ -4695,7 +4695,7 @@
                           <td className="table-td">
                             <div className="space-y-0.5">
                               {(proc.items || []).slice(0, 2).map((it, i) => (
-                                <div key={i} className="text-[11px] text-slate-600">â€¢ {it.itemName} ({it.estimatedQty} {it.unit})</div>
+                                <div key={i} className="text-[11px] text-slate-600">• {it.itemName} ({it.estimatedQty} {it.unit})</div>
                               ))}
                               {(proc.items || []).length > 2 && <div className="text-[11px] text-slate-400">+{proc.items.length - 2} more</div>}
                             </div>
@@ -4716,7 +4716,7 @@
                           <td className="table-td text-slate-400 whitespace-nowrap">{proc.date}</td>
                           <td className="table-td">
                             <button onClick={e => { e.stopPropagation(); onOpenDetail(proc.id); }} className="btn-primary text-xs py-1 px-3">
-                              Open â†’
+                              Open →
                             </button>
                           </td>
                         </tr>
@@ -4734,12 +4734,12 @@
               <form onSubmit={handleCreateProc} className="bg-white rounded-2xl p-6 max-w-lg w-full space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
                 <div className="flex justify-between items-center border-b pb-3">
                   <h3 className="font-bold text-slate-800">Create New Procurement</h3>
-                  <button type="button" onClick={() => setShowNewModal(false)} className="text-slate-400 hover:text-slate-600 font-bold text-lg">âœ•</button>
+                  <button type="button" onClick={() => setShowNewModal(false)} className="text-slate-400 hover:text-slate-600 font-bold text-lg">✕</button>
                 </div>
 
                 <div>
                   <label className="form-label">Procurement Title *</label>
-                  <input type="text" value={newProc.title} onChange={e => setNewProc(p => ({...p, title: e.target.value}))} className="form-input" placeholder="e.g. Monthly Grocery Purchase â€” October 2026" required />
+                  <input type="text" value={newProc.title} onChange={e => setNewProc(p => ({...p, title: e.target.value}))} className="form-input" placeholder="e.g. Monthly Grocery Purchase — October 2026" required />
                 </div>
                 <div>
                   <label className="form-label">Description / Notes</label>
@@ -4759,7 +4759,7 @@
                         <select value={item.unit} onChange={e => setNewProc(p => ({...p, items: p.items.map((it,idx) => idx===i ? {...it, unit: e.target.value} : it)}))} className="form-select text-xs w-20">
                           {SUPPORTED_UNITS.map(u => <option key={u} value={u}>{u}</option>)}
                         </select>
-                        {newProc.items.length > 1 && <button type="button" onClick={() => handleRemoveItemRow(i)} className="text-red-500 hover:text-red-700 font-bold text-xs shrink-0">âœ•</button>}
+                        {newProc.items.length > 1 && <button type="button" onClick={() => handleRemoveItemRow(i)} className="text-red-500 hover:text-red-700 font-bold text-xs shrink-0">✕</button>}
                       </div>
                     ))}
                   </div>
@@ -4767,7 +4767,7 @@
 
                 <div className="flex justify-end gap-2 pt-2 border-t">
                   <button type="button" onClick={() => setShowNewModal(false)} className="btn-secondary text-xs">Cancel</button>
-                  <button type="submit" className="btn-primary text-xs">Create Procurement â†’</button>
+                  <button type="submit" className="btn-primary text-xs">Create Procurement →</button>
                 </div>
               </form>
             </div>
@@ -4777,7 +4777,7 @@
     }
 
     // ===========================================================
-    // PROCUREMENT MODULE â€” DETAIL / WORKFLOW VIEW
+    // PROCUREMENT MODULE — DETAIL / WORKFLOW VIEW
     // ===========================================================
     function ProcurementDetailView({ currentUser, procurementId, onUpdate, onBack }) {
       const [proc, setProc] = useState(() => (ls_get('procurements', [])).find(p => p.id === procurementId) || null);
@@ -4786,9 +4786,9 @@
       if (!proc) {
         return (
           <div className="card p-8 text-center">
-            <div className="text-4xl mb-3">ðŸ”</div>
+            <div className="text-4xl mb-3">🔍</div>
             <p className="font-semibold text-slate-700">Procurement not found.</p>
-            <button onClick={onBack} className="btn-secondary text-xs mt-4">â† Back to List</button>
+            <button onClick={onBack} className="btn-secondary text-xs mt-4">← Back to List</button>
           </div>
         );
       }
@@ -4810,7 +4810,7 @@
           history: [...(proc.history || []), { stage: newStatus, by: currentUser.name, at: now.toISOString(), note }]
         };
         saveProc(updated);
-        logActivity(`Advanced Procurement to ${newStatus}`, 'PROCUREMENT', `${proc.id} â€” ${proc.title}`, note || `Stage: ${newStatus}`);
+        logActivity(`Advanced Procurement to ${newStatus}`, 'PROCUREMENT', `${proc.id} — ${proc.title}`, note || `Stage: ${newStatus}`);
         showToast(`Stage advanced to "${PROC_STEPS.find(s=>s.key===newStatus)?.label || newStatus}"!`, 'success');
       };
 
@@ -4880,7 +4880,7 @@
         const updatedStatus = proc.status === 'rfq_sent' || proc.status === 'market_research' ? 'quotations_received' : proc.status;
         const updated = { ...proc, quotations: updatedQuotes, status: updatedStatus };
         saveProc(updated);
-        logActivity('Added Vendor Quotation', 'PROCUREMENT', `${proc.id} â€” ${vendor.name}`, `Amount: â‚¹${newQuote.totalAmount}`);
+        logActivity('Added Vendor Quotation', 'PROCUREMENT', `${proc.id} — ${vendor.name}`, `Amount: ₹${newQuote.totalAmount}`);
         showToast(`Quotation from ${vendor.name} added!`, 'success');
         setShowAddQuote(false);
         setNewQuote({ vendorId: '', quoteDate: new Date().toISOString().slice(0, 10), totalAmount: '', notes: '', items: [{ itemName: '', unit: 'kg', qty: '', rate: '', total: '' }], docBase64: '', docName: '' });
@@ -4897,7 +4897,7 @@
                 <div key={step.key} className="flex items-center">
                   <div className="flex flex-col items-center gap-1">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold border-2 transition-all ${done ? 'bg-emerald-500 border-emerald-500 text-white' : current ? 'bg-violet-600 border-violet-600 text-white' : 'bg-slate-100 border-slate-200 text-slate-400'}`}>
-                      {done ? 'âœ“' : step.icon}
+                      {done ? '✓' : step.icon}
                     </div>
                     <span className={`text-[9px] font-semibold whitespace-nowrap max-w-16 text-center leading-tight ${current ? 'text-violet-700' : done ? 'text-emerald-700' : 'text-slate-400'}`}>{step.label}</span>
                   </div>
@@ -4916,17 +4916,17 @@
           {/* Header */}
           <div className="flex items-center justify-between flex-wrap gap-3">
             <div className="flex items-center gap-3">
-              <button onClick={onBack} className="btn-secondary text-xs px-3 py-1.5">â† Back</button>
+              <button onClick={onBack} className="btn-secondary text-xs px-3 py-1.5">← Back</button>
               <div>
                 <div className="flex items-center gap-2">
                   <h2 className="font-bold text-slate-800 text-base">{proc.title}</h2>
                   <StatusBadge status={proc.status} />
                 </div>
-                <p className="text-xs text-slate-400 font-mono mt-0.5">{proc.id} Â· Created by {proc.createdBy} on {proc.date}</p>
+                <p className="text-xs text-slate-400 font-mono mt-0.5">{proc.id} · Created by {proc.createdBy} on {proc.date}</p>
               </div>
             </div>
             {proc.status !== 'cancelled' && proc.status !== 'procurement_completed' && (
-              <button onClick={() => { if (confirm('Cancel this procurement?')) { advanceToStage('cancelled', {}, 'Cancelled by Admin/Procurement'); } }} className="btn-secondary text-xs text-red-600 hover:bg-red-50 hover:border-red-200">âœ• Cancel Procurement</button>
+              <button onClick={() => { if (confirm('Cancel this procurement?')) { advanceToStage('cancelled', {}, 'Cancelled by Admin/Procurement'); } }} className="btn-secondary text-xs text-red-600 hover:bg-red-50 hover:border-red-200">✕ Cancel Procurement</button>
             )}
           </div>
 
@@ -4936,7 +4936,7 @@
           {/* Items Summary Card */}
           <div className="card p-4">
             <div className="flex justify-between items-center mb-3">
-              <h3 className="font-bold text-slate-800 text-sm">ðŸ“‹ Items to Procure</h3>
+              <h3 className="font-bold text-slate-800 text-sm">📋 Items to Procure</h3>
               {proc.selectedVendorName && <span className="badge bg-purple-100 text-purple-800 font-semibold">Selected Vendor: {proc.selectedVendorName}</span>}
             </div>
             <div className="overflow-x-auto">
@@ -4955,10 +4955,10 @@
           <div className={`card p-5 space-y-4 ${stepIdx >= 0 ? '' : 'opacity-50 pointer-events-none'}`}>
             <div className="flex items-center justify-between">
               <h3 className="font-bold text-slate-800 text-sm flex items-center gap-2">
-                <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${stepIdx > 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-sky-100 text-sky-700'}`}>{stepIdx > 0 ? 'âœ“' : '1'}</span>
-                ðŸ” Market Research
+                <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${stepIdx > 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-sky-100 text-sky-700'}`}>{stepIdx > 0 ? '✓' : '1'}</span>
+                🔍 Market Research
               </h3>
-              {stepIdx > 0 && <span className="badge bg-emerald-100 text-emerald-700">âœ“ Done</span>}
+              {stepIdx > 0 && <span className="badge bg-emerald-100 text-emerald-700">✓ Done</span>}
             </div>
             <div className="grid sm:grid-cols-2 gap-3">
               <div>
@@ -4972,7 +4972,7 @@
             </div>
             {stepIdx === 0 && (
               <button onClick={() => { if (!mrNotes.trim()) { showToast('Please add market research notes.', 'warning'); return; } advanceToStage('rfq_sent', { marketResearchNotes: mrNotes, marketResearchDate: mrDate }, 'Market research completed'); }} className="btn-primary text-xs">
-                Save & Proceed to RFQ â†’
+                Save & Proceed to RFQ →
               </button>
             )}
             {stepIdx > 0 && proc.marketResearchNotes && (
@@ -4986,10 +4986,10 @@
           <div className={`card p-5 space-y-4 ${stepIdx >= 1 ? '' : 'opacity-40 pointer-events-none'}`}>
             <div className="flex items-center justify-between">
               <h3 className="font-bold text-slate-800 text-sm flex items-center gap-2">
-                <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${stepIdx > 1 ? 'bg-emerald-100 text-emerald-700' : 'bg-violet-100 text-violet-700'}`}>{stepIdx > 1 ? 'âœ“' : '2'}</span>
-                ðŸ“¤ Request for Quotation (RFQ)
+                <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${stepIdx > 1 ? 'bg-emerald-100 text-emerald-700' : 'bg-violet-100 text-violet-700'}`}>{stepIdx > 1 ? '✓' : '2'}</span>
+                📤 Request for Quotation (RFQ)
               </h3>
-              {stepIdx > 1 && <span className="badge bg-emerald-100 text-emerald-700">âœ“ Done</span>}
+              {stepIdx > 1 && <span className="badge bg-emerald-100 text-emerald-700">✓ Done</span>}
             </div>
             {stepIdx >= 1 && (
               <>
@@ -5018,7 +5018,7 @@
                 </div>
                 {stepIdx === 1 && (
                   <button onClick={() => { if (rfqVendors.length === 0) { showToast('Select at least one vendor.', 'warning'); return; } advanceToStage('rfq_sent', { rfqSentTo: rfqVendors, rfqDate, rfqNotes }, 'RFQ sent to vendors'); }} className="btn-primary text-xs">
-                    Confirm RFQ Sent â†’
+                    Confirm RFQ Sent →
                   </button>
                 )}
                 {stepIdx > 1 && (
@@ -5037,8 +5037,8 @@
           <div className={`card p-5 space-y-4 ${stepIdx >= 1 ? '' : 'opacity-40 pointer-events-none'}`}>
             <div className="flex items-center justify-between flex-wrap gap-2">
               <h3 className="font-bold text-slate-800 text-sm flex items-center gap-2">
-                <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${stepIdx > 2 ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700'}`}>{stepIdx > 2 ? 'âœ“' : '3'}</span>
-                ðŸ“¨ Vendor Quotations ({(proc.quotations || []).length} received)
+                <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${stepIdx > 2 ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700'}`}>{stepIdx > 2 ? '✓' : '3'}</span>
+                📨 Vendor Quotations ({(proc.quotations || []).length} received)
               </h3>
               {stepIdx >= 1 && stepIdx < 4 && (
                 <button onClick={() => setShowAddQuote(true)} className="btn-primary text-xs">+ Add Quotation</button>
@@ -5068,21 +5068,21 @@
                         <tr key={i} className={isLowest && proc.quotations.length > 1 ? 'bg-emerald-50/60' : ''}>
                           <td className="table-td font-bold text-slate-800">
                             {q.vendorName}
-                            {isLowest && proc.quotations.length > 1 && <span className="ml-1 badge bg-emerald-100 text-emerald-700 text-[10px]">ðŸ† Lowest</span>}
+                            {isLowest && proc.quotations.length > 1 && <span className="ml-1 badge bg-emerald-100 text-emerald-700 text-[10px]">🏆 Lowest</span>}
                           </td>
                           <td className="table-td text-slate-500">{q.quoteDate}</td>
-                          <td className="table-td font-bold text-slate-900">â‚¹{Number(q.totalAmount || 0).toLocaleString()}</td>
+                          <td className="table-td font-bold text-slate-900">₹{Number(q.totalAmount || 0).toLocaleString()}</td>
                           <td className="table-td">
                             {(q.items || []).map((it, j) => (
-                              <div key={j} className="text-[11px]">{it.itemName}: {it.qty} {it.unit} @ â‚¹{it.rate} = â‚¹{it.total}</div>
+                              <div key={j} className="text-[11px]">{it.itemName}: {it.qty} {it.unit} @ ₹{it.rate} = ₹{it.total}</div>
                             ))}
                           </td>
                           <td className="table-td">
                             {q.docBase64 ? (
-                              <button onClick={() => { const w = window.open(); w.document.write(`<iframe src="${q.docBase64}" style="width:100%;height:100%;border:none"></iframe>`); }} className="text-primary-600 hover:underline text-xs">ðŸ“„ View Doc</button>
+                              <button onClick={() => { const w = window.open(); w.document.write(`<iframe src="${q.docBase64}" style="width:100%;height:100%;border:none"></iframe>`); }} className="text-primary-600 hover:underline text-xs">📄 View Doc</button>
                             ) : <span className="text-slate-400 text-[11px]">No doc</span>}
                           </td>
-                          <td className="table-td text-slate-500 max-w-xs truncate">{q.notes || 'â€”'}</td>
+                          <td className="table-td text-slate-500 max-w-xs truncate">{q.notes || '—'}</td>
                         </tr>
                       );
                     })}
@@ -5093,7 +5093,7 @@
 
             {(proc.quotations || []).length >= 1 && stepIdx === 2 && (
               <button onClick={() => advanceToStage('comparative_done', { comparativeNotes: compNotes }, 'Comparative statement reviewed')} className="btn-primary text-xs">
-                Mark Comparative Done â†’
+                Mark Comparative Done →
               </button>
             )}
           </div>
@@ -5101,8 +5101,8 @@
           {/* ====== STAGE 4: Comparative Statement ====== */}
           <div className={`card p-5 space-y-4 ${stepIdx >= 3 ? '' : 'opacity-40 pointer-events-none'}`}>
             <div className="flex items-center gap-2">
-              <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${stepIdx > 3 ? 'bg-emerald-100 text-emerald-700' : 'bg-indigo-100 text-indigo-700'}`}>{stepIdx > 3 ? 'âœ“' : '4'}</span>
-              <h3 className="font-bold text-slate-800 text-sm">ðŸ“Š Comparative Statement (Auto-Generated)</h3>
+              <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${stepIdx > 3 ? 'bg-emerald-100 text-emerald-700' : 'bg-indigo-100 text-indigo-700'}`}>{stepIdx > 3 ? '✓' : '4'}</span>
+              <h3 className="font-bold text-slate-800 text-sm">📊 Comparative Statement (Auto-Generated)</h3>
             </div>
             {stepIdx >= 3 && (
               <>
@@ -5120,9 +5120,9 @@
                       <tbody>
                         {[...proc.quotations].sort((a,b) => Number(a.totalAmount)-Number(b.totalAmount)).map((q, i) => (
                           <tr key={i} className={i === 0 ? 'bg-emerald-50 font-bold' : 'hover:bg-slate-50'}>
-                            <td className="px-4 py-3">{q.vendorName} {i===0 ? 'ðŸ†' : ''}</td>
+                            <td className="px-4 py-3">{q.vendorName} {i===0 ? '🏆' : ''}</td>
                             <td className="px-4 py-3 text-slate-500">{q.quoteDate}</td>
-                            <td className="px-4 py-3 text-right font-bold text-slate-900">â‚¹{Number(q.totalAmount||0).toLocaleString()}</td>
+                            <td className="px-4 py-3 text-right font-bold text-slate-900">₹{Number(q.totalAmount||0).toLocaleString()}</td>
                             <td className="px-4 py-3">
                               {i === 0 ? <span className="badge bg-emerald-100 text-emerald-800">L1 Lowest</span> : i === 1 ? <span className="badge bg-amber-100 text-amber-700">L2</span> : <span className="badge bg-slate-100 text-slate-600">L{i+1}</span>}
                             </td>
@@ -5138,7 +5138,7 @@
                 </div>
                 {stepIdx === 3 && (
                   <button onClick={() => advanceToStage('vendor_selected', { comparativeNotes: compNotes }, 'Comparative statement finalized')} className="btn-primary text-xs">
-                    Finalize Comparative & Proceed â†’
+                    Finalize Comparative & Proceed →
                   </button>
                 )}
               </>
@@ -5148,8 +5148,8 @@
           {/* ====== STAGE 5: Vendor Selection ====== */}
           <div className={`card p-5 space-y-4 ${stepIdx >= 4 ? '' : 'opacity-40 pointer-events-none'}`}>
             <div className="flex items-center gap-2">
-              <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${stepIdx > 4 ? 'bg-emerald-100 text-emerald-700' : 'bg-purple-100 text-purple-700'}`}>{stepIdx > 4 ? 'âœ“' : '5'}</span>
-              <h3 className="font-bold text-slate-800 text-sm">âœ… Vendor Selection</h3>
+              <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${stepIdx > 4 ? 'bg-emerald-100 text-emerald-700' : 'bg-purple-100 text-purple-700'}`}>{stepIdx > 4 ? '✓' : '5'}</span>
+              <h3 className="font-bold text-slate-800 text-sm">✅ Vendor Selection</h3>
             </div>
             {stepIdx >= 4 && (
               <>
@@ -5159,7 +5159,7 @@
                     <select value={selVendorId} onChange={e => setSelVendorId(e.target.value)} className="form-select text-xs" disabled={stepIdx > 4}>
                       <option value="">-- Choose vendor --</option>
                       {(proc.quotations || []).map(q => (
-                        <option key={q.vendorId} value={q.vendorId}>{q.vendorName} (â‚¹{Number(q.totalAmount||0).toLocaleString()})</option>
+                        <option key={q.vendorId} value={q.vendorId}>{q.vendorName} (₹{Number(q.totalAmount||0).toLocaleString()})</option>
                       ))}
                       {vendors.filter(v => v.isActive).map(v => (
                         <option key={v.id} value={v.id}>{v.name}</option>
@@ -5182,7 +5182,7 @@
                     const vName = v?.name || v?.vendorName || selVendorId;
                     advanceToStage('negotiation', { selectedVendorId: selVendorId, selectedVendorName: vName, selectionReason: selReason, selectionDate: new Date().toISOString().slice(0,10) }, `Vendor selected: ${vName}`);
                   }} className="btn-primary text-xs">
-                    Confirm Vendor Selection â†’
+                    Confirm Vendor Selection →
                   </button>
                 )}
                 {stepIdx > 4 && proc.selectedVendorName && (
@@ -5198,8 +5198,8 @@
           {/* ====== STAGE 6: Negotiation ====== */}
           <div className={`card p-5 space-y-4 ${stepIdx >= 5 ? '' : 'opacity-40 pointer-events-none'}`}>
             <div className="flex items-center gap-2">
-              <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${stepIdx > 5 ? 'bg-emerald-100 text-emerald-700' : 'bg-orange-100 text-orange-700'}`}>{stepIdx > 5 ? 'âœ“' : '6'}</span>
-              <h3 className="font-bold text-slate-800 text-sm">ðŸ¤ Price Negotiation</h3>
+              <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${stepIdx > 5 ? 'bg-emerald-100 text-emerald-700' : 'bg-orange-100 text-orange-700'}`}>{stepIdx > 5 ? '✓' : '6'}</span>
+              <h3 className="font-bold text-slate-800 text-sm">🤝 Price Negotiation</h3>
             </div>
             {stepIdx >= 5 && (
               <>
@@ -5209,7 +5209,7 @@
                     <input type="date" value={negDate} onChange={e => setNegDate(e.target.value)} className="form-input text-xs" disabled={stepIdx > 5} />
                   </div>
                   <div>
-                    <label className="form-label text-xs">Final Negotiated Amount (â‚¹)</label>
+                    <label className="form-label text-xs">Final Negotiated Amount (₹)</label>
                     <input type="number" value={negAmount} onChange={e => setNegAmount(e.target.value)} className="form-input text-xs font-bold" placeholder="0.00" disabled={stepIdx > 5} />
                   </div>
                   <div className="sm:col-span-2">
@@ -5222,12 +5222,12 @@
                     if (!negNotes.trim()) { showToast('Add negotiation notes.', 'warning'); return; }
                     advanceToStage('contract_signed', { negotiationNotes: negNotes, finalNegotiatedAmount: negAmount, negotiationDate: negDate }, 'Negotiation completed');
                   }} className="btn-primary text-xs">
-                    Complete Negotiation & Proceed to Contract â†’
+                    Complete Negotiation & Proceed to Contract →
                   </button>
                 )}
                 {stepIdx > 5 && (
                   <div className="bg-orange-50 p-3 rounded-lg text-xs border border-orange-100">
-                    <strong>Negotiated Amount:</strong> â‚¹{Number(proc.finalNegotiatedAmount||0).toLocaleString()}<br/>
+                    <strong>Negotiated Amount:</strong> ₹{Number(proc.finalNegotiatedAmount||0).toLocaleString()}<br/>
                     <strong>Notes:</strong> {proc.negotiationNotes}
                   </div>
                 )}
@@ -5238,8 +5238,8 @@
           {/* ====== STAGE 7: Contract ====== */}
           <div className={`card p-5 space-y-4 ${stepIdx >= 6 ? '' : 'opacity-40 pointer-events-none'}`}>
             <div className="flex items-center gap-2">
-              <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${stepIdx > 6 ? 'bg-emerald-100 text-emerald-700' : 'bg-teal-100 text-teal-700'}`}>{stepIdx > 6 ? 'âœ“' : '7'}</span>
-              <h3 className="font-bold text-slate-800 text-sm">ðŸ“ 3-Month Contract</h3>
+              <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${stepIdx > 6 ? 'bg-emerald-100 text-emerald-700' : 'bg-teal-100 text-teal-700'}`}>{stepIdx > 6 ? '✓' : '7'}</span>
+              <h3 className="font-bold text-slate-800 text-sm">📝 3-Month Contract</h3>
             </div>
             {stepIdx >= 6 && (
               <>
@@ -5265,11 +5265,11 @@
                     {stepIdx === 6 ? (
                       <div className="space-y-2">
                         <input type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" onChange={handleContractFile} className="block w-full text-xs text-slate-500 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100" />
-                        {contractDocName && <p className="text-xs text-emerald-600">âœ“ Loaded: {contractDocName}</p>}
+                        {contractDocName && <p className="text-xs text-emerald-600">✓ Loaded: {contractDocName}</p>}
                       </div>
                     ) : (
                       proc.contractDocBase64 ? (
-                        <button onClick={() => { const w = window.open(); w.document.write(`<iframe src="${proc.contractDocBase64}" style="width:100%;height:100%;border:none"></iframe>`); }} className="text-primary-600 hover:underline text-xs">ðŸ“„ View Contract Document</button>
+                        <button onClick={() => { const w = window.open(); w.document.write(`<iframe src="${proc.contractDocBase64}" style="width:100%;height:100%;border:none"></iframe>`); }} className="text-primary-600 hover:underline text-xs">📄 View Contract Document</button>
                       ) : <span className="text-xs text-slate-400">No contract document uploaded</span>
                     )}
                   </div>
@@ -5279,7 +5279,7 @@
                     if (!contractNum.trim()) { showToast('Enter contract number.', 'warning'); return; }
                     advanceToStage('procurement_completed', { contractNumber: contractNum, contractStartDate: contractStart, contractEndDate: contractEnd, contractTerms, contractDocBase64, contractDocName }, `Contract ${contractNum} signed with ${proc.selectedVendorName}`);
                   }} className="btn-success text-xs">
-                    ðŸŽ‰ Sign Contract & Complete Procurement
+                    🎉 Sign Contract & Complete Procurement
                   </button>
                 )}
                 {stepIdx > 6 && (
@@ -5295,23 +5295,23 @@
           {/* ====== STAGE 8: Completion ====== */}
           {proc.status === 'procurement_completed' && (
             <div className="card p-5 space-y-3 bg-gradient-to-br from-emerald-50 to-teal-50 border-2 border-emerald-200">
-              <h3 className="font-bold text-emerald-800 text-sm flex items-center gap-2">ðŸŽ‰ Procurement Completed!</h3>
+              <h3 className="font-bold text-emerald-800 text-sm flex items-center gap-2">🎉 Procurement Completed!</h3>
               <div className="grid sm:grid-cols-2 gap-3 text-xs text-slate-700">
                 <div><strong>Procurement ID:</strong> {proc.id}</div>
                 <div><strong>Title:</strong> {proc.title}</div>
                 <div><strong>Selected Vendor:</strong> {proc.selectedVendorName}</div>
-                <div><strong>Negotiated Amount:</strong> â‚¹{Number(proc.finalNegotiatedAmount||0).toLocaleString()}</div>
+                <div><strong>Negotiated Amount:</strong> ₹{Number(proc.finalNegotiatedAmount||0).toLocaleString()}</div>
                 <div><strong>Contract No:</strong> {proc.contractNumber}</div>
-                <div><strong>Contract Period:</strong> {proc.contractStartDate} â€” {proc.contractEndDate}</div>
+                <div><strong>Contract Period:</strong> {proc.contractStartDate} — {proc.contractEndDate}</div>
               </div>
-              <p className="text-xs text-emerald-700 bg-emerald-100 p-2 rounded-lg">âœ… This procurement has been completed successfully. Purchases can now be created against this contract using the Purchases section.</p>
+              <p className="text-xs text-emerald-700 bg-emerald-100 p-2 rounded-lg">✅ This procurement has been completed successfully. Purchases can now be created against this contract using the Purchases section.</p>
             </div>
           )}
 
           {/* Cancelled Notice */}
           {proc.status === 'cancelled' && (
             <div className="card p-5 bg-red-50 border-2 border-red-200 text-center">
-              <p className="font-bold text-red-700 text-sm">âœ• This Procurement was Cancelled</p>
+              <p className="font-bold text-red-700 text-sm">✕ This Procurement was Cancelled</p>
               <p className="text-xs text-red-500 mt-1">No further actions can be taken on this procurement.</p>
             </div>
           )}
@@ -5319,7 +5319,7 @@
           {/* Audit History */}
           {(proc.history || []).length > 0 && (
             <div className="card p-5 space-y-3">
-              <h3 className="font-bold text-slate-800 text-sm">ðŸ“… Procurement History & Timeline</h3>
+              <h3 className="font-bold text-slate-800 text-sm">📅 Procurement History & Timeline</h3>
               <div className="space-y-2">
                 {[...(proc.history || [])].reverse().map((h, i) => (
                   <div key={i} className="flex items-start gap-3 text-xs">
@@ -5327,7 +5327,7 @@
                     <div>
                       <span className="font-semibold text-slate-800">{PROC_STEPS.find(s=>s.key===h.stage)?.label || h.stage}</span>
                       <span className="text-slate-400 ml-2">by {h.by}</span>
-                      <span className="text-slate-400 ml-2">Â· {new Date(h.at).toLocaleString('en-IN')}</span>
+                      <span className="text-slate-400 ml-2">· {new Date(h.at).toLocaleString('en-IN')}</span>
                       {h.note && <p className="text-slate-500 mt-0.5 italic">{h.note}</p>}
                     </div>
                   </div>
@@ -5342,7 +5342,7 @@
               <form onSubmit={handleAddQuote} className="bg-white rounded-2xl p-6 max-w-lg w-full space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
                 <div className="flex justify-between items-center border-b pb-3">
                   <h3 className="font-bold text-slate-800">Add Vendor Quotation</h3>
-                  <button type="button" onClick={() => setShowAddQuote(false)} className="text-slate-400 hover:text-slate-600 font-bold text-lg">âœ•</button>
+                  <button type="button" onClick={() => setShowAddQuote(false)} className="text-slate-400 hover:text-slate-600 font-bold text-lg">✕</button>
                 </div>
                 <div className="grid sm:grid-cols-2 gap-3">
                   <div>
@@ -5357,7 +5357,7 @@
                     <input type="date" value={newQuote.quoteDate} onChange={e => setNewQuote(q => ({...q, quoteDate: e.target.value}))} className="form-input text-xs" />
                   </div>
                   <div>
-                    <label className="form-label text-xs">Total Quoted Amount (â‚¹) *</label>
+                    <label className="form-label text-xs">Total Quoted Amount (₹) *</label>
                     <input type="number" value={newQuote.totalAmount} onChange={e => setNewQuote(q => ({...q, totalAmount: e.target.value}))} className="form-input text-xs font-bold" placeholder="0.00" required />
                   </div>
                   <div>
@@ -5374,7 +5374,7 @@
                     <div key={i} className="grid grid-cols-5 gap-1.5 mb-1.5 text-xs">
                       <input type="text" value={it.itemName} onChange={e => setNewQuote(q => ({...q, items: q.items.map((x,j) => j===i?{...x,itemName:e.target.value}:x)}))} className="form-input text-xs col-span-2" placeholder="Item name" />
                       <input type="number" value={it.qty} onChange={e => setNewQuote(q => ({...q, items: q.items.map((x,j) => j===i?{...x,qty:e.target.value,total:String(Number(e.target.value)*Number(x.rate||0))}:x)}))} className="form-input text-xs" placeholder="Qty" />
-                      <input type="number" value={it.rate} onChange={e => setNewQuote(q => ({...q, items: q.items.map((x,j) => j===i?{...x,rate:e.target.value,total:String(Number(e.target.value)*Number(x.qty||0))}:x)}))} className="form-input text-xs" placeholder="Rate â‚¹" />
+                      <input type="number" value={it.rate} onChange={e => setNewQuote(q => ({...q, items: q.items.map((x,j) => j===i?{...x,rate:e.target.value,total:String(Number(e.target.value)*Number(x.qty||0))}:x)}))} className="form-input text-xs" placeholder="Rate ₹" />
                       <input type="number" value={it.total} readOnly className="form-input text-xs bg-slate-50" placeholder="Total" />
                     </div>
                   ))}
@@ -5382,7 +5382,7 @@
                 <div>
                   <label className="form-label text-xs">Upload Quotation Document</label>
                   <input type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" onChange={handleQuoteFile} className="block w-full text-xs text-slate-500 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100" />
-                  {newQuote.docName && <p className="text-xs text-emerald-600 mt-1">âœ“ {newQuote.docName}</p>}
+                  {newQuote.docName && <p className="text-xs text-emerald-600 mt-1">✓ {newQuote.docName}</p>}
                 </div>
                 <div className="flex justify-end gap-2 pt-2 border-t">
                   <button type="button" onClick={() => setShowAddQuote(false)} className="btn-secondary text-xs">Cancel</button>
