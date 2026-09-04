@@ -34,20 +34,17 @@ jobs:
       - name: Build Debug APK
         run: |
           cd android
-          ./gradlew assembleDebug --stacktrace 2>&1 | tee ../gradle_output.txt
+          ./gradlew assembleDebug --stacktrace
 
-      - name: Show Gradle Build Summary
-        if: always()
-        run: |
-          echo "### Gradle Build Log Output" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          tail -n 80 gradle_output.txt >> $GITHUB_STEP_SUMMARY || true
-          echo '```' >> $GITHUB_STEP_SUMMARY
-
-      - name: Copy and Rename APK
+      - name: Locate and Copy APK
         run: |
           mkdir -p build-output
-          cp android/app/build/outputs/apk/debug/app-debug.apk build-output/SMC_GEC_Palanpur.apk
+          echo "Finding generated APKs:"
+          find android/app/build -name "*.apk"
+          FIRST_APK=$(find android/app/build -name "*.apk" | head -n 1)
+          echo "Copying $FIRST_APK to build-output/SMC_GEC_Palanpur.apk"
+          cp "$FIRST_APK" build-output/SMC_GEC_Palanpur.apk
+          ls -lh build-output/
 
       - name: Upload APK as Workflow Artifact
         uses: actions/upload-artifact@v4
