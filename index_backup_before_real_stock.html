@@ -1,0 +1,2869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SMC — Hostel Students Mess Committee | GEC Palanpur</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe', 300: '#93c5fd',
+              400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8',
+              800: '#1e40af', 900: '#1e3a8a', 950: '#172554'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- React 18 & Babel Standalone -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Firebase 9 (Compat Mode for Instant Live Multi-Device Sync) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <!-- SheetJS & jsPDF for Excel/PDF exports -->
+  <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    .card { background: white; border-radius: 0.75rem; border: 1px solid #e2e8f0; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); }
+    .btn-primary { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background-color: #2563eb; color: white; border-radius: 0.5rem; font-weight: 500; font-size: 0.875rem; transition: background-color 150ms; cursor: pointer; border: none; }
+    .btn-primary:hover { background-color: #1d4ed8; }
+    .btn-secondary { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background-color: white; color: #374151; border: 1px solid #d1d5db; border-radius: 0.5rem; font-weight: 500; font-size: 0.875rem; transition: background-color 150ms; cursor: pointer; }
+    .btn-secondary:hover { background-color: #f9fafb; }
+    .btn-danger { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background-color: #dc2626; color: white; border-radius: 0.5rem; font-weight: 500; font-size: 0.875rem; transition: background-color 150ms; cursor: pointer; border: none; }
+    .btn-danger:hover { background-color: #b91c1c; }
+    .btn-success { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background-color: #059669; color: white; border-radius: 0.5rem; font-weight: 500; font-size: 0.875rem; transition: background-color 150ms; cursor: pointer; border: none; }
+    .btn-success:hover { background-color: #047857; }
+    .btn-warning { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background-color: #d97706; color: white; border-radius: 0.5rem; font-weight: 500; font-size: 0.875rem; transition: background-color 150ms; cursor: pointer; border: none; }
+    .form-input, .form-select { width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 0.875rem; outline: none; }
+    .form-input:focus, .form-select:focus { border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59,130,246,0.3); }
+    .form-label { display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem; }
+    .table-th { padding: 0.75rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; background-color: #f8fafc; }
+    .table-td { padding: 0.75rem 1rem; font-size: 0.875rem; color: #374151; vertical-align: top; }
+    .badge { display: inline-flex; align-items: center; padding: 0.125rem 0.5rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+
+    @media print {
+      body * { visibility: hidden; }
+      #printable-area, #printable-area * { visibility: visible; }
+      #printable-area { position: absolute; left: 0; top: 0; width: 100%; }
+      .no-print { display: none !important; }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useMemo, useCallback } = React;
+
+    // --- SECURE SESSION CLEANUP (NEVER AUTO-LOGIN) ---
+    try {
+      localStorage.removeItem('smc_gec_live_v2_session');
+      localStorage.removeItem('session');
+    } catch(e) {}
+
+    // --- FIREBASE REALTIME CLOUD DATABASE ---
+    const HARDCODED_FIREBASE_URL = "https://smc-gecpl-default-rtdb.firebaseio.com";
+
+    // --- SEED USERS WITH PASSWORDS/PINS ---
+    const INITIAL_USERS = [
+      { id: 'USR-001', name: 'Admin', username: 'admin', password: 'admin123', role: 'admin', committee: 'admin', isActive: true },
+      { id: 'USR-002', name: 'Raj Patel', enrollmentNumber: '21CE001', password: '123', role: 'storage', committee: 'storage', isActive: true },
+      { id: 'USR-003', name: 'Anjali Shah', enrollmentNumber: '21CE002', password: '123', role: 'storage', committee: 'storage', isActive: true },
+      { id: 'USR-004', name: 'Priya Mehta', enrollmentNumber: '21ME001', password: '123', role: 'procurement', committee: 'procurement', isActive: true },
+      { id: 'USR-005', name: 'Vivek Sharma', enrollmentNumber: '21ME002', password: '123', role: 'procurement', committee: 'procurement', isActive: true },
+      { id: 'USR-006', name: 'Karan Desai', enrollmentNumber: '21EC001', password: '123', role: 'account', committee: 'account', isActive: true },
+      { id: 'USR-007', name: 'Sneha Joshi', enrollmentNumber: '21EC002', password: '123', role: 'account', committee: 'account', isActive: true },
+    ];
+
+    const INITIAL_CATEGORIES = [
+      { id: 'CAT-001', name: 'Grains', isActive: true },
+      { id: 'CAT-002', name: 'Pulses / Dal', isActive: true },
+      { id: 'CAT-003', name: 'Grocery', isActive: true },
+      { id: 'CAT-004', name: 'Oil', isActive: true },
+      { id: 'CAT-005', name: 'Vegetables', isActive: true },
+      { id: 'CAT-006', name: 'Spices', isActive: true },
+      { id: 'CAT-007', name: 'Dairy', isActive: true },
+      { id: 'CAT-008', name: 'Cleaning Materials', isActive: true },
+      { id: 'CAT-009', name: 'Other', isActive: true },
+    ];
+
+    const INITIAL_ITEMS = [
+      { id: 'ITEM-001', name: 'Rice (Basmati)', categoryId: 'CAT-001', unit: 'kg', currentStock: 80, minStockLimit: 50, remarks: '' },
+      { id: 'ITEM-002', name: 'Wheat Flour', categoryId: 'CAT-001', unit: 'kg', currentStock: 30, minStockLimit: 40, remarks: '' },
+      { id: 'ITEM-003', name: 'Toor Dal', categoryId: 'CAT-002', unit: 'kg', currentStock: 15, minStockLimit: 20, remarks: '' },
+      { id: 'ITEM-004', name: 'Chana Dal', categoryId: 'CAT-002', unit: 'kg', currentStock: 20, minStockLimit: 15, remarks: '' },
+      { id: 'ITEM-005', name: 'Sunflower Oil', categoryId: 'CAT-004', unit: 'litre', currentStock: 8, minStockLimit: 10, remarks: '' },
+      { id: 'ITEM-006', name: 'Mustard Oil', categoryId: 'CAT-004', unit: 'litre', currentStock: 12, minStockLimit: 8, remarks: '' },
+      { id: 'ITEM-007', name: 'Sugar', categoryId: 'CAT-003', unit: 'kg', currentStock: 25, minStockLimit: 20, remarks: '' },
+      { id: 'ITEM-008', name: 'Salt', categoryId: 'CAT-003', unit: 'kg', currentStock: 0, minStockLimit: 5, remarks: '' },
+      { id: 'ITEM-009', name: 'Turmeric Powder', categoryId: 'CAT-006', unit: 'kg', currentStock: 3, minStockLimit: 2, remarks: '' },
+      { id: 'ITEM-010', name: 'Milk', categoryId: 'CAT-007', unit: 'litre', currentStock: 20, minStockLimit: 15, remarks: '' },
+    ];
+
+    const INITIAL_VENDORS = [
+      {
+        id: 'VEN-001', name: 'Shree Ram Traders', contactPerson: 'Ramesh Patel', mobile: '9876543210',
+        address: 'Main Market, Palanpur, Gujarat 385001', email: 'shreeram@gmail.com',
+        bankName: 'State Bank of India', accountNumber: '1234567890123', ifsc: 'SBIN0001234', isActive: true
+      },
+      {
+        id: 'VEN-002', name: 'Khodiyar Oil Suppliers', contactPerson: 'Bhavesh Shah', mobile: '9988776655',
+        address: 'Industrial Area, Palanpur', email: 'khodiyar@gmail.com',
+        bankName: 'Bank of Baroda', accountNumber: '9876543210987', ifsc: 'BARB0PALANP', isActive: true
+      }
+    ];
+
+    // --- REALTIME CLOUD DATABASE ENGINE ---
+    let firebaseDb = null;
+
+    function initCloud(onDataReceived) {
+      try {
+        if (!firebase.apps.length) {
+          firebase.initializeApp({ databaseURL: HARDCODED_FIREBASE_URL });
+        }
+        firebaseDb = firebase.database();
+
+        firebaseDb.ref('smc_master_db').on('value', (snap) => {
+          const val = snap.val();
+          if (val) {
+            Object.keys(val).forEach(k => {
+              if (k !== 'session') {
+                localStorage.setItem('smc_gec_live_v2_' + k, JSON.stringify(val[k]));
+              }
+            });
+            if (onDataReceived) onDataReceived();
+          } else {
+            syncEverythingToCloud();
+          }
+        }, (err) => {
+          console.warn('Firebase sync notice:', err);
+        });
+      } catch(e) {
+        console.warn('Cloud init:', e);
+      }
+    }
+
+    function syncEverythingToCloud() {
+      if (!firebaseDb) return;
+      try {
+        const keys = ['users','categories','items','vendors','requests','purchases','grns','stockIns','stockOuts','shortSupplies','bills','payments','counters'];
+        const fullDump = {};
+        keys.forEach(k => {
+          fullDump[k] = ls_get(k, k === 'users' ? INITIAL_USERS : k === 'items' ? INITIAL_ITEMS : k === 'vendors' ? INITIAL_VENDORS : k === 'categories' ? INITIAL_CATEGORIES : []);
+        });
+        firebaseDb.ref('smc_master_db').set(fullDump);
+      } catch(e) {}
+    }
+
+    function syncKeyToCloud(key, value) {
+      if (firebaseDb && key !== 'session') {
+        try {
+          firebaseDb.ref(`smc_master_db/${key}`).set(value);
+        } catch(e) {}
+      }
+    }
+
+    const PREFIX = 'smc_gec_live_v2_';
+    function ls_get(key, fallback = null) {
+      try {
+        const v = localStorage.getItem(PREFIX + key);
+        return v ? JSON.parse(v) : fallback;
+      } catch { return fallback; }
+    }
+    function ls_set(key, val) {
+      try {
+        if (key !== 'session') {
+          localStorage.setItem(PREFIX + key, JSON.stringify(val));
+          syncKeyToCloud(key, val);
+        }
+      } catch(e) {}
+    }
+
+    // Helper: Normalize items list for multi-item support
+    function normalizeItems(entity) {
+      if (entity && Array.isArray(entity.items) && entity.items.length > 0) {
+        return entity.items;
+      }
+      if (entity && entity.itemName) {
+        return [{
+          itemId: entity.itemId,
+          itemName: entity.itemName,
+          requiredQty: entity.requiredQty || entity.orderedQty || entity.qty,
+          orderedQty: entity.orderedQty || entity.requiredQty || entity.qty,
+          receivedQty: entity.receivedQty || 0,
+          shortQty: entity.shortQty || 0,
+          qty: entity.qty || entity.orderedQty || entity.requiredQty,
+          unit: entity.unit || 'kg',
+          condition: entity.condition || 'Good'
+        }];
+      }
+      return [];
+    }
+
+    // Session-only storage: Destroyed automatically when browser tab is closed
+    function getSessionUser() {
+      try {
+        const s = sessionStorage.getItem('smc_auth_session');
+        return s ? JSON.parse(s) : null;
+      } catch { return null; }
+    }
+    function setSessionUser(u) {
+      try {
+        if (u) {
+          sessionStorage.setItem('smc_auth_session', JSON.stringify(u));
+        } else {
+          sessionStorage.removeItem('smc_auth_session');
+        }
+      } catch(e) {}
+    }
+
+    function initDb() {
+      if (!ls_get('init_done')) {
+        ls_set('users', INITIAL_USERS);
+        ls_set('categories', INITIAL_CATEGORIES);
+        ls_set('items', INITIAL_ITEMS);
+        ls_set('vendors', INITIAL_VENDORS);
+        ls_set('requests', []);
+        ls_set('purchases', []);
+        ls_set('grns', []);
+        ls_set('stockIns', []);
+        ls_set('stockOuts', []);
+        ls_set('shortSupplies', []);
+        ls_set('bills', []);
+        ls_set('payments', []);
+        ls_set('counters', { REQ: 0, PUR: 0, GRN: 0, STKOUT: 0, SS: 0, BILL: 0, PAY: 0, ITEM: 10, CAT: 9, VEN: 2, USR: 7 });
+        ls_set('init_done', true);
+      }
+    }
+    initDb();
+
+    function showToast(msg, type = 'info') {
+      const el = document.createElement('div');
+      el.className = `fixed bottom-5 right-5 z-50 px-4 py-3 rounded-lg shadow-xl text-white font-medium text-sm flex items-center gap-2 transform transition-all duration-300 ${
+        type === 'success' ? 'bg-emerald-600' : type === 'error' ? 'bg-red-600' : type === 'warning' ? 'bg-amber-600' : 'bg-blue-600'
+      }`;
+      el.innerHTML = `<span>${type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ'}</span> <span>${msg}</span>`;
+      document.body.appendChild(el);
+      setTimeout(() => { el.style.opacity = '0'; setTimeout(() => el.remove(), 300); }, 3500);
+    }
+
+    function exportExcel(data, filename) {
+      if (!data || data.length === 0) { showToast('No data to export', 'warning'); return; }
+      const ws = XLSX.utils.json_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+      XLSX.writeFile(wb, `${filename}_${new Date().toISOString().slice(0,10)}.xlsx`);
+      showToast('Excel report downloaded!', 'success');
+    }
+
+    function exportPDF(headers, rows, title, filename) {
+      if (!rows || rows.length === 0) { showToast('No data to export', 'warning'); return; }
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'landscape' });
+      doc.setFontSize(14);
+      doc.text(title, 14, 15);
+      doc.setFontSize(9);
+      doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 22);
+      doc.autoTable({
+        head: [headers],
+        body: rows,
+        startY: 28,
+        headStyles: { fillColor: [37, 99, 235] },
+        styles: { fontSize: 8 }
+      });
+      doc.save(`${filename}_${new Date().toISOString().slice(0,10)}.pdf`);
+      showToast('PDF report downloaded!', 'success');
+    }
+
+    function getNextId(prefix) {
+      const counters = ls_get('counters') || {};
+      const next = (counters[prefix] || 0) + 1;
+      counters[prefix] = next;
+      ls_set('counters', counters);
+      return `${prefix}-${String(next).padStart(3, '0')}`;
+    }
+
+    function StatusBadge({ status }) {
+      const styles = {
+        in_stock: 'bg-emerald-100 text-emerald-800',
+        low_stock: 'bg-amber-100 text-amber-800',
+        out_of_stock: 'bg-red-100 text-red-800',
+        pending: 'bg-gray-100 text-gray-700',
+        pending_verification: 'bg-amber-100 text-amber-800',
+        approved: 'bg-green-100 text-green-800',
+        ordered: 'bg-indigo-100 text-indigo-800',
+        partially_received: 'bg-amber-100 text-amber-800',
+        fully_received: 'bg-emerald-100 text-emerald-800',
+        paid: 'bg-emerald-100 text-emerald-800',
+        partially_paid: 'bg-amber-100 text-amber-800',
+        verified: 'bg-emerald-100 text-emerald-800',
+        forwarded_for_payment: 'bg-blue-100 text-blue-800',
+        rejected: 'bg-red-100 text-red-800',
+        open: 'bg-orange-100 text-orange-800',
+        resolved: 'bg-emerald-100 text-emerald-800',
+        active: 'bg-emerald-100 text-emerald-800',
+        inactive: 'bg-red-100 text-red-800',
+      };
+      const label = {
+        in_stock: '🟢 In Stock',
+        low_stock: '🟡 Low Stock',
+        out_of_stock: '🔴 Out of Stock',
+        paid: '✅ Paid',
+        partially_paid: '🟡 Partial Paid',
+        pending: 'Pending',
+        pending_verification: '⏳ Pending Verification',
+        approved: 'Approved',
+        ordered: 'Ordered',
+        partially_received: 'Partial Received',
+        fully_received: 'Fully Received',
+        verified: '✓ Verified',
+        forwarded_for_payment: '✓ Verified & Forwarded',
+        rejected: '✕ Rejected',
+        open: 'Open',
+        resolved: 'Resolved',
+        active: 'Active',
+        inactive: 'Inactive'
+      }[status] || status;
+
+      return <span className={`badge ${styles[status] || 'bg-gray-100 text-gray-700'}`}>{label}</span>;
+    }
+
+    // --- MAIN APP COMPONENT ---
+    function App() {
+      const [currentUser, setCurrentUser] = useState(() => getSessionUser());
+      const [view, setView] = useState('dashboard');
+      const [version, setVersion] = useState(0);
+
+      const refresh = useCallback(() => setVersion(v => v + 1), []);
+
+      // Auto-Connect Firebase Realtime Database
+      useEffect(() => {
+        initCloud(() => refresh());
+      }, [refresh]);
+
+      // Blank initial login states
+      const [committeeName, setCommitteeName] = useState('');
+      const [enrollment, setEnrollment] = useState('');
+      const [committeePass, setCommitteePass] = useState('');
+      const [adminUser, setAdminUser] = useState('');
+      const [adminPass, setAdminPass] = useState('');
+      const [loginTab, setLoginTab] = useState('committee');
+
+      const handleCommitteeLogin = (e) => {
+        e.preventDefault();
+        const users = ls_get('users', []);
+        const u = users.find(x => 
+          x.name.trim().toLowerCase() === committeeName.trim().toLowerCase() && 
+          x.enrollmentNumber?.trim().toUpperCase() === enrollment.trim().toUpperCase() && 
+          x.isActive
+        );
+
+        if (!u) {
+          showToast('Invalid Name or Enrollment Number.', 'error');
+          return;
+        }
+
+        if (u.password && committeePass && u.password !== committeePass.trim()) {
+          showToast('Incorrect Password / PIN.', 'error');
+          return;
+        }
+
+        setSessionUser(u);
+        setCurrentUser(u);
+        setView('dashboard');
+        showToast(`Welcome, ${u.name}! (${u.committee.toUpperCase()} Committee)`, 'success');
+      };
+
+      const handleAdminLogin = (e) => {
+        e.preventDefault();
+        const users = ls_get('users', []);
+        const u = users.find(x => x.username === adminUser.trim() && x.password === adminPass.trim() && x.role === 'admin');
+        if (u) {
+          setSessionUser(u);
+          setCurrentUser(u);
+          setView('dashboard');
+          showToast('Welcome, Super Admin!', 'success');
+        } else {
+          showToast('Invalid Admin Username or Password.', 'error');
+        }
+      };
+
+      const handleLogout = () => {
+        setSessionUser(null);
+        setCurrentUser(null);
+        setAdminUser('');
+        setAdminPass('');
+        setCommitteeName('');
+        setEnrollment('');
+        setCommitteePass('');
+        showToast('Logged out securely.');
+      };
+
+      // If not logged in, ALWAYS show the login screen (Demo credentials removed)
+      if (!currentUser) {
+        return (
+          <div className="min-h-screen bg-gradient-to-br from-primary-900 via-primary-800 to-indigo-950 flex items-center justify-center p-4">
+            <div className="w-full max-w-md">
+              <div className="text-center mb-6 text-white">
+                <div className="w-16 h-16 bg-white/10 backdrop-blur rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-xl border border-white/20">
+                  <span className="text-3xl">🍲</span>
+                </div>
+                <h1 className="text-2xl font-extrabold tracking-tight">SMC Management Portal</h1>
+                <p className="text-primary-200 text-xs font-medium mt-1">Hostel Students Mess Committee · GEC Palanpur</p>
+                <div className="inline-flex items-center gap-1.5 mt-2.5 bg-emerald-500/20 text-emerald-300 px-3 py-1 rounded-full text-xs border border-emerald-400/30 font-medium">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> 🟢 Cloud Database Live
+                </div>
+              </div>
+
+              <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-white/10">
+                <div className="flex border-b border-gray-100">
+                  <button onClick={() => setLoginTab('committee')} className={`flex-1 py-3.5 text-sm font-semibold transition-colors ${loginTab === 'committee' ? 'bg-primary-50 text-primary-700 border-b-2 border-primary-600' : 'text-gray-500 hover:bg-gray-50'}`}>
+                    👥 Committee Login
+                  </button>
+                  <button onClick={() => setLoginTab('admin')} className={`flex-1 py-3.5 text-sm font-semibold transition-colors ${loginTab === 'admin' ? 'bg-primary-50 text-primary-700 border-b-2 border-primary-600' : 'text-gray-500 hover:bg-gray-50'}`}>
+                    🛡️ Admin Login
+                  </button>
+                </div>
+
+                {loginTab === 'committee' ? (
+                  <form onSubmit={handleCommitteeLogin} className="p-6 space-y-4">
+                    <div>
+                      <label className="form-label">Full Name</label>
+                      <input type="text" value={committeeName} onChange={e => setCommitteeName(e.target.value)} className="form-input" placeholder="Enter full name" required autoComplete="off" />
+                    </div>
+                    <div>
+                      <label className="form-label">Enrollment Number</label>
+                      <input type="text" value={enrollment} onChange={e => setEnrollment(e.target.value)} className="form-input uppercase font-mono" placeholder="Enter enrollment number" required autoComplete="off" />
+                    </div>
+                    <div>
+                      <label className="form-label">Password / PIN</label>
+                      <input type="password" value={committeePass} onChange={e => setCommitteePass(e.target.value)} className="form-input" placeholder="Enter password / PIN" autoComplete="new-password" />
+                    </div>
+                    <button type="submit" className="btn-primary w-full justify-center py-2.5 shadow-md">Sign In as Member</button>
+                  </form>
+                ) : (
+                  <form onSubmit={handleAdminLogin} className="p-6 space-y-4">
+                    <div>
+                      <label className="form-label">Admin Username</label>
+                      <input type="text" value={adminUser} onChange={e => setAdminUser(e.target.value)} className="form-input" placeholder="Enter admin username" required autoComplete="off" />
+                    </div>
+                    <div>
+                      <label className="form-label">Admin Password</label>
+                      <input type="password" value={adminPass} onChange={e => setAdminPass(e.target.value)} className="form-input" placeholder="••••••••" required autoComplete="new-password" />
+                    </div>
+                    <button type="submit" className="btn-primary w-full justify-center py-2.5 shadow-md bg-slate-800 hover:bg-slate-900">Admin Sign In</button>
+                  </form>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      const role = currentUser.role;
+
+      return (
+        <div className="min-h-screen flex flex-col bg-slate-50">
+          {/* Top Navbar */}
+          <header className="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm px-4 lg:px-8 py-3 flex items-center justify-between no-print">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-primary-600 flex items-center justify-center text-white font-bold text-lg shadow-md shadow-primary-500/20">
+                SMC
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h1 className="font-bold text-slate-900 text-sm sm:text-base leading-tight">Hostel Mess Committee (SMC)</h1>
+                  <span className="inline-flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 text-emerald-700 px-2 py-0.5 rounded-full text-[10px] font-semibold">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> 🟢 Cloud Synced
+                  </span>
+                </div>
+                <p className="text-slate-500 text-xs">GEC Palanpur · <span className="font-semibold text-primary-700 uppercase">{role === 'admin' ? 'Super Admin' : `${role} Committee`}</span></p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <div className="text-right hidden sm:block">
+                <p className="text-xs font-bold text-slate-800 leading-none">{currentUser.name}</p>
+                <p className="text-[11px] text-slate-400 font-mono mt-0.5">{currentUser.enrollmentNumber || 'ADMIN'}</p>
+              </div>
+              <button onClick={handleLogout} className="btn-secondary text-xs px-3 py-1.5 text-red-600 hover:bg-red-50 hover:border-red-200" title="Sign out from this session">
+                🔒 Logout ➔
+              </button>
+            </div>
+          </header>
+
+          {/* Sub Navigation Bar */}
+          <nav className="bg-white border-b border-slate-200 px-4 lg:px-8 overflow-x-auto flex gap-1 py-2 no-print">
+            <NavBtn label="📊 Dashboard" active={view === 'dashboard'} onClick={() => setView('dashboard')} />
+
+            {/* STORAGE ROLE */}
+            {role === 'storage' && (
+              <>
+                <NavBtn label="📦 Stock & Items" active={view === 'items'} onClick={() => setView('items')} />
+                <NavBtn label="📥 Stock Out (Issue Multi-Item)" active={view === 'stockout'} onClick={() => setView('stockout')} />
+                <NavBtn label="🚚 GRN (Goods Received Multi-Item)" active={view === 'grn'} onClick={() => setView('grn')} />
+                <NavBtn label="📝 Request to Procurement (Multi-Item)" active={view === 'requests'} onClick={() => setView('requests')} />
+                <NavBtn label="⚠️ Issues & Short Supply" active={view === 'shortsupply'} onClick={() => setView('shortsupply')} />
+                <NavBtn label="📑 Storage Reports" active={view === 'reports'} onClick={() => setView('reports')} />
+              </>
+            )}
+
+            {/* PROCUREMENT ROLE */}
+            {role === 'procurement' && (
+              <>
+                <NavBtn label="📋 Storage Requests (Grouped)" active={view === 'requests'} onClick={() => setView('requests')} />
+                <NavBtn label="🛒 Purchases" active={view === 'purchases'} onClick={() => setView('purchases')} />
+                <NavBtn label="🏪 Vendors" active={view === 'vendors'} onClick={() => setView('vendors')} />
+                <NavBtn label="🧾 Bills & File Upload" active={view === 'bills'} onClick={() => setView('bills')} />
+                <NavBtn label="⚠️ Short Supply" active={view === 'shortsupply'} onClick={() => setView('shortsupply')} />
+                <NavBtn label="📑 Procurement Reports" active={view === 'reports'} onClick={() => setView('reports')} />
+              </>
+            )}
+
+            {/* ACCOUNT ROLE: Checks/Verifies Bills, Can Delete Bills, Can Print, BUT Does NOT Make Payments */}
+            {role === 'account' && (
+              <>
+                <NavBtn label="🛡️ Bill Verification & Forward" active={view === 'bills'} onClick={() => setView('bills')} />
+                <NavBtn label="🏪 Vendor Ledgers & Statements" active={view === 'vendorledgers'} onClick={() => setView('vendorledgers')} />
+                <NavBtn label="🚚 GRN Receipts Inspector" active={view === 'grninspect'} onClick={() => setView('grninspect')} />
+                <NavBtn label="📑 Financial & Audit Reports" active={view === 'reports'} onClick={() => setView('reports')} />
+              </>
+            )}
+
+            {/* ADMIN ROLE */}
+            {role === 'admin' && (
+              <>
+                <NavBtn label="👥 Manage Members (Edit/Delete)" active={view === 'users'} onClick={() => setView('users')} />
+                <NavBtn label="📦 Items" active={view === 'items'} onClick={() => setView('items')} />
+                <NavBtn label="🏪 Vendors" active={view === 'vendors'} onClick={() => setView('vendors')} />
+                <NavBtn label="🛒 Purchases" active={view === 'purchases'} onClick={() => setView('purchases')} />
+                <NavBtn label="🧾 Bills & Invoices" active={view === 'bills'} onClick={() => setView('bills')} />
+                <NavBtn label="💳 Disburse Payments" active={view === 'payments'} onClick={() => setView('payments')} />
+                <NavBtn label="🚚 GRNs" active={view === 'grn'} onClick={() => setView('grn')} />
+                <NavBtn label="🔗 Transaction Trace" active={view === 'trace'} onClick={() => setView('trace')} />
+                <NavBtn label="📑 Reports" active={view === 'reports'} onClick={() => setView('reports')} />
+              </>
+            )}
+          </nav>
+
+          {/* Main Workspace Body */}
+          <main className="flex-1 p-4 lg:p-8 max-w-7xl w-full mx-auto">
+            {view === 'dashboard' && <DashboardView role={role} currentUser={currentUser} setView={setView} refreshKey={version} />}
+            {view === 'items' && <ItemsView role={role} currentUser={currentUser} onUpdate={refresh} />}
+            {view === 'stockout' && <StockOutView role={role} currentUser={currentUser} onUpdate={refresh} />}
+            {view === 'grn' && <GRNView role={role} currentUser={currentUser} onUpdate={refresh} />}
+            {view === 'requests' && <RequestsView role={role} currentUser={currentUser} onUpdate={refresh} />}
+            {view === 'purchases' && <PurchasesView onUpdate={refresh} />}
+            {view === 'vendors' && <VendorsView currentUser={currentUser} onUpdate={refresh} />}
+            {view === 'bills' && <BillsView role={role} currentUser={currentUser} onUpdate={refresh} />}
+            {view === 'payments' && <PaymentsView role={role} currentUser={currentUser} onUpdate={refresh} />}
+            {view === 'vendorledgers' && <VendorLedgersView onUpdate={refresh} />}
+            {view === 'grninspect' && <GRNInspectView onUpdate={refresh} />}
+            {view === 'shortsupply' && <ShortSupplyView role={role} currentUser={currentUser} onUpdate={refresh} />}
+            {view === 'trace' && <TraceView />}
+            {view === 'users' && <UsersView currentUser={currentUser} onUpdate={refresh} />}
+            {view === 'reports' && <ReportsView role={role} />}
+          </main>
+        </div>
+      );
+    }
+
+    function NavBtn({ label, active, onClick }) {
+      return (
+        <button onClick={onClick} className={`px-3 py-2 text-xs font-semibold rounded-lg whitespace-nowrap transition-all ${active ? 'bg-primary-600 text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100'}`}>
+          {label}
+        </button>
+      );
+    }
+
+    // --- DASHBOARD VIEW ---
+    function DashboardView({ role, currentUser, setView }) {
+      const items = ls_get('items', []);
+      const purchases = ls_get('purchases', []);
+      const bills = ls_get('bills', []);
+      const payments = ls_get('payments', []);
+      const requests = ls_get('requests', []);
+
+      const lowStock = items.filter(i => i.currentStock > 0 && i.currentStock <= i.minStockLimit).length;
+      const outOfStock = items.filter(i => i.currentStock <= 0).length;
+
+      const totalBilled = bills.reduce((s, b) => s + Number(b.billAmount || 0), 0);
+      const totalPaid = payments.reduce((s, p) => s + Number(p.amount || 0), 0);
+      const totalPending = Math.max(0, totalBilled - totalPaid);
+
+      return (
+        <div className="space-y-6">
+          <div className="bg-gradient-to-r from-primary-700 to-indigo-800 rounded-2xl p-6 text-white shadow-lg flex flex-wrap justify-between items-center gap-4">
+            <div>
+              <h2 className="text-xl font-bold">Welcome, {currentUser.name}!</h2>
+              <p className="text-primary-100 text-xs mt-1">Hostel Students Mess Committee · {role.toUpperCase()} Workspace</p>
+            </div>
+            <div className="flex gap-2">
+              {role === 'storage' && (
+                <>
+                  <button onClick={() => setView('requests')} className="btn-primary bg-white text-primary-800 hover:bg-primary-50 text-xs font-semibold">+ New Grouped Request</button>
+                  <button onClick={() => setView('grn')} className="btn-primary bg-white/20 text-white hover:bg-white/30 text-xs font-semibold">🚚 Create GRN</button>
+                </>
+              )}
+              {role === 'procurement' && <button onClick={() => setView('bills')} className="btn-primary bg-white text-primary-800 hover:bg-primary-50 text-xs font-semibold">📁 Upload Bill File</button>}
+              {role === 'account' && <button onClick={() => setView('bills')} className="btn-primary bg-white text-primary-800 hover:bg-primary-50 text-xs font-semibold">🛡️ Verify Bills & Print</button>}
+              {role === 'admin' && <button onClick={() => setView('payments')} className="btn-primary bg-white text-primary-800 hover:bg-primary-50 text-xs font-semibold">💳 Disburse Payments</button>}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <StatCard title="Total Stock Items" value={items.length} icon="📦" color="blue" />
+            <StatCard title="Low Stock Items" value={lowStock} icon="🟡" color="amber" subtitle="Restock required" />
+            <StatCard title="Out of Stock" value={outOfStock} icon="🔴" color="red" subtitle="Critical shortage" />
+            <StatCard title="Pending Requests" value={requests.filter(r => r.status === 'pending').length} icon="📝" color="indigo" />
+
+            {role !== 'storage' && (
+              <>
+                <StatCard title="Total Purchases" value={purchases.length} icon="🛒" color="purple" />
+                <StatCard title="Uploaded Bills" value={bills.length} icon="🧾" color="blue" />
+                <StatCard title="Total Paid" value={`₹${totalPaid.toLocaleString()}`} icon="💳" color="green" />
+                <StatCard title="Pending Payments" value={`₹${totalPending.toLocaleString()}`} icon="⏳" color="red" />
+              </>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    function StatCard({ title, value, icon, color, subtitle }) {
+      return (
+        <div className="card p-4 flex items-start gap-3">
+          <div className="text-2xl">{icon}</div>
+          <div className="flex-1 min-w-0">
+            <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">{title}</p>
+            <p className="text-xl font-bold text-slate-800 mt-0.5 truncate">{value}</p>
+            {subtitle && <p className="text-[10px] text-slate-400 mt-0.5">{subtitle}</p>}
+          </div>
+        </div>
+      );
+    }
+
+    // --- STOCK & ITEMS VIEW ---
+    function ItemsView({ role, onUpdate }) {
+      const [items, setItems] = useState(() => ls_get('items', []));
+      const [search, setSearch] = useState('');
+      const [modalItem, setModalItem] = useState(null);
+      const [minModal, setMinModal] = useState(null);
+
+      const filtered = items.filter(i => i.name.toLowerCase().includes(search.toLowerCase()));
+
+      const handleSaveMin = (e) => {
+        e.preventDefault();
+        const updated = items.map(i => i.id === minModal.id ? { ...i, minStockLimit: Number(minModal.newLimit) } : i);
+        ls_set('items', updated);
+        setItems(updated);
+        showToast(`Min Stock for ${minModal.name} updated to ${minModal.newLimit} ${minModal.unit}`, 'success');
+        setMinModal(null);
+        onUpdate();
+      };
+
+      const handleAddItem = (e) => {
+        e.preventDefault();
+        const id = getNextId('ITEM');
+        const newItem = { id, ...modalItem, currentStock: Number(modalItem.currentStock || 0), minStockLimit: Number(modalItem.minStockLimit || 0) };
+        const updated = [...items, newItem];
+        ls_set('items', updated);
+        setItems(updated);
+        showToast(`Item ${newItem.name} added successfully!`, 'success');
+        setModalItem(null);
+        onUpdate();
+      };
+
+      return (
+        <div className="space-y-4">
+          <div className="flex flex-wrap justify-between items-center gap-3">
+            <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search stock items..." className="form-input max-w-xs text-xs" />
+            <div className="flex gap-2">
+              <button onClick={() => exportExcel(items, 'SMC_Items_Stock')} className="btn-secondary text-xs">📊 Export Excel</button>
+              {(role === 'storage' || role === 'admin') && (
+                <button onClick={() => setModalItem({ name: '', unit: 'kg', currentStock: 0, minStockLimit: 10, categoryId: 'CAT-001' })} className="btn-primary text-xs">+ Add New Item</button>
+              )}
+            </div>
+          </div>
+
+          <div className="card overflow-x-auto">
+            <table className="min-w-full divide-y divide-slate-200 text-xs">
+              <thead>
+                <tr>
+                  <th className="table-th">Item Name</th>
+                  <th className="table-th">Unit</th>
+                  <th className="table-th">Current Stock</th>
+                  <th className="table-th">Min Limit</th>
+                  <th className="table-th">Status</th>
+                  <th className="table-th">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {filtered.map(i => {
+                  const status = i.currentStock <= 0 ? 'out_of_stock' : i.currentStock <= i.minStockLimit ? 'low_stock' : 'in_stock';
+                  return (
+                    <tr key={i.id} className="hover:bg-slate-50">
+                      <td className="table-td font-semibold text-slate-800">{i.name}</td>
+                      <td className="table-td text-slate-500">{i.unit}</td>
+                      <td className="table-td font-bold text-slate-900">{i.currentStock} {i.unit}</td>
+                      <td className="table-td">{i.minStockLimit} {i.unit}</td>
+                      <td className="table-td"><StatusBadge status={status} /></td>
+                      <td className="table-td">
+                        <button onClick={() => setMinModal({ ...i, newLimit: i.minStockLimit })} className="text-primary-600 font-semibold hover:underline">
+                          ✏️ Edit Min Limit
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          {minModal && (
+            <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
+              <form onSubmit={handleSaveMin} className="bg-white rounded-xl p-6 max-w-sm w-full space-y-4 shadow-2xl">
+                <h3 className="font-bold text-slate-800 text-sm">Update Min Stock Limit for {minModal.name}</h3>
+                <div>
+                  <label className="form-label">Min Stock Limit ({minModal.unit})</label>
+                  <input type="number" step="0.1" value={minModal.newLimit} onChange={e => setMinModal({ ...minModal, newLimit: e.target.value })} className="form-input" required />
+                </div>
+                <div className="flex justify-end gap-2">
+                  <button type="button" onClick={() => setMinModal(null)} className="btn-secondary text-xs">Cancel</button>
+                  <button type="submit" className="btn-primary text-xs">Save Changes</button>
+                </div>
+              </form>
+            </div>
+          )}
+
+          {modalItem && (
+            <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
+              <form onSubmit={handleAddItem} className="bg-white rounded-xl p-6 max-w-md w-full space-y-3 shadow-2xl">
+                <h3 className="font-bold text-slate-800 text-sm">Add New Inventory Item</h3>
+                <div>
+                  <label className="form-label">Item Name</label>
+                  <input type="text" value={modalItem.name} onChange={e => setModalItem({ ...modalItem, name: e.target.value })} className="form-input" required />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="form-label">Unit</label>
+                    <select value={modalItem.unit} onChange={e => setModalItem({ ...modalItem, unit: e.target.value })} className="form-select">
+                      {['kg', 'gram', 'litre', 'ml', 'packet', 'box', 'piece', 'bag', 'tin'].map(u => <option key={u}>{u}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="form-label">Initial Stock</label>
+                    <input type="number" value={modalItem.currentStock} onChange={e => setModalItem({ ...modalItem, currentStock: e.target.value })} className="form-input" />
+                  </div>
+                </div>
+                <div>
+                  <label className="form-label">Min Stock Limit</label>
+                  <input type="number" value={modalItem.minStockLimit} onChange={e => setModalItem({ ...modalItem, minStockLimit: e.target.value })} className="form-input" required />
+                </div>
+                <div className="flex justify-end gap-2 pt-2">
+                  <button type="button" onClick={() => setModalItem(null)} className="btn-secondary text-xs">Cancel</button>
+                  <button type="submit" className="btn-primary text-xs">Save Item</button>
+                </div>
+              </form>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // --- GOODS RECEIVED NOTE (GRN) VIEW (WITH MULTI-ITEM SUPPORT) ---
+    function GRNView({ currentUser, onUpdate }) {
+      const [grns, setGrns] = useState(() => ls_get('grns', []));
+      const [purchases, setPurchases] = useState(() => ls_get('purchases', []));
+      const [items, setItems] = useState(() => ls_get('items', []));
+      const [isCreating, setIsCreating] = useState(false);
+
+      const [selectedPurId, setSelectedPurId] = useState('');
+      const [grnItems, setGrnItems] = useState([]); // [{ itemId, itemName, unit, orderedQty, receivedQty, shortQty, condition }]
+      const [remarks, setRemarks] = useState('');
+
+      const selPur = purchases.find(p => p.id === selectedPurId);
+
+      // When a purchase order is selected, load its items into the GRN form
+      useEffect(() => {
+        if (!selPur) {
+          setGrnItems([]);
+          return;
+        }
+        const pItems = normalizeItems(selPur);
+        setGrnItems(pItems.map(it => ({
+          itemId: it.itemId,
+          itemName: it.itemName,
+          unit: it.unit || 'kg',
+          orderedQty: Number(it.orderedQty || it.requiredQty || 0),
+          receivedQty: Number(it.orderedQty || it.requiredQty || 0),
+          shortQty: 0,
+          condition: 'Good'
+        })));
+      }, [selPur]);
+
+      const handleItemFieldChange = (idx, field, val) => {
+        const updated = [...grnItems];
+        updated[idx][field] = val;
+        if (field === 'receivedQty') {
+          const rec = Number(val || 0);
+          const ord = Number(updated[idx].orderedQty || 0);
+          updated[idx].shortQty = Math.max(0, ord - rec);
+        }
+        setGrnItems(updated);
+      };
+
+      const handleCreateGRN = (e) => {
+        e.preventDefault();
+        if (!selPur || grnItems.length === 0) return;
+        const grnId = getNextId('GRN');
+
+        let updatedItems = [...items];
+        let totalShortQty = 0;
+
+        // Process stock additions and shortages for each item in the GRN
+        grnItems.forEach(gi => {
+          const recNum = Number(gi.receivedQty || 0);
+          const shNum = Number(gi.shortQty || 0);
+          totalShortQty += shNum;
+
+          // Increment current stock in warehouse
+          updatedItems = updatedItems.map(i => i.id === gi.itemId ? { ...i, currentStock: Number(i.currentStock) + recNum } : i);
+
+          // Record individual shortage if any
+          if (shNum > 0) {
+            const ssList = ls_get('shortSupplies', []);
+            const ssId = getNextId('SS');
+            const newSS = {
+              id: ssId,
+              grnId,
+              purchaseId: selPur.id,
+              requestId: selPur.requestId,
+              itemId: gi.itemId,
+              itemName: gi.itemName,
+              shortQty: shNum,
+              issueType: 'short_quantity',
+              status: 'open',
+              createdAt: new Date().toISOString()
+            };
+            ls_set('shortSupplies', [...ssList, newSS]);
+          }
+        });
+
+        ls_set('items', updatedItems);
+        setItems(updatedItems);
+
+        // Update purchase order status
+        const updatedPurchases = purchases.map(p => {
+          if (p.id === selPur.id) {
+            return {
+              ...p,
+              status: totalShortQty > 0 ? 'partially_received' : 'fully_received'
+            };
+          }
+          return p;
+        });
+        ls_set('purchases', updatedPurchases);
+        setPurchases(updatedPurchases);
+
+        const newGrn = {
+          id: grnId,
+          purchaseId: selPur.id,
+          requestId: selPur.requestId,
+          items: grnItems,
+          remarks,
+          receivedDate: new Date().toISOString().slice(0, 10),
+          createdBy: currentUser.name,
+          createdAt: new Date().toISOString()
+        };
+
+        const updatedGrns = [...grns, newGrn];
+        ls_set('grns', updatedGrns);
+        setGrns(updatedGrns);
+
+        showToast(`GRN ${grnId} generated with ${grnItems.length} items! Warehouse stock updated.`, 'success');
+        setIsCreating(false);
+        setSelectedPurId('');
+        setGrnItems([]);
+        onUpdate();
+      };
+
+      return (
+        <div className="space-y-4">
+          <div className="flex justify-between items-center">
+            <div>
+              <h3 className="font-bold text-slate-800 text-sm">Goods Received Notes (GRN) Management</h3>
+              <p className="text-xs text-slate-500">Receive multiple items per delivery and update stock in real-time.</p>
+            </div>
+            <button onClick={() => setIsCreating(true)} className="btn-primary text-xs">+ Create GRN Receipt (Multi-Item)</button>
+          </div>
+
+          <div className="card overflow-x-auto">
+            <table className="min-w-full divide-y divide-slate-200 text-xs">
+              <thead>
+                <tr>
+                  <th className="table-th">GRN ID</th>
+                  <th className="table-th">Purchase ID</th>
+                  <th className="table-th">Received Items & Quantities</th>
+                  <th className="table-th">Shortage Status</th>
+                  <th className="table-th">Date</th>
+                  <th className="table-th">Verified By</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {grns.length === 0 ? (
+                  <tr><td colSpan={6} className="text-center py-6 text-slate-400">No GRN receipts created yet.</td></tr>
+                ) : (
+                  grns.map(g => {
+                    const gItems = normalizeItems(g);
+                    const totalShort = gItems.reduce((s, it) => s + Number(it.shortQty || 0), 0);
+
+                    return (
+                      <tr key={g.id} className="hover:bg-slate-50">
+                        <td className="table-td font-mono font-bold text-primary-700">{g.id}</td>
+                        <td className="table-td font-mono text-slate-500">{g.purchaseId}</td>
+                        <td className="table-td">
+                          <div className="space-y-1">
+                            {gItems.map((it, idx) => (
+                              <div key={idx} className="flex items-center gap-2">
+                                <span className="font-semibold text-slate-800">{it.itemName}:</span>
+                                <span className="font-bold text-emerald-600">+{it.receivedQty} {it.unit}</span>
+                                <span className="text-slate-400 text-[11px]">(Ordered: {it.orderedQty} {it.unit})</span>
+                                <span className="badge bg-slate-100 text-slate-700 text-[10px]">{it.condition || 'Good'}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </td>
+                        <td className="table-td">
+                          {totalShort > 0 ? (
+                            <span className="font-bold text-red-600">⚠️ {totalShort} Qty Short</span>
+                          ) : (
+                            <span className="badge bg-emerald-100 text-emerald-800">✓ Complete</span>
+                          )}
+                        </td>
+                        <td className="table-td text-slate-400">{g.receivedDate}</td>
+                        <td className="table-td text-slate-600 font-medium">{g.createdBy}</td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {isCreating && (
+            <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
+              <form onSubmit={handleCreateGRN} className="bg-white rounded-xl p-6 max-w-2xl w-full space-y-4 shadow-2xl max-h-[90vh] flex flex-col">
+                <div className="flex justify-between items-center border-b pb-2">
+                  <h3 className="font-bold text-slate-800 text-sm">Create Goods Received Note (GRN) — Multi-Item</h3>
+                  <span className="badge bg-primary-100 text-primary-800 font-mono">Storage</span>
+                </div>
+
+                <div className="space-y-3 flex-1 overflow-y-auto pr-1">
+                  <div>
+                    <label className="form-label">Select Purchase Order *</label>
+                    <select value={selectedPurId} onChange={e => setSelectedPurId(e.target.value)} className="form-select text-xs" required>
+                      <option value="">Select an active purchase order...</option>
+                      {purchases.filter(p => p.status === 'ordered' || p.status === 'partially_received').map(p => {
+                        const pItems = normalizeItems(p);
+                        const names = pItems.map(it => `${it.itemName} (${it.orderedQty} ${it.unit})`).join(', ');
+                        return <option key={p.id} value={p.id}>{p.id} — {names}</option>;
+                      })}
+                    </select>
+                  </div>
+
+                  {selPur && grnItems.length > 0 && (
+                    <div className="border border-slate-200 rounded-xl p-3 bg-slate-50 space-y-3">
+                      <p className="text-xs font-bold text-slate-700">Ordered Items in {selPur.id}:</p>
+                      {grnItems.map((gi, idx) => (
+                        <div key={idx} className="bg-white p-3 rounded-lg border border-slate-200 grid grid-cols-1 sm:grid-cols-4 gap-2 items-center">
+                          <div className="sm:col-span-1">
+                            <p className="font-semibold text-slate-800 text-xs">{gi.itemName}</p>
+                            <p className="text-[11px] text-slate-500">Ordered: <strong>{gi.orderedQty} {gi.unit}</strong></p>
+                          </div>
+                          <div>
+                            <label className="text-[10px] text-slate-500 block">Received Qty ({gi.unit}) *</label>
+                            <input 
+                              type="number" 
+                              step="0.01" 
+                              value={gi.receivedQty} 
+                              onChange={e => handleItemFieldChange(idx, 'receivedQty', e.target.value)} 
+                              className="form-input text-xs font-bold text-emerald-700 py-1" 
+                              required 
+                            />
+                          </div>
+                          <div>
+                            <label className="text-[10px] text-slate-500 block">Shortage Qty</label>
+                            <span className={`text-xs font-bold ${gi.shortQty > 0 ? 'text-red-600' : 'text-slate-400'}`}>
+                              {gi.shortQty > 0 ? `${gi.shortQty} ${gi.unit}` : '0 (None)'}
+                            </span>
+                          </div>
+                          <div>
+                            <label className="text-[10px] text-slate-500 block">Condition</label>
+                            <select 
+                              value={gi.condition} 
+                              onChange={e => handleItemFieldChange(idx, 'condition', e.target.value)} 
+                              className="form-select text-xs py-1"
+                            >
+                              <option>Good</option>
+                              <option>Damaged</option>
+                              <option>Mixed</option>
+                            </select>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <div>
+                    <label className="form-label">Delivery Remarks</label>
+                    <input type="text" value={remarks} onChange={e => setRemarks(e.target.value)} className="form-input text-xs" placeholder="e.g. Received in good condition by storekeeper" />
+                  </div>
+                </div>
+
+                <div className="flex justify-end gap-2 pt-2 border-t">
+                  <button type="button" onClick={() => setIsCreating(false)} className="btn-secondary text-xs">Cancel</button>
+                  <button type="submit" disabled={!selPur || grnItems.length === 0} className="btn-primary text-xs">Submit GRN & Increment Stock</button>
+                </div>
+              </form>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // --- STOCK OUT VIEW (WITH MULTI-ITEM SUPPORT) ---
+    function StockOutView({ currentUser, onUpdate }) {
+      const [stockOuts, setStockOuts] = useState(() => ls_get('stockOuts', []));
+      const [items, setItems] = useState(() => ls_get('items', []));
+      const [purpose, setPurpose] = useState('Kitchen - Daily Cooking');
+
+      // Multi-item rows for single stock out issue
+      const [outRows, setOutRows] = useState([{ itemId: '', qty: '' }]);
+
+      const handleAddRow = () => {
+        setOutRows([...outRows, { itemId: '', qty: '' }]);
+      };
+
+      const handleRemoveRow = (idx) => {
+        if (outRows.length === 1) return;
+        setOutRows(outRows.filter((_, i) => i !== idx));
+      };
+
+      const handleRowChange = (idx, field, val) => {
+        const updated = [...outRows];
+        updated[idx][field] = val;
+        setOutRows(updated);
+      };
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        
+        // Validate all rows
+        for (let r of outRows) {
+          if (!r.itemId || !r.qty || Number(r.qty) <= 0) {
+            showToast('Please select an item and enter valid quantity for all rows.', 'error');
+            return;
+          }
+          const itemObj = items.find(i => i.id === r.itemId);
+          if (itemObj && Number(r.qty) > itemObj.currentStock) {
+            showToast(`Cannot issue ${r.qty} of ${itemObj.name}. Only ${itemObj.currentStock} ${itemObj.unit} available!`, 'error');
+            return;
+          }
+        }
+
+        const id = getNextId('STKOUT');
+        let updatedItems = [...items];
+        const issuedItemsList = [];
+
+        outRows.forEach(r => {
+          const itemObj = items.find(i => i.id === r.itemId);
+          const qtyNum = Number(r.qty);
+
+          issuedItemsList.push({
+            itemId: itemObj.id,
+            itemName: itemObj.name,
+            unit: itemObj.unit,
+            qty: qtyNum
+          });
+
+          // Deduct from stock
+          updatedItems = updatedItems.map(i => i.id === itemObj.id ? { ...i, currentStock: i.currentStock - qtyNum } : i);
+        });
+
+        ls_set('items', updatedItems);
+        setItems(updatedItems);
+
+        const newEntry = {
+          id,
+          items: issuedItemsList,
+          purpose,
+          issuedBy: currentUser.name,
+          date: new Date().toISOString().slice(0, 10),
+          createdAt: new Date().toISOString()
+        };
+
+        const updatedStockOuts = [...stockOuts, newEntry];
+        ls_set('stockOuts', updatedStockOuts);
+        setStockOuts(updatedStockOuts);
+
+        showToast(`Issued ${issuedItemsList.length} items from Store! (ID: ${id})`, 'success');
+        setOutRows([{ itemId: '', qty: '' }]);
+        onUpdate();
+      };
+
+      return (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="card p-5 space-y-4">
+            <div className="flex justify-between items-center">
+              <h3 className="font-bold text-slate-800 text-sm">Issue Material (Multi-Item)</h3>
+              <span className="badge bg-primary-100 text-primary-800 text-[11px]">Storage</span>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="form-label">Purpose of Issue *</label>
+                <input type="text" value={purpose} onChange={e => setPurpose(e.target.value)} className="form-input text-xs" required />
+              </div>
+
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <label className="text-xs font-semibold text-slate-700">Items to Issue:</label>
+                  <button type="button" onClick={handleAddRow} className="text-primary-600 hover:text-primary-700 text-xs font-bold">
+                    + Add Item Row
+                  </button>
+                </div>
+
+                {outRows.map((row, idx) => {
+                  const sel = items.find(i => i.id === row.itemId);
+                  const isExceeding = sel && Number(row.qty) > sel.currentStock;
+
+                  return (
+                    <div key={idx} className="p-3 rounded-lg border border-slate-200 bg-slate-50 space-y-2 relative">
+                      <div className="flex justify-between items-center">
+                        <span className="text-[11px] font-bold text-slate-500">Item #{idx + 1}</span>
+                        {outRows.length > 1 && (
+                          <button type="button" onClick={() => handleRemoveRow(idx)} className="text-red-500 hover:text-red-700 text-xs font-bold">
+                            ✕ Remove
+                          </button>
+                        )}
+                      </div>
+
+                      <select 
+                        value={row.itemId} 
+                        onChange={e => handleRowChange(idx, 'itemId', e.target.value)} 
+                        className="form-select text-xs" 
+                        required
+                      >
+                        <option value="">Select store item...</option>
+                        {items.map(i => (
+                          <option key={i.id} value={i.id}>{i.name} (Stock: {i.currentStock} {i.unit})</option>
+                        ))}
+                      </select>
+
+                      {sel && (
+                        <p className="text-[11px] text-primary-700 font-medium">
+                          Available: <strong>{sel.currentStock} {sel.unit}</strong>
+                        </p>
+                      )}
+
+                      <input 
+                        type="number" 
+                        step="0.01" 
+                        value={row.qty} 
+                        onChange={e => handleRowChange(idx, 'qty', e.target.value)} 
+                        placeholder="Quantity to issue" 
+                        className={`form-input text-xs ${isExceeding ? 'border-red-500 bg-red-50' : ''}`} 
+                        required 
+                      />
+                      {isExceeding && <p className="text-red-500 text-[10px]">Exceeds available stock!</p>}
+                    </div>
+                  );
+                })}
+              </div>
+
+              <button type="submit" className="btn-danger w-full justify-center text-xs py-2 shadow-sm">
+                Confirm & Issue All Items
+              </button>
+            </form>
+          </div>
+
+          <div className="card p-5 lg:col-span-2 space-y-3">
+            <h3 className="font-bold text-slate-800 text-sm">Recent Multi-Item Stock Out Transactions</h3>
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-slate-100 text-xs">
+                <thead>
+                  <tr>
+                    <th className="table-th">Issue ID</th>
+                    <th className="table-th">Issued Items</th>
+                    <th className="table-th">Purpose</th>
+                    <th className="table-th">Issued By</th>
+                    <th className="table-th">Date</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-50">
+                  {stockOuts.length === 0 ? (
+                    <tr><td colSpan={5} className="text-center py-6 text-slate-400">No stock out transactions yet.</td></tr>
+                  ) : (
+                    stockOuts.slice(-10).reverse().map(so => {
+                      const soItems = normalizeItems(so);
+                      return (
+                        <tr key={so.id}>
+                          <td className="table-td font-mono font-bold text-slate-700">{so.id}</td>
+                          <td className="table-td">
+                            <div className="space-y-1">
+                              {soItems.map((it, idx) => (
+                                <div key={idx} className="flex items-center gap-1.5">
+                                  <span className="font-semibold text-slate-800">{it.itemName}:</span>
+                                  <span className="font-bold text-red-600">-{it.qty} {it.unit}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </td>
+                          <td className="table-td text-slate-600">{so.purpose}</td>
+                          <td className="table-td text-slate-500">{so.issuedBy}</td>
+                          <td className="table-td text-slate-400">{so.date}</td>
+                        </tr>
+                      );
+                    })
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // --- REQUESTS VIEW & ORDER PURCHASE (GROUPED MULTIPLE ITEMS UNDER ONE REQUEST ID) ---
+    function RequestsView({ role, currentUser, onUpdate }) {
+      const [requests, setRequests] = useState(() => ls_get('requests', []));
+      const [items] = useState(() => ls_get('items', []));
+      const [vendors] = useState(() => ls_get('vendors', []));
+
+      // Multi-item Request creation state
+      const [isCreating, setIsCreating] = useState(false);
+      const [reqItems, setReqItems] = useState([{ itemId: '', requiredQty: '' }]);
+      const [priority, setPriority] = useState('Normal');
+      const [reason, setReason] = useState('Hostel Mess Pantry replenishment');
+
+      // Purchase Modal state for a Grouped Request
+      const [purchaseModalReq, setPurchaseModalReq] = useState(null);
+      const [vendorId, setVendorId] = useState(vendors[0]?.id || '');
+      const [purOrderItems, setPurOrderItems] = useState([]);
+      const [expectedDelivery, setExpectedDelivery] = useState('');
+
+      // View Request Details modal
+      const [viewingReq, setViewingReq] = useState(null);
+
+      const handleAddReqRow = () => {
+        setReqItems([...reqItems, { itemId: '', requiredQty: '' }]);
+      };
+
+      const handleRemoveReqRow = (idx) => {
+        if (reqItems.length === 1) return;
+        setReqItems(reqItems.filter((_, i) => i !== idx));
+      };
+
+      const handleReqRowChange = (idx, field, val) => {
+        const updated = [...reqItems];
+        updated[idx][field] = val;
+        setReqItems(updated);
+      };
+
+      const handleCreateGroupedReq = (e) => {
+        e.preventDefault();
+        
+        // Validate rows
+        const validRows = [];
+        for (let r of reqItems) {
+          if (!r.itemId || !r.requiredQty || Number(r.requiredQty) <= 0) {
+            showToast('Please select item and enter required quantity for all rows.', 'error');
+            return;
+          }
+          const itemObj = items.find(i => i.id === r.itemId);
+          validRows.push({
+            itemId: itemObj.id,
+            itemName: itemObj.name,
+            unit: itemObj.unit,
+            requiredQty: Number(r.requiredQty)
+          });
+        }
+
+        const id = getNextId('REQ');
+        const newReq = {
+          id,
+          items: validRows,
+          priority,
+          reason,
+          status: 'pending',
+          requestedBy: currentUser.name,
+          requestDate: new Date().toISOString().slice(0, 10),
+          createdAt: new Date().toISOString()
+        };
+
+        const updated = [...requests, newReq];
+        ls_set('requests', updated);
+        setRequests(updated);
+        showToast(`Grouped Request ${id} with ${validRows.length} items submitted to Procurement!`, 'success');
+        setIsCreating(false);
+        setReqItems([{ itemId: '', requiredQty: '' }]);
+        onUpdate();
+      };
+
+      // Open purchase order modal for a grouped request
+      const openPurchaseModal = (req) => {
+        setPurchaseModalReq(req);
+        const normItems = normalizeItems(req);
+        setPurOrderItems(normItems.map(it => ({
+          itemId: it.itemId,
+          itemName: it.itemName,
+          unit: it.unit,
+          orderedQty: it.requiredQty
+        })));
+        setVendorId(vendors[0]?.id || '');
+      };
+
+      const handleCreateGroupedPurchase = (e) => {
+        e.preventDefault();
+        if (!purchaseModalReq || purOrderItems.length === 0) return;
+
+        const purId = getNextId('PUR');
+        const selVendor = vendors.find(v => v.id === vendorId);
+
+        const newPur = {
+          id: purId,
+          requestId: purchaseModalReq.id,
+          vendorId,
+          vendorName: selVendor?.name || vendorId,
+          items: purOrderItems.map(it => ({
+            itemId: it.itemId,
+            itemName: it.itemName,
+            unit: it.unit,
+            orderedQty: Number(it.orderedQty)
+          })),
+          expectedDelivery: expectedDelivery || new Date().toISOString().slice(0, 10),
+          status: 'ordered',
+          purchaseDate: new Date().toISOString().slice(0, 10),
+          createdBy: currentUser.name,
+          createdAt: new Date().toISOString()
+        };
+
+        const purchases = ls_get('purchases', []);
+        ls_set('purchases', [...purchases, newPur]);
+
+        // Mark request as ordered
+        const updatedReqs = requests.map(r => r.id === purchaseModalReq.id ? { ...r, status: 'ordered', purchaseId: purId } : r);
+        ls_set('requests', updatedReqs);
+        setRequests(updatedReqs);
+
+        showToast(`Purchase Order ${purId} placed with ${selVendor?.name} for all items!`, 'success');
+        setPurchaseModalReq(null);
+        onUpdate();
+      };
+
+      return (
+        <div className="space-y-4">
+          <div className="flex justify-between items-center">
+            <div>
+              <h3 className="font-bold text-slate-800 text-sm">Procurement Requests (Grouped Multi-Item)</h3>
+              <p className="text-xs text-slate-500">Multiple items remain together under one Request ID.</p>
+            </div>
+            {role === 'storage' && (
+              <button onClick={() => setIsCreating(true)} className="btn-primary text-xs">+ Create Grouped Request (Multi-Item)</button>
+            )}
+          </div>
+
+          <div className="card overflow-x-auto">
+            <table className="min-w-full divide-y divide-slate-200 text-xs">
+              <thead>
+                <tr>
+                  <th className="table-th">Request ID</th>
+                  <th className="table-th">Requested Items (Grouped)</th>
+                  <th className="table-th">Priority</th>
+                  <th className="table-th">Status</th>
+                  <th className="table-th">Date</th>
+                  <th className="table-th">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {requests.length === 0 ? (
+                  <tr><td colSpan={6} className="text-center py-6 text-slate-400">No procurement requests yet.</td></tr>
+                ) : (
+                  requests.map(r => {
+                    const norm = normalizeItems(r);
+                    return (
+                      <tr key={r.id} className="hover:bg-slate-50">
+                        <td className="table-td font-mono font-bold text-primary-700">
+                          <button onClick={() => setViewingReq(r)} className="hover:underline text-left">
+                            {r.id}
+                          </button>
+                        </td>
+                        <td className="table-td">
+                          <div className="space-y-1">
+                            {norm.map((it, idx) => (
+                              <div key={idx} className="flex items-center gap-2">
+                                <span className="font-semibold text-slate-800">• {it.itemName}:</span>
+                                <span className="font-bold text-primary-700">{it.requiredQty} {it.unit}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </td>
+                        <td className="table-td"><span className="badge bg-slate-100 text-slate-700">{r.priority}</span></td>
+                        <td className="table-td"><StatusBadge status={r.status} /></td>
+                        <td className="table-td text-slate-400">{r.requestDate}</td>
+                        <td className="table-td">
+                          <div className="flex gap-2 items-center">
+                            <button onClick={() => setViewingReq(r)} className="btn-secondary text-xs py-1 px-2">
+                              👁️ View
+                            </button>
+                            {role === 'procurement' && r.status === 'pending' && (
+                              <button onClick={() => openPurchaseModal(r)} className="btn-primary text-xs py-1 px-2.5 shadow-sm">
+                                🛒 Order Purchase
+                              </button>
+                            )}
+                            {r.purchaseId && <span className="font-mono text-slate-500 font-medium">Order: {r.purchaseId}</span>}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* New Grouped Request Modal */}
+          {isCreating && (
+            <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
+              <form onSubmit={handleCreateGroupedReq} className="bg-white rounded-xl p-6 max-w-xl w-full space-y-4 shadow-2xl max-h-[90vh] flex flex-col">
+                <div className="flex justify-between items-center border-b pb-2">
+                  <h3 className="font-bold text-slate-800 text-sm">Create New Procurement Request (Multi-Item)</h3>
+                  <span className="badge bg-primary-100 text-primary-800 font-mono">Storage Committee</span>
+                </div>
+
+                <div className="space-y-3 flex-1 overflow-y-auto pr-1">
+                  <div className="flex justify-between items-center">
+                    <label className="text-xs font-bold text-slate-700">Add Requested Items:</label>
+                    <button type="button" onClick={handleAddReqRow} className="text-primary-600 hover:text-primary-700 text-xs font-bold">
+                      + Add Item Row
+                    </button>
+                  </div>
+
+                  {reqItems.map((row, idx) => {
+                    const sel = items.find(i => i.id === row.itemId);
+                    return (
+                      <div key={idx} className="p-3 rounded-lg border border-slate-200 bg-slate-50 grid grid-cols-1 sm:grid-cols-6 gap-2 items-center">
+                        <div className="sm:col-span-3">
+                          <label className="text-[10px] text-slate-500 block">Item #{idx + 1} *</label>
+                          <select 
+                            value={row.itemId} 
+                            onChange={e => handleReqRowChange(idx, 'itemId', e.target.value)} 
+                            className="form-select text-xs" 
+                            required
+                          >
+                            <option value="">Select pantry item...</option>
+                            {items.map(i => <option key={i.id} value={i.id}>{i.name} (Stock: {i.currentStock} {i.unit})</option>)}
+                          </select>
+                        </div>
+                        <div className="sm:col-span-2">
+                          <label className="text-[10px] text-slate-500 block">Required Qty ({sel?.unit || 'unit'}) *</label>
+                          <input 
+                            type="number" 
+                            step="0.01" 
+                            value={row.requiredQty} 
+                            onChange={e => handleReqRowChange(idx, 'requiredQty', e.target.value)} 
+                            className="form-input text-xs font-bold" 
+                            placeholder="Qty" 
+                            required 
+                          />
+                        </div>
+                        <div className="sm:col-span-1 pt-3 text-right">
+                          {reqItems.length > 1 && (
+                            <button type="button" onClick={() => handleRemoveReqRow(idx)} className="text-red-500 hover:text-red-700 text-xs font-bold">
+                              ✕
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+
+                  <div className="grid grid-cols-2 gap-3 pt-2">
+                    <div>
+                      <label className="form-label">Priority</label>
+                      <select value={priority} onChange={e => setPriority(e.target.value)} className="form-select text-xs">
+                        <option>Normal</option>
+                        <option>Urgent</option>
+                        <option>Critical</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="form-label">Reason</label>
+                      <input type="text" value={reason} onChange={e => setReason(e.target.value)} className="form-input text-xs" required />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex justify-end gap-2 pt-2 border-t">
+                  <button type="button" onClick={() => setIsCreating(false)} className="btn-secondary text-xs">Cancel</button>
+                  <button type="submit" className="btn-primary text-xs">Submit Grouped Request</button>
+                </div>
+              </form>
+            </div>
+          )}
+
+          {/* Place Purchase Order Modal for Grouped Request */}
+          {purchaseModalReq && (
+            <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
+              <form onSubmit={handleCreateGroupedPurchase} className="bg-white rounded-xl p-6 max-w-xl w-full space-y-4 shadow-2xl max-h-[90vh] flex flex-col">
+                <div className="flex justify-between items-center border-b pb-2">
+                  <h3 className="font-bold text-slate-800 text-sm">Place Purchase Order for {purchaseModalReq.id}</h3>
+                  <span className="badge bg-primary-100 text-primary-800 font-mono">{purchaseModalReq.id}</span>
+                </div>
+
+                <div className="space-y-3 flex-1 overflow-y-auto pr-1">
+                  <div>
+                    <label className="form-label">Select Vendor / Supplier *</label>
+                    <select value={vendorId} onChange={e => setVendorId(e.target.value)} className="form-select text-xs" required>
+                      {vendors.map(v => <option key={v.id} value={v.id}>{v.name} ({v.contactPerson})</option>)}
+                    </select>
+                  </div>
+
+                  <div className="border border-slate-200 rounded-xl p-3 bg-slate-50 space-y-2">
+                    <p className="text-xs font-bold text-slate-700">Items in this Order:</p>
+                    {purOrderItems.map((it, idx) => (
+                      <div key={idx} className="bg-white p-2.5 rounded-lg border border-slate-200 flex items-center justify-between gap-3">
+                        <div>
+                          <p className="font-semibold text-slate-800 text-xs">{it.itemName}</p>
+                          <p className="text-[10px] text-slate-400">Unit: {it.unit}</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <label className="text-xs text-slate-500">Ordered Qty:</label>
+                          <input 
+                            type="number" 
+                            step="0.01" 
+                            value={it.orderedQty} 
+                            onChange={e => {
+                              const up = [...purOrderItems];
+                              up[idx].orderedQty = e.target.value;
+                              setPurOrderItems(up);
+                            }} 
+                            className="form-input text-xs font-bold w-24 py-1" 
+                            required 
+                          />
+                          <span className="text-xs text-slate-500">{it.unit}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div>
+                    <label className="form-label">Expected Delivery Date</label>
+                    <input type="date" value={expectedDelivery} onChange={e => setExpectedDelivery(e.target.value)} className="form-input text-xs" />
+                  </div>
+                </div>
+
+                <div className="flex justify-end gap-2 pt-2 border-t">
+                  <button type="button" onClick={() => setPurchaseModalReq(null)} className="btn-secondary text-xs">Cancel</button>
+                  <button type="submit" className="btn-primary text-xs">Confirm & Place Purchase</button>
+                </div>
+              </form>
+            </div>
+          )}
+
+          {/* View Grouped Request Details Modal */}
+          {viewingReq && (
+            <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+              <div className="bg-white rounded-xl p-6 max-w-lg w-full space-y-4 shadow-2xl">
+                <div className="flex justify-between items-center border-b pb-2">
+                  <h3 className="font-bold text-slate-800 text-sm">Request Details — {viewingReq.id}</h3>
+                  <button onClick={() => setViewingReq(null)} className="text-slate-400 hover:text-slate-600 font-bold">✕</button>
+                </div>
+
+                <div className="space-y-2 text-xs">
+                  <div className="grid grid-cols-2 gap-2 bg-slate-50 p-3 rounded-lg border border-slate-200">
+                    <p>Requested By: <strong>{viewingReq.requestedBy}</strong></p>
+                    <p>Date: <strong>{viewingReq.requestDate}</strong></p>
+                    <p>Priority: <span className="badge bg-slate-200 text-slate-800">{viewingReq.priority}</span></p>
+                    <p>Status: <StatusBadge status={viewingReq.status} /></p>
+                  </div>
+
+                  <p className="font-bold text-slate-700 pt-2">Requested Items Breakdown:</p>
+                  <div className="border border-slate-200 rounded-lg overflow-hidden">
+                    <table className="min-w-full divide-y divide-slate-200">
+                      <thead className="bg-slate-50">
+                        <tr>
+                          <th className="table-th">Item Name</th>
+                          <th className="table-th">Quantity</th>
+                          <th className="table-th">Unit</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100">
+                        {normalizeItems(viewingReq).map((it, idx) => (
+                          <tr key={idx}>
+                            <td className="table-td font-semibold">{it.itemName}</td>
+                            <td className="table-td font-bold text-primary-700">{it.requiredQty}</td>
+                            <td className="table-td">{it.unit}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div className="flex justify-end pt-2">
+                  <button onClick={() => setViewingReq(null)} className="btn-secondary text-xs">Close</button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // --- PURCHASES VIEW ---
+    function PurchasesView({ onUpdate }) {
+      const purchases = ls_get('purchases', []);
+      const vendors = Object.fromEntries((ls_get('vendors', [])).map(v => [v.id, v.name]));
+
+      return (
+        <div className="space-y-4">
+          <div className="flex justify-between items-center">
+            <div>
+              <h3 className="font-bold text-slate-800 text-sm">Purchase Orders (Procurement)</h3>
+              <p className="text-xs text-slate-500">Track purchase orders placed with suppliers.</p>
+            </div>
+            <button onClick={() => exportExcel(purchases, 'SMC_Purchases')} className="btn-secondary text-xs">📊 Export Excel</button>
+          </div>
+
+          <div className="card overflow-x-auto">
+            <table className="min-w-full divide-y divide-slate-200 text-xs">
+              <thead>
+                <tr>
+                  <th className="table-th">Purchase ID</th>
+                  <th className="table-th">Request ID</th>
+                  <th className="table-th">Vendor</th>
+                  <th className="table-th">Ordered Items</th>
+                  <th className="table-th">Status</th>
+                  <th className="table-th">Date</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {purchases.length === 0 ? (
+                  <tr><td colSpan={6} className="text-center py-6 text-slate-400">No purchase orders placed yet.</td></tr>
+                ) : (
+                  purchases.map(p => {
+                    const norm = normalizeItems(p);
+                    return (
+                      <tr key={p.id} className="hover:bg-slate-50">
+                        <td className="table-td font-mono font-bold text-indigo-700">{p.id}</td>
+                        <td className="table-td font-mono text-slate-500">{p.requestId}</td>
+                        <td className="table-td font-semibold text-slate-800">{p.vendorName || vendors[p.vendorId] || p.vendorId}</td>
+                        <td className="table-td">
+                          <div className="space-y-1">
+                            {norm.map((it, idx) => (
+                              <div key={idx} className="flex items-center gap-1.5">
+                                <span>• {it.itemName}:</span>
+                                <span className="font-bold text-slate-900">{it.orderedQty} {it.unit}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </td>
+                        <td className="table-td"><StatusBadge status={p.status} /></td>
+                        <td className="table-td text-slate-400">{p.purchaseDate}</td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
+    }
+
+    // --- VENDORS VIEW ---
+    function VendorsView({ currentUser, onUpdate }) {
+      const [vendors, setVendors] = useState(() => ls_get('vendors', []));
+      const [modalVendor, setModalVendor] = useState(null);
+
+      const handleAddVendor = (e) => {
+        e.preventDefault();
+        const id = getNextId('VEN');
+        const newV = { id, ...modalVendor, isActive: true };
+        const updated = [...vendors, newV];
+        ls_set('vendors', updated);
+        setVendors(updated);
+        showToast(`Vendor ${newV.name} added!`, 'success');
+        setModalVendor(null);
+        onUpdate();
+      };
+
+      return (
+        <div className="space-y-4">
+          <div className="flex justify-between items-center">
+            <h3 className="font-bold text-slate-800 text-sm">Vendor & Supplier Directory</h3>
+            <button onClick={() => setModalVendor({ name: '', contactPerson: '', mobile: '', address: '', bankName: '', accountNumber: '', ifsc: '' })} className="btn-primary text-xs">+ Add Vendor</button>
+          </div>
+
+          <div className="card overflow-x-auto">
+            <table className="min-w-full divide-y divide-slate-200 text-xs">
+              <thead>
+                <tr>
+                  <th className="table-th">ID</th>
+                  <th className="table-th">Shop / Vendor</th>
+                  <th className="table-th">Contact</th>
+                  <th className="table-th">Mobile</th>
+                  <th className="table-th">Bank Details</th>
+                  <th className="table-th">Address</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {vendors.map(v => (
+                  <tr key={v.id} className="hover:bg-slate-50">
+                    <td className="table-td font-mono font-bold">{v.id}</td>
+                    <td className="table-td font-semibold text-slate-800">{v.name}</td>
+                    <td className="table-td">{v.contactPerson}</td>
+                    <td className="table-td font-mono">{v.mobile}</td>
+                    <td className="table-td font-mono text-[11px]">{v.bankName} (A/C: {v.accountNumber || '—'})</td>
+                    <td className="table-td text-slate-500 max-w-xs truncate">{v.address}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {modalVendor && (
+            <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
+              <form onSubmit={handleAddVendor} className="bg-white rounded-xl p-6 max-w-md w-full space-y-3 shadow-2xl">
+                <h3 className="font-bold text-slate-800 text-sm">Register New Vendor</h3>
+                <div>
+                  <label className="form-label">Shop / Vendor Name *</label>
+                  <input type="text" value={modalVendor.name} onChange={e => setModalVendor({ ...modalVendor, name: e.target.value })} className="form-input" required />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="form-label">Contact Person</label>
+                    <input type="text" value={modalVendor.contactPerson} onChange={e => setModalVendor({ ...modalVendor, contactPerson: e.target.value })} className="form-input" required />
+                  </div>
+                  <div>
+                    <label className="form-label">Mobile</label>
+                    <input type="tel" value={modalVendor.mobile} onChange={e => setModalVendor({ ...modalVendor, mobile: e.target.value })} className="form-input" required />
+                  </div>
+                </div>
+                <div>
+                  <label className="form-label">Bank Name</label>
+                  <input type="text" value={modalVendor.bankName} onChange={e => setModalVendor({ ...modalVendor, bankName: e.target.value })} className="form-input" placeholder="e.g. State Bank of India" />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="form-label">Account Number</label>
+                    <input type="text" value={modalVendor.accountNumber} onChange={e => setModalVendor({ ...modalVendor, accountNumber: e.target.value })} className="form-input font-mono" />
+                  </div>
+                  <div>
+                    <label className="form-label">IFSC Code</label>
+                    <input type="text" value={modalVendor.ifsc} onChange={e => setModalVendor({ ...modalVendor, ifsc: e.target.value })} className="form-input font-mono uppercase" />
+                  </div>
+                </div>
+                <div>
+                  <label className="form-label">Address</label>
+                  <input type="text" value={modalVendor.address} onChange={e => setModalVendor({ ...modalVendor, address: e.target.value })} className="form-input" required />
+                </div>
+                <div className="flex justify-end gap-2 pt-2">
+                  <button type="button" onClick={() => setModalVendor(null)} className="btn-secondary text-xs">Cancel</button>
+                  <button type="submit" className="btn-primary text-xs">Save Vendor</button>
+                </div>
+              </form>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // --- BILLS VIEW (WITH VENDOR NAME IN LISTING, AUTOMATIC ORDERED ITEMS ON VENDOR SELECT, DELETE PERMISSION FOR ADMIN & ACCOUNT, & PRINT FOR ACCOUNTANT) ---
+    function BillsView({ role, currentUser, onUpdate }) {
+      const [bills, setBills] = useState(() => ls_get('bills', []));
+      const [purchases] = useState(() => ls_get('purchases', []));
+      const [vendors] = useState(() => ls_get('vendors', []));
+
+      const [isUploading, setIsUploading] = useState(false);
+      const [viewingBill, setViewingBill] = useState(null);
+      const [deleteModalBill, setDeleteModalBill] = useState(null);
+
+      // Upload form state
+      const [selectedVendorId, setSelectedVendorId] = useState('');
+      const [billNo, setBillNo] = useState('');
+      const [billAmt, setBillAmt] = useState('');
+      const [fileBase64, setFileBase64] = useState(null);
+      const [fileName, setFileName] = useState('');
+      const [fileType, setFileType] = useState('');
+
+      // Auto-extract items ordered from selected vendor
+      const vendorOrderedItems = useMemo(() => {
+        if (!selectedVendorId) return [];
+        const vendorPurchases = purchases.filter(p => p.vendorId === selectedVendorId);
+        const allItems = [];
+        vendorPurchases.forEach(p => {
+          const norm = normalizeItems(p);
+          norm.forEach(it => {
+            allItems.push({
+              purchaseId: p.id,
+              itemId: it.itemId,
+              itemName: it.itemName,
+              orderedQty: it.orderedQty,
+              unit: it.unit
+            });
+          });
+        });
+        return allItems;
+      }, [selectedVendorId, purchases]);
+
+      const handleFilePick = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        setFileName(file.name);
+        setFileType(file.type);
+
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          setFileBase64(ev.target.result);
+          showToast(`File "${file.name}" selected!`, 'info');
+        };
+        reader.readAsDataURL(file);
+      };
+
+      const handleUploadBill = (e) => {
+        e.preventDefault();
+        const selVendor = vendors.find(v => v.id === selectedVendorId);
+        if (!selVendor) {
+          showToast('Please select a vendor.', 'error');
+          return;
+        }
+
+        const id = getNextId('BILL');
+        const newBill = {
+          id,
+          vendorId: selVendor.id,
+          vendorName: selVendor.name,
+          items: vendorOrderedItems,
+          billNumber: billNo,
+          billAmount: Number(billAmt),
+          fileData: fileBase64,
+          fileName: fileName || 'Uploaded_Invoice',
+          fileType: fileType,
+          billDate: new Date().toISOString().slice(0, 10),
+          verificationStatus: 'pending_verification',
+          paymentStatus: 'pending',
+          createdBy: currentUser.name,
+          createdAt: new Date().toISOString()
+        };
+
+        const updated = [...bills, newBill];
+        ls_set('bills', updated);
+        setBills(updated);
+        showToast(`Bill ${id} with vendor ${selVendor.name} and ordered items uploaded!`, 'success');
+        setIsUploading(false);
+        setSelectedVendorId('');
+        setBillNo('');
+        setBillAmt('');
+        setFileBase64(null);
+        setFileName('');
+        onUpdate();
+      };
+
+      // Verification & Forwarding (Account Committee)
+      const handleVerifyAndForward = (billId) => {
+        const updated = bills.map(b => b.id === billId ? { ...b, verificationStatus: 'verified' } : b);
+        ls_set('bills', updated);
+        setBills(updated);
+        showToast(`Bill ${billId} Verified & Marked Approved for Payment!`, 'success');
+        onUpdate();
+      };
+
+      const handleReject = (billId) => {
+        const updated = bills.map(b => b.id === billId ? { ...b, verificationStatus: 'rejected' } : b);
+        ls_set('bills', updated);
+        setBills(updated);
+        showToast(`Bill ${billId} was Marked Rejected.`, 'error');
+        onUpdate();
+      };
+
+      // Bill Delete Permission (Admin and Account can both delete bills)
+      const handleConfirmDeleteBill = () => {
+        if (!deleteModalBill) return;
+        const updated = bills.filter(b => b.id !== deleteModalBill.id);
+        ls_set('bills', updated);
+        setBills(updated);
+        showToast(`Bill ${deleteModalBill.id} (${deleteModalBill.billNumber}) deleted successfully!`, 'error');
+        setDeleteModalBill(null);
+        onUpdate();
+      };
+
+      // Print Bill Voucher (Both Admin and Accountant can Print)
+      const triggerPrint = () => {
+        window.print();
+      };
+
+      return (
+        <div className="space-y-4">
+          <div className="flex flex-wrap justify-between items-center gap-3 no-print">
+            <div>
+              <h3 className="font-bold text-slate-800 text-sm">Bills & Supplier Invoices</h3>
+              <p className="text-xs text-slate-500">Upload invoices with auto-linked vendor items, verify bills, print vouchers, or delete records.</p>
+            </div>
+            <div className="flex gap-2">
+              {(role === 'procurement' || role === 'admin') && (
+                <button onClick={() => setIsUploading(true)} className="btn-primary text-xs">📁 Upload New Bill</button>
+              )}
+            </div>
+          </div>
+
+          <div className="card overflow-x-auto no-print">
+            <table className="min-w-full divide-y divide-slate-200 text-xs">
+              <thead>
+                <tr>
+                  <th className="table-th">Bill ID</th>
+                  <th className="table-th">Vendor Name</th>
+                  <th className="table-th">Ordered Items</th>
+                  <th className="table-th">Bill Number</th>
+                  <th className="table-th">Amount</th>
+                  <th className="table-th">Document / File</th>
+                  <th className="table-th">Status</th>
+                  <th className="table-th">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {bills.length === 0 ? (
+                  <tr><td colSpan={8} className="text-center py-6 text-slate-400">No bills uploaded yet.</td></tr>
+                ) : (
+                  bills.map(b => {
+                    const normItems = normalizeItems(b);
+                    return (
+                      <tr key={b.id} className="hover:bg-slate-50">
+                        <td className="table-td font-mono font-bold text-indigo-700">{b.id}</td>
+                        {/* Clear Vendor Name Display */}
+                        <td className="table-td font-bold text-slate-900">{b.vendorName || 'General Supplier'}</td>
+                        <td className="table-td">
+                          <div className="space-y-1">
+                            {normItems.map((it, idx) => (
+                              <div key={idx} className="text-slate-700">
+                                • {it.itemName} ({it.orderedQty || it.qty} {it.unit})
+                              </div>
+                            ))}
+                          </div>
+                        </td>
+                        <td className="table-td font-medium font-mono">{b.billNumber}</td>
+                        <td className="table-td font-bold text-slate-900">₹{Number(b.billAmount).toLocaleString()}</td>
+                        <td className="table-td">
+                          {b.fileData ? (
+                            <button onClick={() => setViewingBill(b)} className="inline-flex items-center gap-1 px-2 py-1 rounded bg-blue-50 text-blue-700 font-semibold text-[11px] hover:bg-blue-100 border border-blue-200">
+                              👁️ View File
+                            </button>
+                          ) : (
+                            <span className="text-slate-400 italic">No File</span>
+                          )}
+                        </td>
+                        <td className="table-td">
+                          <div className="space-y-1">
+                            <StatusBadge status={b.verificationStatus} />
+                            <div><StatusBadge status={b.paymentStatus || 'pending'} /></div>
+                          </div>
+                        </td>
+                        <td className="table-td">
+                          <div className="flex flex-wrap gap-1.5 items-center">
+                            {/* View / Print button */}
+                            <button onClick={() => setViewingBill(b)} className="btn-secondary text-xs py-1 px-2" title="View details and print voucher">
+                              👁️ View / 🖨️ Print
+                            </button>
+
+                            {/* Account Verification & Forwarding Actions (NO payment action) */}
+                            {role === 'account' && b.verificationStatus !== 'verified' && (
+                              <>
+                                <button onClick={() => handleVerifyAndForward(b.id)} className="btn-success text-xs py-1 px-2" title="Verify and forward to payment">
+                                  ✓ Verify & Forward
+                                </button>
+                                <button onClick={() => handleReject(b.id)} className="btn-danger text-xs py-1 px-2" title="Mark rejected">
+                                  ✕ Reject
+                                </button>
+                              </>
+                            )}
+
+                            {/* Bill Delete Permission: ADMIN and ACCOUNT/ACCOUNTANT both have permission */}
+                            {(role === 'admin' || role === 'account') && (
+                              <button onClick={() => setDeleteModalBill(b)} className="inline-flex items-center gap-1 px-2 py-1 bg-red-50 hover:bg-red-100 text-red-700 rounded text-xs font-semibold" title="Delete this bill record">
+                                🗑️ Delete
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Upload Bill Modal (Shows Vendor Name & Auto Shows Ordered Items) */}
+          {isUploading && (
+            <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
+              <form onSubmit={handleUploadBill} className="bg-white rounded-xl p-6 max-w-xl w-full space-y-4 shadow-2xl max-h-[90vh] flex flex-col">
+                <div className="flex justify-between items-center border-b pb-2">
+                  <h3 className="font-bold text-slate-800 text-sm">Upload Supplier Bill & Invoice</h3>
+                  <span className="text-xs text-primary-600 font-semibold font-mono">Procurement</span>
+                </div>
+
+                <div className="space-y-3 flex-1 overflow-y-auto pr-1">
+                  {/* Clearly visible Vendor Name field */}
+                  <div>
+                    <label className="form-label font-bold text-slate-800">1. Vendor Name *</label>
+                    <select 
+                      value={selectedVendorId} 
+                      onChange={e => setSelectedVendorId(e.target.value)} 
+                      className="form-select text-xs font-semibold" 
+                      required
+                    >
+                      <option value="">Select Vendor / Supplier...</option>
+                      {vendors.map(v => (
+                        <option key={v.id} value={v.id}>{v.name} ({v.contactPerson})</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Automatically show items ordered from that vendor */}
+                  {selectedVendorId && (
+                    <div className="border border-blue-200 bg-blue-50/50 rounded-xl p-3 space-y-2">
+                      <p className="text-xs font-bold text-blue-900 flex items-center gap-1.5">
+                        📦 Ordered Items from this Vendor (Auto-Detected):
+                      </p>
+                      {vendorOrderedItems.length === 0 ? (
+                        <p className="text-xs text-slate-500 italic">No previous purchase records found for this vendor.</p>
+                      ) : (
+                        <div className="bg-white rounded-lg border border-blue-100 p-2 space-y-1.5 text-xs">
+                          {vendorOrderedItems.map((it, idx) => (
+                            <div key={idx} className="flex justify-between items-center py-1 border-b border-slate-100 last:border-0">
+                              <span className="font-semibold text-slate-800">• {it.itemName}</span>
+                              <span className="font-bold text-primary-700">{it.orderedQty} {it.unit}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="form-label">2. Bill / Invoice Number *</label>
+                      <input type="text" value={billNo} onChange={e => setBillNo(e.target.value)} className="form-input text-xs font-mono" placeholder="e.g. INV-9042" required />
+                    </div>
+                    <div>
+                      <label className="form-label">3. Bill Amount (₹) *</label>
+                      <input type="number" step="0.01" value={billAmt} onChange={e => setBillAmt(e.target.value)} className="form-input text-xs font-bold" placeholder="Total Amount" required />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="form-label">4. Upload Invoice Document (PDF / Image) *</label>
+                    <div className="border-2 border-dashed border-slate-300 rounded-xl p-4 text-center hover:border-primary-500 bg-slate-50 transition-colors">
+                      <input 
+                        type="file" 
+                        id="billFileInput" 
+                        accept=".pdf, image/png, image/jpeg, image/jpg, image/webp" 
+                        onChange={handleFilePick} 
+                        className="hidden" 
+                        required 
+                      />
+                      <label htmlFor="billFileInput" className="cursor-pointer block">
+                        <div className="text-3xl mb-1">📄</div>
+                        <p className="text-xs font-semibold text-primary-700">Click to Select Invoice Document from Computer/Phone</p>
+                        <p className="text-[10px] text-slate-400 mt-0.5">Supports PDF, JPG, PNG, WEBP</p>
+                      </label>
+                      {fileName && (
+                        <div className="mt-2 text-xs font-mono text-emerald-700 bg-emerald-50 py-1 px-2 rounded border border-emerald-200">
+                          Selected: <strong>{fileName}</strong>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex justify-end gap-2 pt-2 border-t">
+                  <button type="button" onClick={() => setIsUploading(false)} className="btn-secondary text-xs">Cancel</button>
+                  <button type="submit" disabled={!selectedVendorId} className="btn-primary text-xs">Upload & Link to Account</button>
+                </div>
+              </form>
+            </div>
+          )}
+
+          {/* Delete Bill Confirmation Modal (For Admin & Accountant) */}
+          {deleteModalBill && (
+            <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+              <div className="bg-white rounded-xl p-6 max-w-sm w-full space-y-3 shadow-2xl">
+                <h3 className="font-bold text-red-600 text-sm flex items-center gap-1.5">
+                  ⚠️ Delete Bill Confirmation
+                </h3>
+                <p className="text-xs text-slate-600">
+                  Are you sure you want to permanently delete Bill <strong>{deleteModalBill.id} (Invoice: {deleteModalBill.billNumber})</strong> for Vendor <strong>{deleteModalBill.vendorName}</strong>?
+                </p>
+                <div className="flex justify-end gap-2 pt-2 border-t">
+                  <button onClick={() => setDeleteModalBill(null)} className="btn-secondary text-xs">Cancel</button>
+                  <button onClick={handleConfirmDeleteBill} className="btn-danger text-xs">Yes, Delete Bill</button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* View Bill Attachment & Print Modal (Accessible to Both Admin & Accountant) */}
+          {viewingBill && (
+            <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
+              <div className="bg-white rounded-2xl p-6 max-w-3xl w-full space-y-4 shadow-2xl max-h-[95vh] flex flex-col">
+                <div className="flex justify-between items-center border-b pb-3 no-print">
+                  <div>
+                    <h3 className="font-bold text-slate-900 text-sm">Invoice Voucher & Document Preview — {viewingBill.id}</h3>
+                    <p className="text-xs text-slate-500">Vendor: <strong>{viewingBill.vendorName || 'General Supplier'}</strong> · Bill No: {viewingBill.billNumber} · Amount: ₹{Number(viewingBill.billAmount).toLocaleString()}</p>
+                  </div>
+                  <button onClick={() => setViewingBill(null)} className="text-slate-400 hover:text-slate-600 text-xl font-bold">✕</button>
+                </div>
+
+                {/* Printable Voucher Section (Formatted cleanly for print or screen) */}
+                <div id="printable-area" className="space-y-4 bg-white p-4 rounded-xl border border-slate-200">
+                  <div className="border-b pb-3 text-center">
+                    <h2 className="font-bold text-base text-slate-900 uppercase">Hostel Students Mess Committee (SMC)</h2>
+                    <p className="text-xs text-slate-500">Government Engineering College, Palanpur</p>
+                    <h3 className="font-bold text-sm text-primary-800 mt-1 uppercase tracking-wider">Bill & Invoice Verification Voucher</h3>
+                  </div>
+
+                  <div className="grid grid-cols-2 text-xs gap-2 bg-slate-50 p-3 rounded-lg border border-slate-200">
+                    <p>Bill ID: <strong className="font-mono">{viewingBill.id}</strong></p>
+                    <p>Bill Date: <strong>{viewingBill.billDate}</strong></p>
+                    <p>Vendor Name: <strong className="text-slate-900">{viewingBill.vendorName || 'General Supplier'}</strong></p>
+                    <p>Invoice / Bill No: <strong className="font-mono">{viewingBill.billNumber}</strong></p>
+                    <p>Total Bill Amount: <strong className="text-emerald-700 text-sm">₹{Number(viewingBill.billAmount).toLocaleString()}</strong></p>
+                    <p>Verification Status: <StatusBadge status={viewingBill.verificationStatus} /></p>
+                  </div>
+
+                  <div>
+                    <p className="text-xs font-bold text-slate-800 mb-1">Ordered Items Listed Under this Bill:</p>
+                    <table className="min-w-full divide-y divide-slate-200 text-xs border border-slate-200">
+                      <thead className="bg-slate-50">
+                        <tr>
+                          <th className="table-th">#</th>
+                          <th className="table-th">Item Description</th>
+                          <th className="table-th">Quantity</th>
+                          <th className="table-th">Unit</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100">
+                        {normalizeItems(viewingBill).map((it, idx) => (
+                          <tr key={idx}>
+                            <td className="table-td text-slate-400">{idx + 1}</td>
+                            <td className="table-td font-semibold text-slate-800">{it.itemName}</td>
+                            <td className="table-td font-bold">{it.orderedQty || it.qty}</td>
+                            <td className="table-td">{it.unit}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Signatures block for physical print */}
+                  <div className="pt-6 grid grid-cols-3 text-center text-xs text-slate-500 gap-4">
+                    <div className="border-t border-slate-300 pt-2">Procurement Member</div>
+                    <div className="border-t border-slate-300 pt-2">Accountant / Account Committee</div>
+                    <div className="border-t border-slate-300 pt-2">Mess Warden / Admin</div>
+                  </div>
+                </div>
+
+                {/* Attached Document (Iframe / Image) */}
+                {viewingBill.fileData && (
+                  <div className="flex-1 overflow-auto bg-slate-100 rounded-xl p-3 flex items-center justify-center min-h-[250px] no-print">
+                    {viewingBill.fileType?.includes('pdf') || viewingBill.fileData.startsWith('data:application/pdf') ? (
+                      <iframe src={viewingBill.fileData} className="w-full h-[400px] rounded-lg border border-slate-300" title="Bill PDF" />
+                    ) : (
+                      <img src={viewingBill.fileData} alt="Bill Invoice" className="max-h-[400px] object-contain rounded-lg shadow-md" />
+                    )}
+                  </div>
+                )}
+
+                <div className="flex justify-between items-center pt-2 border-t no-print">
+                  <div className="flex gap-2">
+                    {/* Print Option for Accountant & Admin */}
+                    {(role === 'account' || role === 'admin') && (
+                      <button onClick={triggerPrint} className="btn-primary text-xs bg-slate-800 hover:bg-slate-900">
+                        🖨️ Print Voucher
+                      </button>
+                    )}
+                    {viewingBill.fileData && (
+                      <a href={viewingBill.fileData} download={viewingBill.fileName || `Invoice_${viewingBill.id}`} className="btn-secondary text-xs">
+                        ⬇️ Download File
+                      </a>
+                    )}
+                  </div>
+                  <button onClick={() => setViewingBill(null)} className="btn-secondary text-xs">Close</button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // --- PAYMENTS VIEW (ADMIN-ONLY DISBURSAL, PERMISSION REMOVED FROM ACCOUNTANT) ---
+    function PaymentsView({ role, currentUser, onUpdate }) {
+      const [bills, setBills] = useState(() => ls_get('bills', []));
+      const [payments, setPayments] = useState(() => ls_get('payments', []));
+      const [payModalBill, setPayModalBill] = useState(null);
+      const [amount, setAmount] = useState('');
+      const [mode, setMode] = useState('UPI');
+      const [refNo, setRefNo] = useState('');
+
+      const handlePay = (e) => {
+        e.preventDefault();
+        const payId = getNextId('PAY');
+        const payNum = Number(amount);
+
+        const newPay = {
+          id: payId,
+          billId: payModalBill.id,
+          purchaseId: payModalBill.purchaseId || 'PUR-GRP',
+          vendorId: payModalBill.vendorId,
+          vendorName: payModalBill.vendorName,
+          amount: payNum,
+          paymentDate: new Date().toISOString().slice(0, 10),
+          paymentMode: mode,
+          referenceNumber: refNo,
+          paidBy: currentUser.name,
+          createdAt: new Date().toISOString()
+        };
+
+        const updatedPayments = [...payments, newPay];
+        ls_set('payments', updatedPayments);
+        setPayments(updatedPayments);
+
+        const totalPaidSoFar = updatedPayments.filter(p => p.billId === payModalBill.id).reduce((s, p) => s + Number(p.amount), 0);
+        const rem = Number(payModalBill.billAmount) - totalPaidSoFar;
+        const newStatus = rem <= 0 ? 'paid' : 'partially_paid';
+
+        const updatedBills = bills.map(b => b.id === payModalBill.id ? { ...b, paymentStatus: newStatus } : b);
+        ls_set('bills', updatedBills);
+        setBills(updatedBills);
+
+        showToast(`Payment ${payId} of ₹${payNum.toLocaleString()} processed!`, 'success');
+        setPayModalBill(null);
+        setAmount('');
+        onUpdate();
+      };
+
+      return (
+        <div className="space-y-4">
+          <div className="flex justify-between items-center">
+            <div>
+              <h3 className="font-bold text-slate-800 text-sm">Disburse Vendor Payments (Super Admin Disbursal)</h3>
+              <p className="text-xs text-slate-500">Pay verified invoices and record bank/UPI transaction references.</p>
+            </div>
+          </div>
+
+          <div className="card overflow-x-auto">
+            <table className="min-w-full divide-y divide-slate-200 text-xs">
+              <thead>
+                <tr>
+                  <th className="table-th">Bill ID</th>
+                  <th className="table-th">Vendor</th>
+                  <th className="table-th">Bill Total</th>
+                  <th className="table-th">Already Paid</th>
+                  <th className="table-th">Remaining</th>
+                  <th className="table-th">Verification</th>
+                  <th className="table-th">Status</th>
+                  <th className="table-th">Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {bills.map(b => {
+                  const paid = payments.filter(p => p.billId === b.id).reduce((s, p) => s + Number(p.amount), 0);
+                  const rem = Math.max(0, Number(b.billAmount) - paid);
+                  return (
+                    <tr key={b.id} className="hover:bg-slate-50">
+                      <td className="table-td font-mono font-bold text-indigo-700">{b.id}</td>
+                      <td className="table-td font-semibold text-slate-800">{b.vendorName || 'General Supplier'}</td>
+                      <td className="table-td font-semibold">₹{Number(b.billAmount).toLocaleString()}</td>
+                      <td className="table-td font-bold text-emerald-600">₹{paid.toLocaleString()}</td>
+                      <td className="table-td font-bold text-red-600">₹{rem.toLocaleString()}</td>
+                      <td className="table-td"><StatusBadge status={b.verificationStatus} /></td>
+                      <td className="table-td"><StatusBadge status={rem <= 0 ? 'paid' : paid > 0 ? 'partially_paid' : 'pending'} /></td>
+                      <td className="table-td">
+                        {role === 'admin' && rem > 0 && (
+                          <button onClick={() => { setPayModalBill(b); setAmount(rem); }} className="btn-primary text-xs py-1 px-2.5">
+                            💳 Pay ₹{rem.toLocaleString()}
+                          </button>
+                        )}
+                        {role !== 'admin' && rem > 0 && (
+                          <span className="text-slate-400 italic text-[11px]">Admin Disbursal</span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          {payModalBill && (
+            <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
+              <form onSubmit={handlePay} className="bg-white rounded-xl p-6 max-w-md w-full space-y-3 shadow-2xl">
+                <h3 className="font-bold text-slate-800 text-sm">Process Payment for {payModalBill.id}</h3>
+                <div>
+                  <label className="form-label">Payment Amount (₹) *</label>
+                  <input type="number" step="0.01" value={amount} onChange={e => setAmount(e.target.value)} className="form-input" required />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="form-label">Mode</label>
+                    <select value={mode} onChange={e => setMode(e.target.value)} className="form-select">
+                      {['UPI', 'NEFT', 'RTGS', 'Cash', 'Cheque', 'DD'].map(m => <option key={m}>{m}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="form-label">Reference No.</label>
+                    <input type="text" value={refNo} onChange={e => setRefNo(e.target.value)} className="form-input font-mono" placeholder="UTR/Cheque No" />
+                  </div>
+                </div>
+                <div className="flex justify-end gap-2 pt-2">
+                  <button type="button" onClick={() => setPayModalBill(null)} className="btn-secondary text-xs">Cancel</button>
+                  <button type="submit" className="btn-success text-xs">Confirm Payment</button>
+                </div>
+              </form>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // --- VENDOR LEDGERS VIEW ---
+    function VendorLedgersView() {
+      const vendors = ls_get('vendors', []);
+      const bills = ls_get('bills', []);
+      const payments = ls_get('payments', []);
+
+      return (
+        <div className="space-y-4">
+          <div className="flex justify-between items-center">
+            <div>
+              <h3 className="font-bold text-slate-800 text-sm">Vendor Payment Ledgers & Statements</h3>
+              <p className="text-xs text-slate-500">Summary of total billed, cleared payments, and pending dues per vendor.</p>
+            </div>
+            <button onClick={() => window.print()} className="btn-secondary text-xs">🖨️ Print Statement</button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {vendors.map(v => {
+              const vBills = bills.filter(b => b.vendorId === v.id);
+              const totalBilled = vBills.reduce((s, b) => s + Number(b.billAmount || 0), 0);
+              const vPays = payments.filter(p => p.vendorId === v.id || vBills.some(b => b.id === p.billId));
+              const totalPaid = vPays.reduce((s, p) => s + Number(p.amount || 0), 0);
+              const pending = Math.max(0, totalBilled - totalPaid);
+
+              return (
+                <div key={v.id} className="card p-5 space-y-3">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h4 className="font-bold text-slate-900">{v.name}</h4>
+                      <p className="text-xs text-slate-400">Contact: {v.contactPerson} ({v.mobile})</p>
+                    </div>
+                    <span className={`badge ${pending === 0 && totalBilled > 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}`}>
+                      {pending === 0 && totalBilled > 0 ? 'All Cleared' : `₹${pending.toLocaleString()} Pending`}
+                    </span>
+                  </div>
+
+                  <div className="bg-slate-50 p-3 rounded-lg grid grid-cols-3 text-center text-xs">
+                    <div><p className="text-slate-400">Billed</p><p className="font-bold text-slate-800">₹{totalBilled.toLocaleString()}</p></div>
+                    <div><p className="text-slate-400">Paid</p><p className="font-bold text-emerald-600">₹{totalPaid.toLocaleString()}</p></div>
+                    <div><p className="text-slate-400">Pending</p><p className="font-bold text-red-600">₹{pending.toLocaleString()}</p></div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      );
+    }
+
+    // --- GRN INSPECT VIEW ---
+    function GRNInspectView() {
+      const grns = ls_get('grns', []);
+      return (
+        <div className="space-y-4">
+          <div className="flex justify-between items-center">
+            <div>
+              <h3 className="font-bold text-slate-800 text-sm">Goods Received Notes (GRN) Inspector for Account Verification</h3>
+              <p className="text-xs text-slate-500">Inspect physical quantities received before verifying invoices.</p>
+            </div>
+            <button onClick={() => window.print()} className="btn-secondary text-xs">🖨️ Print GRN Sheet</button>
+          </div>
+
+          <div className="card overflow-x-auto">
+            <table className="min-w-full divide-y divide-slate-200 text-xs">
+              <thead>
+                <tr>
+                  <th className="table-th">GRN ID</th>
+                  <th className="table-th">Purchase ID</th>
+                  <th className="table-th">Received Items Breakdown</th>
+                  <th className="table-th">Shortage Status</th>
+                  <th className="table-th">Date</th>
+                  <th className="table-th">Verified By</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {grns.map(g => {
+                  const gItems = normalizeItems(g);
+                  const totalShort = gItems.reduce((s, it) => s + Number(it.shortQty || 0), 0);
+                  return (
+                    <tr key={g.id} className="hover:bg-slate-50">
+                      <td className="table-td font-mono font-bold text-blue-700">{g.id}</td>
+                      <td className="table-td font-mono">{g.purchaseId}</td>
+                      <td className="table-td">
+                        <div className="space-y-1">
+                          {gItems.map((it, idx) => (
+                            <div key={idx} className="flex items-center gap-1.5">
+                              <span className="font-semibold text-slate-800">• {it.itemName}:</span>
+                              <span className="font-bold text-emerald-600">+{it.receivedQty} {it.unit}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </td>
+                      <td className="table-td">
+                        {totalShort > 0 ? (
+                          <span className="font-bold text-red-600">⚠️ {totalShort} Short</span>
+                        ) : (
+                          <span className="badge bg-emerald-100 text-emerald-800">✓ Complete</span>
+                        )}
+                      </td>
+                      <td className="table-td text-slate-400">{g.receivedDate}</td>
+                      <td className="table-td text-slate-500 font-medium">{g.createdBy}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
+    }
+
+    // --- SHORT SUPPLY VIEW ---
+    function ShortSupplyView({ role, currentUser, onUpdate }) {
+      const [shortSupplies, setShortSupplies] = useState(() => ls_get('shortSupplies', []));
+      const [vendors] = useState(() => ls_get('vendors', []));
+      const [completeModalSS, setCompleteModalSS] = useState(null);
+      const [orderedQty, setOrderedQty] = useState('');
+      const [vendorId, setVendorId] = useState(vendors[0]?.id || '');
+
+      const handleCompleteShortSupply = (e) => {
+        e.preventDefault();
+        const purId = getNextId('PUR');
+        const ordQty = Number(orderedQty || completeModalSS.shortQty);
+
+        const newPur = {
+          id: purId,
+          requestId: completeModalSS.requestId,
+          vendorId,
+          items: [{
+            itemId: completeModalSS.itemId,
+            itemName: completeModalSS.itemName,
+            unit: 'kg',
+            orderedQty: ordQty
+          }],
+          status: 'ordered',
+          remarks: `Follow-up procurement for short supply ${completeModalSS.id}`,
+          purchaseDate: new Date().toISOString().slice(0, 10),
+          createdBy: currentUser.name,
+          createdAt: new Date().toISOString()
+        };
+
+        const allPurchases = ls_get('purchases', []);
+        ls_set('purchases', [...allPurchases, newPur]);
+
+        const updatedSS = shortSupplies.map(s => s.id === completeModalSS.id ? { ...s, status: 'resolved', resolvedByPurchaseId: purId } : s);
+        ls_set('shortSupplies', updatedSS);
+        setShortSupplies(updatedSS);
+
+        showToast(`Follow-up Purchase Order ${purId} placed for remaining ${ordQty} qty!`, 'success');
+        setCompleteModalSS(null);
+        onUpdate();
+      };
+
+      return (
+        <div className="space-y-4">
+          <h3 className="font-bold text-slate-800 text-sm">Short Supply & Delivery Shortages</h3>
+
+          <div className="card overflow-x-auto">
+            <table className="min-w-full divide-y divide-slate-200 text-xs">
+              <thead>
+                <tr>
+                  <th className="table-th">SS ID</th>
+                  <th className="table-th">GRN ID</th>
+                  <th className="table-th">Original Pur</th>
+                  <th className="table-th">Item</th>
+                  <th className="table-th">Short Quantity</th>
+                  <th className="table-th">Status</th>
+                  <th className="table-th">Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {shortSupplies.length === 0 ? (
+                  <tr><td colSpan={7} className="text-center py-6 text-slate-400">No short supply issues recorded.</td></tr>
+                ) : (
+                  shortSupplies.map(s => (
+                    <tr key={s.id} className="hover:bg-slate-50">
+                      <td className="table-td font-mono font-bold text-orange-700">{s.id}</td>
+                      <td className="table-td font-mono text-slate-400">{s.grnId || 'Manual'}</td>
+                      <td className="table-td font-mono text-slate-500">{s.purchaseId}</td>
+                      <td className="table-td font-semibold text-slate-800">{s.itemName}</td>
+                      <td className="table-td font-bold text-red-600">{s.shortQty}</td>
+                      <td className="table-td"><StatusBadge status={s.status} /></td>
+                      <td className="table-td">
+                        {role === 'procurement' && s.status === 'open' && (
+                          <button onClick={() => { setCompleteModalSS(s); setOrderedQty(s.shortQty); }} className="btn-primary text-xs py-1 px-2">
+                            🛒 Complete Short Supply
+                          </button>
+                        )}
+                        {s.resolvedByPurchaseId && <span className="font-mono text-slate-400">Pur: {s.resolvedByPurchaseId}</span>}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {completeModalSS && (
+            <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
+              <form onSubmit={handleCompleteShortSupply} className="bg-white rounded-xl p-6 max-w-md w-full space-y-3 shadow-2xl">
+                <h3 className="font-bold text-slate-800 text-sm">Procure Remaining Short Supply ({completeModalSS.id})</h3>
+                <div className="bg-amber-50 p-3 rounded text-xs space-y-1 text-amber-900 border border-amber-200">
+                  <p>Item: <strong>{completeModalSS.itemName}</strong></p>
+                  <p>Short Quantity to Procure: <strong className="text-red-600">{completeModalSS.shortQty}</strong></p>
+                </div>
+                <div>
+                  <label className="form-label">Vendor</label>
+                  <select value={vendorId} onChange={e => setVendorId(e.target.value)} className="form-select text-xs">
+                    {vendors.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="form-label">Quantity to Procure *</label>
+                  <input type="number" step="0.01" value={orderedQty} onChange={e => setOrderedQty(e.target.value)} className="form-input font-bold" required />
+                </div>
+                <div className="flex justify-end gap-2 pt-2">
+                  <button type="button" onClick={() => setCompleteModalSS(null)} className="btn-secondary text-xs">Cancel</button>
+                  <button type="submit" className="btn-primary text-xs">Place Follow-up Purchase</button>
+                </div>
+              </form>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // --- TRANSACTION TRACE VIEW (ADMIN) ---
+    function TraceView() {
+      const requests = ls_get('requests', []);
+      const purchases = ls_get('purchases', []);
+      const bills = ls_get('bills', []);
+      const payments = ls_get('payments', []);
+      const grns = ls_get('grns', []);
+
+      return (
+        <div className="space-y-4">
+          <h3 className="font-bold text-slate-800 text-sm">End-to-End Linked Transaction Workflow</h3>
+          <div className="space-y-3">
+            {requests.map(req => {
+              const p = purchases.find(x => x.requestId === req.id);
+              const b = p ? bills.find(x => x.purchaseId === p.id || (x.items && x.items.some(it => it.purchaseId === p.id))) : null;
+              const payList = b ? payments.filter(x => x.billId === b.id) : [];
+              const gList = p ? grns.filter(x => x.purchaseId === p.id) : [];
+
+              return (
+                <div key={req.id} className="card p-4 space-y-3">
+                  <div className="flex items-center gap-2 flex-wrap text-xs">
+                    <span className="bg-blue-100 text-blue-800 font-bold px-2 py-1 rounded font-mono">{req.id} (Grouped Request)</span>
+                    <span>➔</span>
+                    <span className={`font-mono px-2 py-1 rounded font-bold ${p ? 'bg-purple-100 text-purple-800' : 'bg-slate-100 text-slate-400'}`}>{p ? p.id : 'No Purchase'}</span>
+                    <span>➔</span>
+                    <span className={`font-mono px-2 py-1 rounded font-bold ${b ? 'bg-indigo-100 text-indigo-800' : 'bg-slate-100 text-slate-400'}`}>{b ? b.id : 'No Bill'}</span>
+                    <span>➔</span>
+                    <span className={`font-mono px-2 py-1 rounded font-bold ${payList.length > 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-400'}`}>{payList.length > 0 ? payList.map(x => x.id).join(', ') : 'No Payment'}</span>
+                    <span>➔</span>
+                    <span className={`font-mono px-2 py-1 rounded font-bold ${gList.length > 0 ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-400'}`}>{gList.length > 0 ? gList.map(x => x.id).join(', ') : 'No GRN'}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      );
+    }
+
+    // --- USERS & COMMITTEE MEMBERS MANAGEMENT (WITH ADD, EDIT, DELETE) ---
+    function UsersView({ onUpdate }) {
+      const [users, setUsers] = useState(() => ls_get('users', []));
+      const [modalUser, setModalUser] = useState(null);
+      const [editUser, setEditUser] = useState(null);
+      const [deleteUser, setDeleteUser] = useState(null);
+
+      const handleAddUser = (e) => {
+        e.preventDefault();
+        const id = getNextId('USR');
+        const u = { id, ...modalUser, role: modalUser.committee, isActive: true, password: modalUser.password || '123' };
+        const updated = [...users, u];
+        ls_set('users', updated);
+        setUsers(updated);
+        showToast(`Member ${u.name} added!`, 'success');
+        setModalUser(null);
+        onUpdate();
+      };
+
+      const handleSaveEdit = (e) => {
+        e.preventDefault();
+        const updated = users.map(u => u.id === editUser.id ? { 
+          ...u, 
+          name: editUser.name, 
+          enrollmentNumber: editUser.enrollmentNumber, 
+          committee: editUser.committee, 
+          role: editUser.committee,
+          password: editUser.password || u.password || '123'
+        } : u);
+        ls_set('users', updated);
+        setUsers(updated);
+        showToast(`Member ${editUser.name} updated!`, 'success');
+        setEditUser(null);
+        onUpdate();
+      };
+
+      const handleConfirmDelete = () => {
+        if (!deleteUser) return;
+        if (deleteUser.id === 'USR-001') {
+          showToast('Cannot delete primary Super Admin account!', 'error');
+          setDeleteUser(null);
+          return;
+        }
+        const updated = users.filter(u => u.id !== deleteUser.id);
+        ls_set('users', updated);
+        setUsers(updated);
+        showToast(`Member ${deleteUser.name} deleted!`, 'error');
+        setDeleteUser(null);
+        onUpdate();
+      };
+
+      return (
+        <div className="space-y-4">
+          <div className="flex justify-between items-center">
+            <div>
+              <h3 className="font-bold text-slate-800 text-sm">Committee Members & User Access</h3>
+              <p className="text-xs text-slate-500">Super Admin can Add, Edit, and Delete committee members.</p>
+            </div>
+            <button onClick={() => setModalUser({ name: '', enrollmentNumber: '', committee: 'storage', password: '123' })} className="btn-primary text-xs">+ Add Member</button>
+          </div>
+
+          <div className="card overflow-x-auto">
+            <table className="min-w-full divide-y divide-slate-200 text-xs">
+              <thead>
+                <tr>
+                  <th className="table-th">ID</th>
+                  <th className="table-th">Name</th>
+                  <th className="table-th">Enrollment No.</th>
+                  <th className="table-th">Committee</th>
+                  <th className="table-th">Status</th>
+                  <th className="table-th">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {users.map(u => (
+                  <tr key={u.id} className="hover:bg-slate-50">
+                    <td className="table-td font-mono font-bold text-slate-600">{u.id}</td>
+                    <td className="table-td font-semibold text-slate-800">{u.name}</td>
+                    <td className="table-td font-mono">{u.enrollmentNumber || 'ADMIN'}</td>
+                    <td className="table-td uppercase font-semibold text-primary-700">{u.committee}</td>
+                    <td className="table-td"><StatusBadge status={u.isActive ? 'active' : 'inactive'} /></td>
+                    <td className="table-td">
+                      {u.id !== 'USR-001' ? (
+                        <div className="flex gap-2">
+                          <button onClick={() => setEditUser(u)} className="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded text-[11px] font-semibold">
+                            ✏️ Edit
+                          </button>
+                          <button onClick={() => setDeleteUser(u)} className="inline-flex items-center gap-1 px-2 py-1 bg-red-50 hover:bg-red-100 text-red-700 rounded text-[11px] font-semibold">
+                            🗑️ Delete
+                          </button>
+                        </div>
+                      ) : (
+                        <span className="text-slate-400 text-[11px] italic">Protected Admin</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Add User Modal */}
+          {modalUser && (
+            <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
+              <form onSubmit={handleAddUser} className="bg-white rounded-xl p-6 max-w-sm w-full space-y-3 shadow-2xl">
+                <h3 className="font-bold text-slate-800 text-sm">Add Committee Member</h3>
+                <div>
+                  <label className="form-label">Full Name *</label>
+                  <input type="text" value={modalUser.name} onChange={e => setModalUser({ ...modalUser, name: e.target.value })} className="form-input" placeholder="e.g. Mayank Joshi" required />
+                </div>
+                <div>
+                  <label className="form-label">Enrollment Number *</label>
+                  <input type="text" value={modalUser.enrollmentNumber} onChange={e => setModalUser({ ...modalUser, enrollmentNumber: e.target.value })} className="form-input uppercase font-mono" placeholder="e.g. 21CE045" required />
+                </div>
+                <div>
+                  <label className="form-label">Committee *</label>
+                  <select value={modalUser.committee} onChange={e => setModalUser({ ...modalUser, committee: e.target.value })} className="form-select">
+                    <option value="storage">Storage Committee</option>
+                    <option value="procurement">Procurement Committee</option>
+                    <option value="account">Account Committee</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="form-label">PIN / Password (Default: 123)</label>
+                  <input type="password" value={modalUser.password} onChange={e => setModalUser({ ...modalUser, password: e.target.value })} className="form-input" />
+                </div>
+                <div className="flex justify-end gap-2 pt-2 border-t">
+                  <button type="button" onClick={() => setModalUser(null)} className="btn-secondary text-xs">Cancel</button>
+                  <button type="submit" className="btn-primary text-xs">Save Member</button>
+                </div>
+              </form>
+            </div>
+          )}
+
+          {/* Edit User Modal */}
+          {editUser && (
+            <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
+              <form onSubmit={handleSaveEdit} className="bg-white rounded-xl p-6 max-w-sm w-full space-y-3 shadow-2xl">
+                <h3 className="font-bold text-slate-800 text-sm">Edit Member — {editUser.id}</h3>
+                <div>
+                  <label className="form-label">Full Name *</label>
+                  <input type="text" value={editUser.name} onChange={e => setEditUser({ ...editUser, name: e.target.value })} className="form-input" required />
+                </div>
+                <div>
+                  <label className="form-label">Enrollment Number *</label>
+                  <input type="text" value={editUser.enrollmentNumber} onChange={e => setEditUser({ ...editUser, enrollmentNumber: e.target.value })} className="form-input uppercase font-mono" required />
+                </div>
+                <div>
+                  <label className="form-label">Committee *</label>
+                  <select value={editUser.committee} onChange={e => setEditUser({ ...editUser, committee: e.target.value })} className="form-select">
+                    <option value="storage">Storage Committee</option>
+                    <option value="procurement">Procurement Committee</option>
+                    <option value="account">Account Committee</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="form-label">Password / PIN</label>
+                  <input type="password" value={editUser.password || ''} onChange={e => setEditUser({ ...editUser, password: e.target.value })} className="form-input" placeholder="Change password..." />
+                </div>
+                <div className="flex justify-end gap-2 pt-2 border-t">
+                  <button type="button" onClick={() => setEditUser(null)} className="btn-secondary text-xs">Cancel</button>
+                  <button type="submit" className="btn-primary text-xs">Update Member</button>
+                </div>
+              </form>
+            </div>
+          )}
+
+          {/* Delete User Confirmation */}
+          {deleteUser && (
+            <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+              <div className="bg-white rounded-xl p-6 max-w-sm w-full space-y-3 shadow-2xl">
+                <h3 className="font-bold text-red-600 text-sm flex items-center gap-1.5">
+                  ⚠️ Delete Committee Member
+                </h3>
+                <p className="text-xs text-slate-600">
+                  Are you sure you want to remove <strong>{deleteUser.name} ({deleteUser.enrollmentNumber})</strong> from {deleteUser.committee.toUpperCase()} Committee?
+                </p>
+                <div className="flex justify-end gap-2 pt-2 border-t">
+                  <button onClick={() => setDeleteUser(null)} className="btn-secondary text-xs">Cancel</button>
+                  <button onClick={handleConfirmDelete} className="btn-danger text-xs">Yes, Delete</button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // --- REPORTS VIEW (WITH PRINT OPTION FOR ACCOUNTANT & ADMIN) ---
+    function ReportsView({ role }) {
+      const items = ls_get('items', []);
+      const purchases = ls_get('purchases', []);
+      const bills = ls_get('bills', []);
+
+      return (
+        <div className="card p-6 space-y-4">
+          <div className="flex justify-between items-center no-print">
+            <div>
+              <h3 className="font-bold text-slate-800 text-sm">Export & Print Committee Reports</h3>
+              <p className="text-xs text-slate-500">Download formatted Excel spreadsheets, PDF summaries, or print reports.</p>
+            </div>
+            {(role === 'account' || role === 'admin') && (
+              <button onClick={() => window.print()} className="btn-primary text-xs bg-slate-800 hover:bg-slate-900">
+                🖨️ Print Entire Report Sheet
+              </button>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+            <div className="border border-slate-200 rounded-xl p-4 space-y-3 bg-slate-50">
+              <p className="font-bold text-xs text-slate-800">📦 Inventory Stock Report</p>
+              <button onClick={() => exportExcel(items, 'SMC_Stock_Report')} className="btn-primary w-full justify-center text-xs">Export Excel</button>
+              <button onClick={() => exportPDF(['Item', 'Unit', 'Stock', 'Min Limit'], items.map(i => [i.name, i.unit, String(i.currentStock), String(i.minStockLimit)]), 'SMC GEC Palanpur — Stock Report', 'SMC_Stock')} className="btn-secondary w-full justify-center text-xs">Export PDF</button>
+            </div>
+
+            {role !== 'storage' && (
+              <>
+                <div className="border border-slate-200 rounded-xl p-4 space-y-3 bg-slate-50">
+                  <p className="font-bold text-xs text-slate-800">🛒 Purchases Report</p>
+                  <button onClick={() => exportExcel(purchases, 'SMC_Purchases_Report')} className="btn-primary w-full justify-center text-xs">Export Excel</button>
+                  <button onClick={() => exportPDF(['Purchase ID', 'Vendor', 'Items', 'Status'], purchases.map(p => [p.id, p.vendorName || p.vendorId, normalizeItems(p).map(it => `${it.itemName} (${it.orderedQty} ${it.unit})`).join(', '), p.status]), 'SMC GEC Palanpur — Purchases Report', 'SMC_Purchases')} className="btn-secondary w-full justify-center text-xs">Export PDF</button>
+                </div>
+
+                <div className="border border-slate-200 rounded-xl p-4 space-y-3 bg-slate-50">
+                  <p className="font-bold text-xs text-slate-800">💳 Payments & Bills Report</p>
+                  <button onClick={() => exportExcel(bills, 'SMC_Bills_Report')} className="btn-primary w-full justify-center text-xs">Export Excel</button>
+                  <button onClick={() => exportPDF(['Bill ID', 'Vendor', 'Bill No', 'Amount', 'Status'], bills.map(b => [b.id, b.vendorName || 'General', b.billNumber, `Rs. ${b.billAmount}`, b.verificationStatus]), 'SMC GEC Palanpur — Bills Report', 'SMC_Bills')} className="btn-secondary w-full justify-center text-xs">Export PDF</button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
