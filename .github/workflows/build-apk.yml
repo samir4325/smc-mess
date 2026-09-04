@@ -34,7 +34,15 @@ jobs:
       - name: Build Debug APK
         run: |
           cd android
-          ./gradlew assembleDebug --stacktrace
+          ./gradlew assembleDebug --stacktrace 2>&1 | tee ../gradle_output.txt
+
+      - name: Show Gradle Build Summary
+        if: always()
+        run: |
+          echo "### Gradle Build Log Output" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          tail -n 80 gradle_output.txt >> $GITHUB_STEP_SUMMARY || true
+          echo '```' >> $GITHUB_STEP_SUMMARY
 
       - name: Copy and Rename APK
         run: |
