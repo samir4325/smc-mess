@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SMC GEC Palanpur</string>
+    <string name="app_title">Hostel Students Mess Committee</string>
+    <string name="college_name">GEC Palanpur</string>
+    <string name="no_internet_title">No Internet Connection</string>
+    <string name="no_internet_msg">Please check your internet connection and try again.</string>
+    <string name="btn_retry">Retry Connection</string>
+    <string name="press_back_again">Press back again to exit</string>
+    <string name="permission_camera_title">Camera Permission</string>
+    <string name="permission_camera_msg">Camera permission is required to capture photos of bills and vouchers.</string>
+</resources>

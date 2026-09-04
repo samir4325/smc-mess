@@ -6,11 +6,14 @@ if (!fs.existsSync(dist)) {
   fs.mkdirSync(dist, { recursive: true });
 }
 
-fs.copyFileSync(path.join(__dirname, 'index.html'), path.join(dist, 'index.html'));
+const filesToCopy = ['index.html', '_redirects', 'manifest.json', 'sw.js'];
 
-const redirectsPath = path.join(__dirname, '_redirects');
-if (fs.existsSync(redirectsPath)) {
-  fs.copyFileSync(redirectsPath, path.join(dist, '_redirects'));
-}
+filesToCopy.forEach(file => {
+  const src = path.join(__dirname, file);
+  const dest = path.join(dist, file);
+  if (fs.existsSync(src)) {
+    fs.copyFileSync(src, dest);
+  }
+});
 
-console.log('Build complete: copied index.html to dist/');
+console.log('Build complete: copied static assets to dist/');
