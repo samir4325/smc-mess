@@ -22,10 +22,14 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: gradle
 
-      - name: Grant Execute Permission to Gradlew
-        run: chmod +x android/gradlew
+      - name: Prepare Gradle Wrapper
+        run: |
+          sed -i 's/\r$//' android/gradlew
+          chmod +x android/gradlew
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
 
       - name: Build Debug APK
         run: |
@@ -48,22 +52,21 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/heads/main')
         with:
-          tag_name: v1.0.0-apk
+          tag_name: v1.0.0
           name: "SMC GEC Palanpur — Android APK (v1.0.0)"
           body: |
-            ## 📱 SMC GEC Palanpur Android App
+            ## 📱 SMC GEC Palanpur Android App (Official)
             
-            Download the official Android APK for **Hostel Students Mess Committee (SMC), GEC Palanpur**.
+            Download the official Android APK for **Hostel Students Mess Committee (SMC), Government Engineering College, Palanpur**.
             
             - **App Name**: SMC GEC Palanpur
             - **Package**: `com.smc.gecpalanpur`
             - **Connected Live**: Vercel Production (`https://smc-mess.vercel.app`) + Firebase Realtime DB
             
-            ### 📥 Download Instructions:
-            1. Download `SMC_GEC_Palanpur.apk` below directly on your Android phone.
-            2. Tap the downloaded file to install.
-            3. If prompted, allow "Install from Unknown Sources".
-            4. Open the app and log in with your committee credentials!
+            ### 📥 Installation Steps:
+            1. Download `SMC_GEC_Palanpur.apk` below directly onto your Android phone.
+            2. Tap the file to install (Enable "Install unknown apps" if prompted).
+            3. Open the app and log in!
           files: build-output/SMC_GEC_Palanpur.apk
           draft: false
           prerelease: false
