@@ -34,15 +34,20 @@ jobs:
       - name: Build Debug APK
         run: |
           cd android
-          ./gradlew assembleDebug --stacktrace
+          ./gradlew assembleDebug --stacktrace 2>&1 | tee ../gradle_build.log
+
+      - name: Upload Build Log on Failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gradle_error_log
+          path: gradle_build.log
 
       - name: Locate and Copy APK
         run: |
           mkdir -p build-output
-          echo "Finding generated APKs:"
           find android/app/build -name "*.apk"
           FIRST_APK=$(find android/app/build -name "*.apk" | head -n 1)
-          echo "Copying $FIRST_APK to build-output/SMC_GEC_Palanpur.apk"
           cp "$FIRST_APK" build-output/SMC_GEC_Palanpur.apk
           ls -lh build-output/
 
