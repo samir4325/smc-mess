@@ -193,23 +193,8 @@
     // Clean zero inventory (ready for user to add stock items manually)
     const ACTUAL_HOSTEL_ITEMS = [];
 
-    const INITIAL_VENDORS = [
-      {
-        id: 'VEN-001', name: 'Shree Ram Traders', contactPerson: 'Ramesh Patel', mobile: '9876543210',
-        address: 'Main Market, Palanpur, Gujarat 385001', email: 'shreeram@gmail.com',
-        bankName: 'State Bank of India', accountNumber: '1234567890123', ifsc: 'SBIN0001234', isActive: true
-      },
-      {
-        id: 'VEN-002', name: 'Khodiyar Oil Suppliers', contactPerson: 'Bhavesh Shah', mobile: '9988776655',
-        address: 'Industrial Area, Palanpur', email: 'khodiyar@gmail.com',
-        bankName: 'Bank of Baroda', accountNumber: '9876543210987', ifsc: 'BARB0PALANP', isActive: true
-      },
-      {
-        id: 'VEN-003', name: 'Hari Kirana Store', contactPerson: 'Haribhai Patel', mobile: '9426012345',
-        address: 'Station Road, Palanpur', email: 'harikirana@gmail.com',
-        bankName: 'HDFC Bank', accountNumber: '50100234567890', ifsc: 'HDFC0001234', isActive: true
-      }
-    ];
+    // Clean zero vendors (ready for user to add vendors manually)
+    const INITIAL_VENDORS = [];
 
     // Supported Units List
     const SUPPORTED_UNITS = ['kg', 'g', 'L', 'ml', 'Packet', 'Piece', 'Box', 'Bottle', 'Tin', 'Bag', 'Dozen', 'Other'];
@@ -263,7 +248,7 @@
       }
     }
 
-    const PREFIX = 'smc_v7_clean_';
+    const PREFIX = 'smc_v8_clean_';
     function ls_get(key, fallback = null) {
       try {
         const v = localStorage.getItem(PREFIX + key);
@@ -322,18 +307,18 @@
     function initDb() {
       try {
         Object.keys(localStorage).forEach(k => {
-          if (k.startsWith('smc_gec_live_v2_') || k.startsWith('smc_v5_') || k.startsWith('smc_v6_')) {
+          if (k.startsWith('smc_gec_live_v2_') || k.startsWith('smc_v5_') || k.startsWith('smc_v6_') || k.startsWith('smc_v7_')) {
             localStorage.removeItem(k);
           }
         });
       } catch(e) {}
 
-      const FORCE_VERSION = 'v7_clean_zero_data';
+      const FORCE_VERSION = 'v8_clean_zero_data';
       if (localStorage.getItem(PREFIX + 'db_clean_version') !== FORCE_VERSION) {
         localStorage.setItem(PREFIX + 'users', JSON.stringify(INITIAL_USERS));
         localStorage.setItem(PREFIX + 'categories', JSON.stringify(INITIAL_CATEGORIES));
         localStorage.setItem(PREFIX + 'items', '[]');
-        localStorage.setItem(PREFIX + 'vendors', JSON.stringify(INITIAL_VENDORS));
+        localStorage.setItem(PREFIX + 'vendors', '[]');
         localStorage.setItem(PREFIX + 'requests', '[]');
         localStorage.setItem(PREFIX + 'purchases', '[]');
         localStorage.setItem(PREFIX + 'grns', '[]');
@@ -345,7 +330,7 @@
         localStorage.setItem(PREFIX + 'activityLogs', '[]');
         localStorage.setItem(PREFIX + 'trash', '[]');
         localStorage.setItem(PREFIX + 'procurements', '[]');
-        localStorage.setItem(PREFIX + 'counters', JSON.stringify({ REQ: 0, PUR: 0, GRN: 0, STKOUT: 0, SS: 0, BILL: 0, PAY: 0, ITEM: 0, CAT: 9, VEN: 3, USR: 7, PROC: 0, QTE: 0, ACT: 0 }));
+        localStorage.setItem(PREFIX + 'counters', JSON.stringify({ REQ: 0, PUR: 0, GRN: 0, STKOUT: 0, SS: 0, BILL: 0, PAY: 0, ITEM: 0, CAT: 9, VEN: 0, USR: 7, PROC: 0, QTE: 0, ACT: 0 }));
         localStorage.setItem(PREFIX + 'db_clean_version', FORCE_VERSION);
       }
     }
