@@ -1278,7 +1278,21 @@
       const ws = XLSX.utils.json_to_sheet(data);
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-      XLSX.writeFile(wb, `${filename}_${new Date().toISOString().slice(0,10)}.xlsx`);
+      const fullFileName = `${filename}_${new Date().toISOString().slice(0,10)}.xlsx`;
+
+      // Check if running inside SMC Android App Native WebView
+      if (window.AndroidBridge && typeof window.AndroidBridge.saveBase64File === 'function') {
+        try {
+          const b64 = XLSX.write(wb, { bookType: 'xlsx', type: 'base64' });
+          window.AndroidBridge.saveBase64File(b64, fullFileName, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+          showToast('Excel report downloaded to device!', 'success');
+          return;
+        } catch (err) {
+          console.warn('AndroidBridge Excel export fallback:', err);
+        }
+      }
+
+      XLSX.writeFile(wb, fullFileName);
       showToast('Excel report downloaded!', 'success');
     }
 

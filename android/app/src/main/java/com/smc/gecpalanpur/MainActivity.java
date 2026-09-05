@@ -19,6 +19,7 @@ import android.util.Base64;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
+import android.webkit.JavascriptInterface;
 import android.webkit.URLUtil;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
@@ -40,6 +41,8 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -56,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private View layoutNoInternet;
     private Button btnRetry;
+    private FloatingActionButton fabScrollTop;
 
     private ValueCallback<Uri[]> filePathCallback;
     private Uri cameraPhotoUri;
@@ -90,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         layoutNoInternet = findViewById(R.id.layoutNoInternet);
         btnRetry = findViewById(R.id.btnRetry);
+        fabScrollTop = findViewById(R.id.fabScrollTop);
 
         swipeRefreshLayout.setColorSchemeResources(
                 R.color.primary,
@@ -122,14 +127,33 @@ public class MainActivity extends AppCompatActivity {
         // Enable responsive hardware acceleration
         webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
+        // Add JavaScript Interface for Excel/PDF Base64 File Downloads
+        webView.addJavascriptInterface(new SMCAndroidBridge(), "AndroidBridge");
+
         // WebChromeClient for File Uploads, Camera, and Progress
         webView.setWebChromeClient(new SMCWebChromeClient());
 
         // WebViewClient for navigation and error handling
         webView.setWebViewClient(new SMCWebViewClient());
 
-        // DownloadListener for PDF exports and bill downloads
+        // DownloadListener for standard URLs and data URIs
         webView.setDownloadListener(new SMCDownloadListener());
+
+        // Scroll listener to disable pull-to-refresh while scrolled down & toggle Scroll-To-Top FAB
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            webView.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+                swipeRefreshLayout.setEnabled(scrollY == 0);
+                if (scrollY > 300) {
+                    if (fabScrollTop != null && fabScrollTop.getVisibility() != View.VISIBLE) {
+                        fabScrollTop.show();
+                    }
+                } else {
+                    if (fabScrollTop != null && fabScrollTop.getVisibility() == View.VISIBLE) {
+                        fabScrollTop.hide();
+                    }
+                }
+            });
+        }
     }
 
     private void setupListeners() {
@@ -151,6 +175,13 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, R.string.no_internet_msg, Toast.LENGTH_SHORT).show();
             }
         });
+
+        if (fabScrollTop != null) {
+            fabScrollTop.setOnClickListener(v -> {
+                webView.scrollTo(0, 0);
+                webView.evaluateJavascript("window.scrollTo({ top: 0, behavior: 'smooth' });", null);
+            });
+        }
     }
 
     private void setupBackNavigation() {
@@ -192,6 +223,46 @@ public class MainActivity extends AppCompatActivity {
     private void hideOfflineView() {
         layoutNoInternet.setVisibility(View.GONE);
         swipeRefreshLayout.setVisibility(View.VISIBLE);
+    }
+
+    // =========================================================================
+    // JavaScript Interface for Native File Saving (Excel / Reports)
+    // =========================================================================
+    private class SMCAndroidBridge {
+        @JavascriptInterface
+        public void saveBase64File(String base64Data, String filename, String mimeType) {
+            runOnUiThread(() -> {
+                try {
+                    byte[] decodedBytes = Base64.decode(base64Data, Base64.DEFAULT);
+                    File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                    if (!downloadsDir.exists()) {
+                        downloadsDir.mkdirs();
+                    }
+
+                    String actualName = (filename != null && !filename.trim().isEmpty()) ? filename.trim() : ("SMC_Report_" + System.currentTimeMillis() + ".xlsx");
+                    File file = new File(downloadsDir, actualName);
+
+                    FileOutputStream fos = new FileOutputStream(file);
+                    fos.write(decodedBytes);
+                    fos.flush();
+                    fos.close();
+
+                    Toast.makeText(MainActivity.this, "Excel downloaded: " + file.getName(), Toast.LENGTH_LONG).show();
+
+                    // Open file chooser or Excel viewer app
+                    try {
+                        Uri fileUri = FileProvider.getUriForFile(MainActivity.this, getPackageName() + ".fileprovider", file);
+                        Intent openIntent = new Intent(Intent.ACTION_VIEW);
+                        openIntent.setDataAndType(fileUri, mimeType != null ? mimeType : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                        openIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        startActivity(Intent.createChooser(openIntent, "Open Excel with..."));
+                    } catch (Exception ignored) {}
+
+                } catch (Exception e) {
+                    Toast.makeText(MainActivity.this, "Save error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     // =========================================================================
@@ -388,10 +459,15 @@ public class MainActivity extends AppCompatActivity {
     private class SMCDownloadListener implements DownloadListener {
         @Override
         public void onDownloadStart(String url, String userAgent, String contentDisposition,
-                                    String mimeType, long contentLength) {
+                                     String mimeType, long contentLength) {
             // Handle base64 Data URLs (PDF receipts, reports generated client-side)
             if (url.startsWith("data:")) {
                 handleDataUrlDownload(url, mimeType);
+                return;
+            }
+
+            if (url.startsWith("blob:")) {
+                Toast.makeText(MainActivity.this, "Processing download...", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -427,7 +503,7 @@ public class MainActivity extends AppCompatActivity {
             if (parts.length < 2) return;
 
             byte[] decodedBytes = Base64.decode(parts[1], Base64.DEFAULT);
-            String extension = mimeType != null && mimeType.contains("pdf") ? ".pdf" : ".png";
+            String extension = mimeType != null && mimeType.contains("pdf") ? ".pdf" : mimeType != null && (mimeType.contains("sheet") || mimeType.contains("excel")) ? ".xlsx" : ".png";
             String filename = "SMC_Export_" + System.currentTimeMillis() + extension;
 
             File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);

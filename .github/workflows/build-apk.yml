@@ -1,4 +1,4 @@
-﻿name: Build Android APK
+name: Build Android APK
 
 on:
   push:
@@ -71,8 +71,8 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/heads/main')
         with:
-          tag_name: v1.0.0
-          name: "SMC GEC Palanpur — Android APK (v1.0.0)"
+          tag_name: v1.0.1
+          name: "SMC GEC Palanpur — Android APK (v1.0.1)"
           body: |
             ## 📱 SMC GEC Palanpur Android App (Official)
             
