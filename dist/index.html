@@ -191,7 +191,824 @@
     ];
 
     // Clean zero inventory (ready for user to add stock items manually)
-    const ACTUAL_HOSTEL_ITEMS = [];
+    const ACTUAL_HOSTEL_ITEMS = [
+    {
+        "id":  "ITEM-001",
+        "name":  "Chakki Atta (Gau No Lot)",
+        "brand":  "Armaniya Nakshatra",
+        "categoryId":  "CAT-001",
+        "unit":  "kg",
+        "currentStock":  494,
+        "minStockLimit":  50,
+        "upperLimit":  0,
+        "packSize":  "26 kg Pack",
+        "remarks":  "Armaniya Nakshatra (5 packs + 14 packs = 19 packs of 26kg)"
+    },
+    {
+        "id":  "ITEM-002",
+        "name":  "Bhakhari No Lot",
+        "brand":  "Not Specified",
+        "categoryId":  "CAT-001",
+        "unit":  "kg",
+        "currentStock":  50,
+        "minStockLimit":  10,
+        "upperLimit":  0,
+        "packSize":  "50 kg Pack",
+        "remarks":  "1 Pack of 50 kg"
+    },
+    {
+        "id":  "ITEM-003",
+        "name":  "Batti Lot",
+        "brand":  "Not Specified",
+        "categoryId":  "CAT-001",
+        "unit":  "kg",
+        "currentStock":  50,
+        "minStockLimit":  10,
+        "upperLimit":  0,
+        "packSize":  "50 kg Bag",
+        "remarks":  "50 kg"
+    },
+    {
+        "id":  "ITEM-004",
+        "name":  "Besan (Chanano Lot)",
+        "brand":  "Gaay Chhap",
+        "categoryId":  "CAT-001",
+        "unit":  "kg",
+        "currentStock":  40,
+        "minStockLimit":  10,
+        "upperLimit":  0,
+        "packSize":  "1 kg / Bulk",
+        "remarks":  "Gaay Chhap 10kg (1kg pkt) + 30kg bulk"
+    },
+    {
+        "id":  "ITEM-005",
+        "name":  "Maida",
+        "brand":  "Uttam",
+        "categoryId":  "CAT-001",
+        "unit":  "kg",
+        "currentStock":  5,
+        "minStockLimit":  5,
+        "upperLimit":  0,
+        "packSize":  "1 kg Pack",
+        "remarks":  "5 packets of 1 kg"
+    },
+    {
+        "id":  "ITEM-006",
+        "name":  "Sooji",
+        "brand":  "Uttam",
+        "categoryId":  "CAT-001",
+        "unit":  "kg",
+        "currentStock":  7,
+        "minStockLimit":  5,
+        "upperLimit":  0,
+        "packSize":  "1 kg Pack",
+        "remarks":  "7 packets of 1 kg"
+    },
+    {
+        "id":  "ITEM-007",
+        "name":  "Basmati Rice",
+        "brand":  "Ruchi Bhog",
+        "categoryId":  "CAT-001",
+        "unit":  "kg",
+        "currentStock":  60,
+        "minStockLimit":  20,
+        "upperLimit":  0,
+        "packSize":  "30 kg Pack",
+        "remarks":  "2 packs of 30 kg"
+    },
+    {
+        "id":  "ITEM-008",
+        "name":  "Bhat Na Chokha",
+        "brand":  "Davat",
+        "categoryId":  "CAT-001",
+        "unit":  "kg",
+        "currentStock":  130,
+        "minStockLimit":  26,
+        "upperLimit":  0,
+        "packSize":  "26 kg Pack",
+        "remarks":  "5 packs of 26 kg"
+    },
+    {
+        "id":  "ITEM-009",
+        "name":  "Rice (Khichadiya)",
+        "brand":  "Orange",
+        "categoryId":  "CAT-001",
+        "unit":  "kg",
+        "currentStock":  50,
+        "minStockLimit":  20,
+        "upperLimit":  0,
+        "packSize":  "50 kg Bag",
+        "remarks":  "50 kg"
+    },
+    {
+        "id":  "ITEM-010",
+        "name":  "Pauaa",
+        "brand":  "Vijay / Sai",
+        "categoryId":  "CAT-001",
+        "unit":  "kg",
+        "currentStock":  65,
+        "minStockLimit":  15,
+        "upperLimit":  0,
+        "packSize":  "Bag",
+        "remarks":  "Sai 30kg + Vijay 35kg (Motu 30kg \u0026 Nanu 5kg)"
+    },
+    {
+        "id":  "ITEM-011",
+        "name":  "Toovar Dar",
+        "brand":  "Sunrise / Angoor",
+        "categoryId":  "CAT-002",
+        "unit":  "kg",
+        "currentStock":  80,
+        "minStockLimit":  20,
+        "upperLimit":  0,
+        "packSize":  "25-30 kg Pack",
+        "remarks":  "Sunrise 30kg (1 pack) + Angoor 50kg (2 packs of 25kg)"
+    },
+    {
+        "id":  "ITEM-012",
+        "name":  "Chana Dar",
+        "brand":  "Katariya",
+        "categoryId":  "CAT-002",
+        "unit":  "kg",
+        "currentStock":  25,
+        "minStockLimit":  10,
+        "upperLimit":  0,
+        "packSize":  "Pack",
+        "remarks":  "Katariya 20kg (1 pack) + 5kg (1 pack)"
+    },
+    {
+        "id":  "ITEM-013",
+        "name":  "Masur Dar (Lal)",
+        "brand":  "Not Specified",
+        "categoryId":  "CAT-002",
+        "unit":  "kg",
+        "currentStock":  15,
+        "minStockLimit":  5,
+        "upperLimit":  0,
+        "packSize":  "Bulk",
+        "remarks":  "15 kg"
+    },
+    {
+        "id":  "ITEM-014",
+        "name":  "Mogar Dar",
+        "brand":  "Not Specified",
+        "categoryId":  "CAT-002",
+        "unit":  "kg",
+        "currentStock":  18,
+        "minStockLimit":  5,
+        "upperLimit":  0,
+        "packSize":  "Pack",
+        "remarks":  "10 kg + 8 kg (1 pack)"
+    },
+    {
+        "id":  "ITEM-015",
+        "name":  "Mag Dar",
+        "brand":  "Umiya",
+        "categoryId":  "CAT-002",
+        "unit":  "kg",
+        "currentStock":  2.4,
+        "minStockLimit":  2,
+        "upperLimit":  0,
+        "packSize":  "Bulk",
+        "remarks":  "2.4 kg"
+    },
+    {
+        "id":  "ITEM-016",
+        "name":  "Fotaravari Dar",
+        "brand":  "Not Specified",
+        "categoryId":  "CAT-002",
+        "unit":  "kg",
+        "currentStock":  10,
+        "minStockLimit":  5,
+        "upperLimit":  0,
+        "packSize":  "1 Pack",
+        "remarks":  "10 kg (1 pack)"
+    },
+    {
+        "id":  "ITEM-017",
+        "name":  "Mix Dar",
+        "brand":  "Not Specified",
+        "categoryId":  "CAT-002",
+        "unit":  "kg",
+        "currentStock":  15,
+        "minStockLimit":  5,
+        "upperLimit":  0,
+        "packSize":  "1 Pack",
+        "remarks":  "15 kg (1 pack)"
+    },
+    {
+        "id":  "ITEM-018",
+        "name":  "Mag (Akha)",
+        "brand":  "Not Specified",
+        "categoryId":  "CAT-002",
+        "unit":  "kg",
+        "currentStock":  15,
+        "minStockLimit":  5,
+        "upperLimit":  0,
+        "packSize":  "1 Pack",
+        "remarks":  "15 kg (1 pack)"
+    },
+    {
+        "id":  "ITEM-019",
+        "name":  "Desi Chana",
+        "brand":  "Not Specified",
+        "categoryId":  "CAT-002",
+        "unit":  "kg",
+        "currentStock":  15,
+        "minStockLimit":  5,
+        "upperLimit":  0,
+        "packSize":  "1 Pack",
+        "remarks":  "15 kg (1 pack)"
+    },
+    {
+        "id":  "ITEM-020",
+        "name":  "Kabuli Chana",
+        "brand":  "Hari Krisna",
+        "categoryId":  "CAT-002",
+        "unit":  "kg",
+        "currentStock":  38.4,
+        "minStockLimit":  10,
+        "upperLimit":  0,
+        "packSize":  "Pack",
+        "remarks":  "Hari Krisna 25.4 kg + 13 kg pack"
+    },
+    {
+        "id":  "ITEM-021",
+        "name":  "Rajama",
+        "brand":  "Not Specified",
+        "categoryId":  "CAT-002",
+        "unit":  "kg",
+        "currentStock":  12,
+        "minStockLimit":  5,
+        "upperLimit":  0,
+        "packSize":  "1 Pack",
+        "remarks":  "12 kg (1 pack)"
+    },
+    {
+        "id":  "ITEM-022",
+        "name":  "Val",
+        "brand":  "Not Specified",
+        "categoryId":  "CAT-002",
+        "unit":  "kg",
+        "currentStock":  12,
+        "minStockLimit":  5,
+        "upperLimit":  0,
+        "packSize":  "1 Pack",
+        "remarks":  "12 kg (1 pack)"
+    },
+    {
+        "id":  "ITEM-023",
+        "name":  "Chora (White)",
+        "brand":  "Not Specified",
+        "categoryId":  "CAT-002",
+        "unit":  "kg",
+        "currentStock":  12,
+        "minStockLimit":  5,
+        "upperLimit":  0,
+        "packSize":  "1 Pack",
+        "remarks":  "12 kg (1 pack)"
+    },
+    {
+        "id":  "ITEM-024",
+        "name":  "Vatana (Suka Vatana)",
+        "brand":  "Not Specified",
+        "categoryId":  "CAT-002",
+        "unit":  "kg",
+        "currentStock":  13,
+        "minStockLimit":  5,
+        "upperLimit":  0,
+        "packSize":  "Bulk / Pack",
+        "remarks":  "5 kg + 8 kg (1 pack)"
+    },
+    {
+        "id":  "ITEM-025",
+        "name":  "Khand (Sugar)",
+        "brand":  "Not Specified",
+        "categoryId":  "CAT-003",
+        "unit":  "kg",
+        "currentStock":  88,
+        "minStockLimit":  25,
+        "upperLimit":  0,
+        "packSize":  "Kattu / Bulk",
+        "remarks":  "38 kg + 1 Kattu (~50kg)"
+    },
+    {
+        "id":  "ITEM-026",
+        "name":  "Gor (Jaggery)",
+        "brand":  "Not Specified",
+        "categoryId":  "CAT-003",
+        "unit":  "kg",
+        "currentStock":  30,
+        "minStockLimit":  10,
+        "upperLimit":  0,
+        "packSize":  "Rava / Box",
+        "remarks":  "10 kg (1 box) + 20 Rava (1 kg each)"
+    },
+    {
+        "id":  "ITEM-027",
+        "name":  "Miththu (Salt)",
+        "brand":  "Nirama",
+        "categoryId":  "CAT-003",
+        "unit":  "kg",
+        "currentStock":  20,
+        "minStockLimit":  5,
+        "upperLimit":  0,
+        "packSize":  "1 kg \u0026 2 kg Pack",
+        "remarks":  "Nirama: 15kg (7x2kg + 1x1kg) + 5kg (1x2kg + 3x1kg)"
+    },
+    {
+        "id":  "ITEM-028",
+        "name":  "Kachi Shing (Peanuts)",
+        "brand":  "Not Specified",
+        "categoryId":  "CAT-003",
+        "unit":  "kg",
+        "currentStock":  3,
+        "minStockLimit":  2,
+        "upperLimit":  0,
+        "packSize":  "1 Pack",
+        "remarks":  "3 kg (1 pack)"
+    },
+    {
+        "id":  "ITEM-029",
+        "name":  "Coconut Powder",
+        "brand":  "Kesar",
+        "categoryId":  "CAT-003",
+        "unit":  "kg",
+        "currentStock":  2,
+        "minStockLimit":  1,
+        "upperLimit":  0,
+        "packSize":  "1 kg Pack",
+        "remarks":  "2 packets of 1 kg"
+    },
+    {
+        "id":  "ITEM-030",
+        "name":  "Tutti Frutti",
+        "brand":  "Jay Kisan",
+        "categoryId":  "CAT-003",
+        "unit":  "Packet",
+        "currentStock":  10,
+        "minStockLimit":  2,
+        "upperLimit":  0,
+        "packSize":  "380 gm Pack",
+        "remarks":  "10 packets of 380 gm"
+    },
+    {
+        "id":  "ITEM-031",
+        "name":  "Amali (Tamarind)",
+        "brand":  "Not Specified",
+        "categoryId":  "CAT-003",
+        "unit":  "kg",
+        "currentStock":  1,
+        "minStockLimit":  1,
+        "upperLimit":  0,
+        "packSize":  "1 kg Pack",
+        "remarks":  "1 packet of 1 kg"
+    },
+    {
+        "id":  "ITEM-032",
+        "name":  "Save (Lal)",
+        "brand":  "Not Specified",
+        "categoryId":  "CAT-003",
+        "unit":  "kg",
+        "currentStock":  4,
+        "minStockLimit":  2,
+        "upperLimit":  0,
+        "packSize":  "4 kg Pack",
+        "remarks":  "1 pack of 4 kg"
+    },
+    {
+        "id":  "ITEM-033",
+        "name":  "Ganthiya",
+        "brand":  "Not Specified",
+        "categoryId":  "CAT-003",
+        "unit":  "kg",
+        "currentStock":  8.6,
+        "minStockLimit":  2,
+        "upperLimit":  0,
+        "packSize":  "Pack",
+        "remarks":  "8.6 kg"
+    },
+    {
+        "id":  "ITEM-034",
+        "name":  "Papadi",
+        "brand":  "Not Specified",
+        "categoryId":  "CAT-003",
+        "unit":  "kg",
+        "currentStock":  5,
+        "minStockLimit":  2,
+        "upperLimit":  0,
+        "packSize":  "Pack",
+        "remarks":  "Hostel snacks"
+    },
+    {
+        "id":  "ITEM-035",
+        "name":  "Sing Tel (Groundnut Oil)",
+        "brand":  "Sing Tel (Rani)",
+        "categoryId":  "CAT-004",
+        "unit":  "Tin",
+        "currentStock":  6,
+        "minStockLimit":  2,
+        "upperLimit":  0,
+        "packSize":  "15 kg Tin",
+        "remarks":  "6 Dabba of 15 kg"
+    },
+    {
+        "id":  "ITEM-036",
+        "name":  "Soyabean Tel",
+        "brand":  "Fortune Soyabeen",
+        "categoryId":  "CAT-004",
+        "unit":  "Tin",
+        "currentStock":  8,
+        "minStockLimit":  2,
+        "upperLimit":  0,
+        "packSize":  "15 L / Tin",
+        "remarks":  "8 Dabba"
+    },
+    {
+        "id":  "ITEM-037",
+        "name":  "Marachu (Red Chilli Powder)",
+        "brand":  "Ramadev",
+        "categoryId":  "CAT-005",
+        "unit":  "kg",
+        "currentStock":  6,
+        "minStockLimit":  2,
+        "upperLimit":  0,
+        "packSize":  "1 kg Pack",
+        "remarks":  "6 packets of 1 kg (Ramadev)"
+    },
+    {
+        "id":  "ITEM-038",
+        "name":  "Kasmiri Marachu",
+        "brand":  "Ramadev",
+        "categoryId":  "CAT-005",
+        "unit":  "kg",
+        "currentStock":  3,
+        "minStockLimit":  1,
+        "upperLimit":  0,
+        "packSize":  "1 kg Pack",
+        "remarks":  "3 packets of 1 kg (Ramadev)"
+    },
+    {
+        "id":  "ITEM-039",
+        "name":  "Suka Lal Maracha (Whole)",
+        "brand":  "Not Specified",
+        "categoryId":  "CAT-005",
+        "unit":  "g",
+        "currentStock":  500,
+        "minStockLimit":  200,
+        "upperLimit":  0,
+        "packSize":  "500 gm Pack",
+        "remarks":  "500 gm"
+    },
+    {
+        "id":  "ITEM-040",
+        "name":  "Haradar (Turmeric Powder)",
+        "brand":  "Ramadev",
+        "categoryId":  "CAT-005",
+        "unit":  "kg",
+        "currentStock":  5,
+        "minStockLimit":  2,
+        "upperLimit":  0,
+        "packSize":  "1 kg Pack",
+        "remarks":  "5 packets of 1 kg (Ramadev Dareli Haradar)"
+    },
+    {
+        "id":  "ITEM-041",
+        "name":  "Dhaniya Jira Powder",
+        "brand":  "Ramadev",
+        "categoryId":  "CAT-005",
+        "unit":  "kg",
+        "currentStock":  2,
+        "minStockLimit":  1,
+        "upperLimit":  0,
+        "packSize":  "1 kg Pack",
+        "remarks":  "2 packets of 1 kg (Ramadev)"
+    },
+    {
+        "id":  "ITEM-042",
+        "name":  "Dhana (Akha / Suka)",
+        "brand":  "Kisan",
+        "categoryId":  "CAT-005",
+        "unit":  "kg",
+        "currentStock":  1.5,
+        "minStockLimit":  1,
+        "upperLimit":  0,
+        "packSize":  "Pack",
+        "remarks":  "Kisan 1 kg + 500 gm pack"
+    },
+    {
+        "id":  "ITEM-043",
+        "name":  "Jiru (Cumin Seeds)",
+        "brand":  "Kisan",
+        "categoryId":  "CAT-005",
+        "unit":  "kg",
+        "currentStock":  3,
+        "minStockLimit":  1,
+        "upperLimit":  0,
+        "packSize":  "1 kg Pack",
+        "remarks":  "3 packets of 1 kg (Kisan)"
+    },
+    {
+        "id":  "ITEM-044",
+        "name":  "Rai (Mustard Seeds)",
+        "brand":  "Kisan",
+        "categoryId":  "CAT-005",
+        "unit":  "kg",
+        "currentStock":  3,
+        "minStockLimit":  1,
+        "upperLimit":  0,
+        "packSize":  "1 kg Pack",
+        "remarks":  "3 packets of 1 kg (Kisan)"
+    },
+    {
+        "id":  "ITEM-045",
+        "name":  "Tal (White Sesame)",
+        "brand":  "Kisan",
+        "categoryId":  "CAT-005",
+        "unit":  "kg",
+        "currentStock":  1.5,
+        "minStockLimit":  1,
+        "upperLimit":  0,
+        "packSize":  "Pack",
+        "remarks":  "Kisan 1 kg + 500 gm pack"
+    },
+    {
+        "id":  "ITEM-046",
+        "name":  "Variyali (Fennel Seeds)",
+        "brand":  "Kisan",
+        "categoryId":  "CAT-005",
+        "unit":  "kg",
+        "currentStock":  1.5,
+        "minStockLimit":  1,
+        "upperLimit":  0,
+        "packSize":  "Pack",
+        "remarks":  "Kisan 1 kg + 500 gm pack"
+    },
+    {
+        "id":  "ITEM-047",
+        "name":  "Hing (Asafoetida)",
+        "brand":  "Krisna",
+        "categoryId":  "CAT-005",
+        "unit":  "g",
+        "currentStock":  250,
+        "minStockLimit":  100,
+        "upperLimit":  0,
+        "packSize":  "250 gm Pack",
+        "remarks":  "1 pack of 250 gm"
+    },
+    {
+        "id":  "ITEM-048",
+        "name":  "Methi (Suki / Kasturi Methi)",
+        "brand":  "Badashah",
+        "categoryId":  "CAT-005",
+        "unit":  "kg",
+        "currentStock":  1,
+        "minStockLimit":  0.5,
+        "upperLimit":  0,
+        "packSize":  "500 gm Pack",
+        "remarks":  "2 packs of 500 gm"
+    },
+    {
+        "id":  "ITEM-049",
+        "name":  "Ajamo (Carom Seeds)",
+        "brand":  "Not Specified",
+        "categoryId":  "CAT-005",
+        "unit":  "g",
+        "currentStock":  250,
+        "minStockLimit":  100,
+        "upperLimit":  0,
+        "packSize":  "250 gm Pack",
+        "remarks":  "250 gm"
+    },
+    {
+        "id":  "ITEM-050",
+        "name":  "Laving (Cloves)",
+        "brand":  "Not Specified",
+        "categoryId":  "CAT-005",
+        "unit":  "g",
+        "currentStock":  250,
+        "minStockLimit":  100,
+        "upperLimit":  0,
+        "packSize":  "250 gm Pack",
+        "remarks":  "250 gm"
+    },
+    {
+        "id":  "ITEM-051",
+        "name":  "Taj (Lakada / Cinnamon)",
+        "brand":  "Not Specified",
+        "categoryId":  "CAT-005",
+        "unit":  "g",
+        "currentStock":  490,
+        "minStockLimit":  100,
+        "upperLimit":  0,
+        "packSize":  "Pack",
+        "remarks":  "240 gm + 250 gm pack"
+    },
+    {
+        "id":  "ITEM-052",
+        "name":  "Tej Patta (Bay Leaves)",
+        "brand":  "Not Specified",
+        "categoryId":  "CAT-005",
+        "unit":  "g",
+        "currentStock":  50,
+        "minStockLimit":  20,
+        "upperLimit":  0,
+        "packSize":  "50 gm Pack",
+        "remarks":  "50 gm"
+    },
+    {
+        "id":  "ITEM-053",
+        "name":  "Ilaichi (Cardamom)",
+        "brand":  "Not Specified",
+        "categoryId":  "CAT-005",
+        "unit":  "g",
+        "currentStock":  240,
+        "minStockLimit":  50,
+        "upperLimit":  0,
+        "packSize":  "240 gm Pack",
+        "remarks":  "240 gm"
+    },
+    {
+        "id":  "ITEM-054",
+        "name":  "Sanchar (Black Salt)",
+        "brand":  "Not Specified",
+        "categoryId":  "CAT-005",
+        "unit":  "g",
+        "currentStock":  500,
+        "minStockLimit":  200,
+        "upperLimit":  0,
+        "packSize":  "500 gm Pack",
+        "remarks":  "500 gm"
+    },
+    {
+        "id":  "ITEM-055",
+        "name":  "Achar Masalo",
+        "brand":  "Ramadev",
+        "categoryId":  "CAT-005",
+        "unit":  "kg",
+        "currentStock":  2,
+        "minStockLimit":  1,
+        "upperLimit":  0,
+        "packSize":  "500 gm Pack",
+        "remarks":  "4 packets of 500 gm"
+    },
+    {
+        "id":  "ITEM-056",
+        "name":  "Kitchen King Masala",
+        "brand":  "Badashah",
+        "categoryId":  "CAT-005",
+        "unit":  "g",
+        "currentStock":  500,
+        "minStockLimit":  200,
+        "upperLimit":  0,
+        "packSize":  "500 gm Pack",
+        "remarks":  "1 packet of 500 gm"
+    },
+    {
+        "id":  "ITEM-057",
+        "name":  "Pav Bhaji No Masalo",
+        "brand":  "Badashah",
+        "categoryId":  "CAT-005",
+        "unit":  "g",
+        "currentStock":  400,
+        "minStockLimit":  200,
+        "upperLimit":  0,
+        "packSize":  "200 gm Pack",
+        "remarks":  "2 packets of 200 gm"
+    },
+    {
+        "id":  "ITEM-058",
+        "name":  "Panir Masala (Paneer Masalo)",
+        "brand":  "Badashah",
+        "categoryId":  "CAT-005",
+        "unit":  "g",
+        "currentStock":  400,
+        "minStockLimit":  100,
+        "upperLimit":  0,
+        "packSize":  "100 gm Pack",
+        "remarks":  "4 packets of 100 gm"
+    },
+    {
+        "id":  "ITEM-059",
+        "name":  "Chhole Masala",
+        "brand":  "Badashah",
+        "categoryId":  "CAT-005",
+        "unit":  "g",
+        "currentStock":  50,
+        "minStockLimit":  50,
+        "upperLimit":  0,
+        "packSize":  "50 gm Pack",
+        "remarks":  "1 packet of 50 gm"
+    },
+    {
+        "id":  "ITEM-060",
+        "name":  "Chat Masala",
+        "brand":  "Badashah",
+        "categoryId":  "CAT-005",
+        "unit":  "g",
+        "currentStock":  200,
+        "minStockLimit":  100,
+        "upperLimit":  0,
+        "packSize":  "100 gm Pack",
+        "remarks":  "2 packets of 100 gm"
+    },
+    {
+        "id":  "ITEM-061",
+        "name":  "Undhiya No Masalo",
+        "brand":  "Badashah",
+        "categoryId":  "CAT-005",
+        "unit":  "g",
+        "currentStock":  200,
+        "minStockLimit":  100,
+        "upperLimit":  0,
+        "packSize":  "100 gm Pack",
+        "remarks":  "2 packets of 100 gm"
+    },
+    {
+        "id":  "ITEM-062",
+        "name":  "Cooking Soda (Sajina Full)",
+        "brand":  "TATA",
+        "categoryId":  "CAT-005",
+        "unit":  "g",
+        "currentStock":  370,
+        "minStockLimit":  100,
+        "upperLimit":  0,
+        "packSize":  "Pack",
+        "remarks":  "170 gm + 2x100 gm (200gm)"
+    },
+    {
+        "id":  "ITEM-063",
+        "name":  "Limbu Na Ful (Citric Acid)",
+        "brand":  "Rajat",
+        "categoryId":  "CAT-005",
+        "unit":  "kg",
+        "currentStock":  1.5,
+        "minStockLimit":  0.5,
+        "upperLimit":  0,
+        "packSize":  "1 kg + 500 gm",
+        "remarks":  "1.5 kg (Rajat)"
+    },
+    {
+        "id":  "ITEM-064",
+        "name":  "Lashan (Garlic)",
+        "brand":  "Not Specified",
+        "categoryId":  "CAT-005",
+        "unit":  "kg",
+        "currentStock":  3,
+        "minStockLimit":  1,
+        "upperLimit":  0,
+        "packSize":  "Bulk",
+        "remarks":  "3 kg fresh garlic"
+    },
+    {
+        "id":  "ITEM-065",
+        "name":  "Cha (Tea - Orange)",
+        "brand":  "Wagh Bakri",
+        "categoryId":  "CAT-007",
+        "unit":  "kg",
+        "currentStock":  7,
+        "minStockLimit":  2,
+        "upperLimit":  0,
+        "packSize":  "1 kg Pack",
+        "remarks":  "7 packets of 1 kg (3 pkt + 4 pkt)"
+    },
+    {
+        "id":  "ITEM-066",
+        "name":  "Washing Powder (Nirama Powder)",
+        "brand":  "Nirama",
+        "categoryId":  "CAT-008",
+        "unit":  "kg",
+        "currentStock":  57,
+        "minStockLimit":  10,
+        "upperLimit":  0,
+        "packSize":  "1 kg / 8 kg Pack",
+        "remarks":  "9x1kg (9kg) + 6x8kg (48kg) = 57 kg"
+    },
+    {
+        "id":  "ITEM-067",
+        "name":  "Machis (Matchbox)",
+        "brand":  "Home Lites",
+        "categoryId":  "CAT-009",
+        "unit":  "Box",
+        "currentStock":  10,
+        "minStockLimit":  2,
+        "upperLimit":  0,
+        "packSize":  "10 Box",
+        "remarks":  "10 boxes"
+    },
+    {
+        "id":  "ITEM-068",
+        "name":  "Silvar Paper (Aluminium Foil)",
+        "brand":  "Not Specified",
+        "categoryId":  "CAT-009",
+        "unit":  "Packet",
+        "currentStock":  1,
+        "minStockLimit":  1,
+        "upperLimit":  0,
+        "packSize":  "1 Pack",
+        "remarks":  "1 pack roll"
+    }
+];
 
     // Clean zero vendors (ready for user to add vendors manually)
     const INITIAL_VENDORS = [];
@@ -313,11 +1130,11 @@
         });
       } catch(e) {}
 
-      const FORCE_VERSION = 'v8_clean_zero_data';
+      const FORCE_VERSION = 'v9_with_stock_items';
       if (localStorage.getItem(PREFIX + 'db_clean_version') !== FORCE_VERSION) {
         localStorage.setItem(PREFIX + 'users', JSON.stringify(INITIAL_USERS));
         localStorage.setItem(PREFIX + 'categories', JSON.stringify(INITIAL_CATEGORIES));
-        localStorage.setItem(PREFIX + 'items', '[]');
+        localStorage.setItem(PREFIX + 'items', JSON.stringify(ACTUAL_HOSTEL_ITEMS));
         localStorage.setItem(PREFIX + 'vendors', '[]');
         localStorage.setItem(PREFIX + 'requests', '[]');
         localStorage.setItem(PREFIX + 'purchases', '[]');
@@ -330,7 +1147,7 @@
         localStorage.setItem(PREFIX + 'activityLogs', '[]');
         localStorage.setItem(PREFIX + 'trash', '[]');
         localStorage.setItem(PREFIX + 'procurements', '[]');
-        localStorage.setItem(PREFIX + 'counters', JSON.stringify({ REQ: 0, PUR: 0, GRN: 0, STKOUT: 0, SS: 0, BILL: 0, PAY: 0, ITEM: 0, CAT: 9, VEN: 0, USR: 7, PROC: 0, QTE: 0, ACT: 0 }));
+        localStorage.setItem(PREFIX + 'counters', JSON.stringify({ REQ: 0, PUR: 0, GRN: 0, STKOUT: 0, SS: 0, BILL: 0, PAY: 0, ITEM: 68, CAT: 9, VEN: 0, USR: 7, PROC: 0, QTE: 0, ACT: 0 }));
         localStorage.setItem(PREFIX + 'db_clean_version', FORCE_VERSION);
       }
     }
