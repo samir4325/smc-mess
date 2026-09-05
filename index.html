@@ -2524,6 +2524,7 @@
     function VendorsView({ currentUser, onUpdate }) {
       const [vendors, setVendors] = useState(() => ls_get('vendors', []));
       const [modalVendor, setModalVendor] = useState(null);
+      const [deleteModalVendor, setDeleteModalVendor] = useState(null);
 
       const handleAddVendor = (e) => {
         e.preventDefault();
@@ -2532,15 +2533,32 @@
         const updated = [...vendors, newV];
         ls_set('vendors', updated);
         setVendors(updated);
+        logActivity('Added Vendor', 'VENDORS', `${newV.name} (${newV.id})`, `Added by ${currentUser?.name || 'User'}`);
         showToast(`Vendor ${newV.name} added!`, 'success');
         setModalVendor(null);
-        onUpdate();
+        if (onUpdate) onUpdate();
+      };
+
+      const confirmDeleteVendor = () => {
+        if (!deleteModalVendor) return;
+        const v = deleteModalVendor;
+        const updated = vendors.filter(x => x.id !== v.id);
+        ls_set('vendors', updated);
+        setVendors(updated);
+        moveToTrash('vendors', v, `${v.name} (${v.id})`, currentUser);
+        logActivity('Deleted Vendor', 'VENDORS', `${v.name} (${v.id})`, `Deleted by ${currentUser?.name || 'User'}`);
+        showToast(`Vendor ${v.name} deleted! (Moved to Trash)`, 'success');
+        setDeleteModalVendor(null);
+        if (onUpdate) onUpdate();
       };
 
       return (
         <div className="space-y-4">
           <div className="flex justify-between items-center">
-            <h3 className="font-bold text-slate-800 text-sm">Vendor & Supplier Directory</h3>
+            <div>
+              <h3 className="font-bold text-slate-800 text-sm">Vendor & Supplier Directory</h3>
+              <p className="text-xs text-slate-500">Manage registered suppliers and shop contacts ({vendors.length} vendors)</p>
+            </div>
             <button onClick={() => setModalVendor({ name: '', contactPerson: '', mobile: '', address: '', bankName: '', accountNumber: '', ifsc: '' })} className="btn-primary text-xs">+ Add Vendor</button>
           </div>
 
@@ -2554,19 +2572,38 @@
                   <th className="table-th">Mobile</th>
                   <th className="table-th">Bank Details</th>
                   <th className="table-th">Address</th>
+                  <th className="table-th text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {vendors.map(v => (
-                  <tr key={v.id} className="hover:bg-slate-50">
+                  <tr key={v.id} className="hover:bg-slate-50 transition-colors">
                     <td className="table-td font-mono font-bold">{v.id}</td>
                     <td className="table-td font-semibold text-slate-800">{v.name}</td>
                     <td className="table-td">{v.contactPerson}</td>
                     <td className="table-td font-mono">{v.mobile}</td>
                     <td className="table-td font-mono text-[11px]">{v.bankName} (A/C: {v.accountNumber || '—'})</td>
                     <td className="table-td text-slate-500 max-w-xs truncate">{v.address}</td>
+                    <td className="table-td text-right">
+                      <button 
+                        onClick={() => setDeleteModalVendor(v)} 
+                        className="px-2.5 py-1 text-xs font-semibold text-rose-600 bg-rose-50 hover:bg-rose-100 hover:text-rose-700 border border-rose-200 rounded-md transition-colors inline-flex items-center gap-1"
+                        title="Delete Vendor"
+                      >
+                        🗑️ Delete
+                      </button>
+                    </td>
                   </tr>
                 ))}
+                {vendors.length === 0 && (
+                  <tr>
+                    <td colSpan="7" className="text-center py-12 text-slate-400">
+                      <div className="text-3xl mb-2">🏪</div>
+                      <p className="font-semibold text-slate-700 text-sm">No vendors in directory</p>
+                      <p className="text-xs text-slate-400 mt-1">Vendor list is completely clean. Click "+ Add Vendor" to register a supplier.</p>
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
@@ -2612,6 +2649,36 @@
                   <button type="submit" className="btn-primary text-xs">Save Vendor</button>
                 </div>
               </form>
+            </div>
+          )}
+
+          {deleteModalVendor && (
+            <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
+              <div className="bg-white rounded-xl p-6 max-w-sm w-full space-y-4 shadow-2xl">
+                <div className="flex items-center gap-3 text-rose-600">
+                  <span className="text-2xl">⚠️</span>
+                  <h3 className="font-bold text-slate-800 text-sm">Delete Vendor?</h3>
+                </div>
+                <p className="text-xs text-slate-600">
+                  Are you sure you want to delete vendor <strong>{deleteModalVendor.name}</strong> ({deleteModalVendor.id})? This record will be safely moved to the Trash Bin.
+                </p>
+                <div className="flex justify-end gap-2 pt-2">
+                  <button 
+                    type="button" 
+                    onClick={() => setDeleteModalVendor(null)} 
+                    className="btn-secondary text-xs"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    type="button" 
+                    onClick={confirmDeleteVendor} 
+                    className="btn-danger text-xs"
+                  >
+                    Delete Vendor
+                  </button>
+                </div>
+              </div>
             </div>
           )}
         </div>
