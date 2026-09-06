@@ -3155,15 +3155,19 @@
                           </button>
                         </td>
                         <td className="table-td">
-                          <div className="space-y-1">
+                          <div className="inline-grid gap-x-3 gap-y-0.5 text-xs" style={{gridTemplateColumns: 'minmax(0,1fr) auto'}}>
                             {norm.map((it, idx) => (
-                              <div key={idx} className="flex items-center gap-2">
-                                <span className="font-semibold text-slate-800">• {it.itemName}:</span>
-                                <span className="font-bold text-primary-700">{it.requiredQty} {it.unit}</span>
-                                {it.packSize && it.packSize !== 'Not Specified' && (
-                                  <span className="text-slate-400 text-[10px]">({it.packSize})</span>
-                                )}
-                              </div>
+                              <React.Fragment key={idx}>
+                                <span className="font-medium text-slate-700 truncate">
+                                  <span className="text-slate-400 mr-1">•</span>{it.itemName}
+                                </span>
+                                <span className="font-bold text-primary-700 text-right whitespace-nowrap">
+                                  {it.requiredQty} {it.unit}
+                                  {it.packSize && it.packSize !== 'Not Specified' && (
+                                    <span className="text-slate-400 font-normal text-[10px] ml-1">({it.packSize})</span>
+                                  )}
+                                </span>
+                              </React.Fragment>
                             ))}
                           </div>
                         </td>
@@ -3360,20 +3364,26 @@
 
                   <p className="font-bold text-slate-700 pt-2">Requested Items Breakdown:</p>
                   <div className="border border-slate-200 rounded-lg overflow-hidden">
-                    <table className="min-w-full divide-y divide-slate-200">
+                    <table className="min-w-full divide-y divide-slate-200 text-xs">
                       <thead className="bg-slate-50">
                         <tr>
+                          <th className="table-th w-8 text-center">#</th>
                           <th className="table-th">Item Name</th>
-                          <th className="table-th">Quantity</th>
+                          <th className="table-th text-right">Qty</th>
                           <th className="table-th">Unit</th>
+                          <th className="table-th">Pack Size</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100">
                         {normalizeItems(viewingReq).map((it, idx) => (
-                          <tr key={idx}>
-                            <td className="table-td font-semibold">{it.itemName}</td>
-                            <td className="table-td font-bold text-primary-700">{it.requiredQty}</td>
-                            <td className="table-td">{it.unit}</td>
+                          <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/60'}>
+                            <td className="table-td text-center text-slate-400 font-medium">{idx + 1}</td>
+                            <td className="table-td font-semibold text-slate-800">{it.itemName}</td>
+                            <td className="table-td font-bold text-primary-700 text-right">{it.requiredQty}</td>
+                            <td className="table-td text-slate-600">{it.unit}</td>
+                            <td className="table-td text-slate-400 italic">
+                              {it.packSize && it.packSize !== 'Not Specified' ? it.packSize : '—'}
+                            </td>
                           </tr>
                         ))}
                       </tbody>
