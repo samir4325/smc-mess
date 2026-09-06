@@ -2161,7 +2161,7 @@
                           <button onClick={() => setEditItemModal(i)} className="text-primary-600 font-semibold hover:underline">
                             ✏️ Edit
                           </button>
-                          {role === 'admin' && (
+                          {(role === 'admin' || role === 'storage') && (
                             <button onClick={() => handleDeleteItem(i)} className="text-red-600 font-semibold hover:underline" title="Move to Trash Bin">
                               🗑️ Delete
                             </button>
