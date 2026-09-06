@@ -1,9 +1,10 @@
 import React from 'react'
-import { ClipboardList, ShoppingCart, Truck, AlertTriangle, CheckCircle, CreditCard, Receipt, Clock } from 'lucide-react'
+import { ClipboardList, ShoppingCart, Truck, AlertTriangle, CheckCircle, CreditCard, Receipt, Clock, FileText } from 'lucide-react'
 import { useData } from '../../contexts/DataContext'
 import { StatCard } from '../../components/shared/StatCard'
 import { StatusBadge } from '../../components/shared/StatusBadge'
 import { format } from 'date-fns'
+import { exportToPDF } from '../../utils/exportUtils'
 
 export function ProcurementDashboard() {
   const { getRequests, getPurchases, getBills, getPayments, getShortSupplies } = useData()
@@ -13,6 +14,19 @@ export function ProcurementDashboard() {
   const bills     = getBills()
   const payments  = getPayments()
   const ss        = getShortSupplies()
+
+  const handleExportRequestsPDF = () => {
+    if (!requests || requests.length === 0) return
+    const cols = [
+      { header: 'Request ID', accessor: 'id' },
+      { header: 'Item Name', accessor: 'itemName' },
+      { header: 'Quantity', render: r => `${r.requiredQty || ''} ${r.unit || ''}`.trim() },
+      { header: 'Priority', accessor: 'priority' },
+      { header: 'Status', accessor: 'status' },
+      { header: 'Date', render: r => r.requestDate || r.createdAt || '—' }
+    ]
+    exportToPDF(requests, cols, 'SMC_Storage_Requests_Report', 'SMC GEC Palanpur — Storage Requests Report')
+  }
 
   const newReqs    = requests.filter(r => r.status === 'pending').length
   const approved   = requests.filter(r => r.status === 'approved').length
@@ -44,7 +58,17 @@ export function ProcurementDashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="card p-5">
-          <h3 className="text-sm font-semibold text-gray-700 mb-4">Recent Storage Requests</h3>
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-sm font-semibold text-gray-700">Recent Storage Requests</h3>
+            <button
+              onClick={handleExportRequestsPDF}
+              className="inline-flex items-center gap-1 text-xs text-primary-600 hover:text-primary-800 font-medium bg-primary-50 hover:bg-primary-100 px-2.5 py-1 rounded transition-colors"
+              title="Export Storage Requests as PDF"
+            >
+              <FileText className="w-3.5 h-3.5" />
+              Export PDF
+            </button>
+          </div>
           <div className="divide-y divide-gray-50">
             {recentRequests.length === 0 ? <p className="text-sm text-gray-400">No requests yet.</p> :
               recentRequests.map(r => (

@@ -1311,7 +1311,24 @@
         headStyles: { fillColor: [37, 99, 235] },
         styles: { fontSize: 8 }
       });
-      doc.save(`${filename}_${new Date().toISOString().slice(0,10)}.pdf`);
+      const fullFileName = `${filename}_${new Date().toISOString().slice(0,10)}.pdf`;
+
+      // Check if running inside SMC Android App Native WebView
+      if (window.AndroidBridge && typeof window.AndroidBridge.saveBase64File === 'function') {
+        try {
+          const dataUri = doc.output('datauristring');
+          const b64 = dataUri.split(',')[1] || '';
+          if (b64) {
+            window.AndroidBridge.saveBase64File(b64, fullFileName, 'application/pdf');
+            showToast('PDF report downloaded to device!', 'success');
+            return;
+          }
+        } catch (err) {
+          console.warn('AndroidBridge PDF export fallback:', err);
+        }
+      }
+
+      doc.save(fullFileName);
       showToast('PDF report downloaded!', 'success');
     }
 
@@ -1905,6 +1922,27 @@
       const totalPaid = payments.reduce((s, p) => s + Number(p.amount || 0), 0);
       const totalPending = Math.max(0, totalBilled - totalPaid);
 
+      const handleExportRequestsPDF = () => {
+        if (!requests || requests.length === 0) {
+          showToast('No requests to export', 'warning');
+          return;
+        }
+        const headers = ['Request ID', 'Items (Quantity)', 'Priority', 'Status', 'Date', 'Requested By'];
+        const rows = requests.map(r => {
+          const norm = normalizeItems(r);
+          const itemsStr = norm.map(it => `${it.itemName}: ${it.requiredQty} ${it.unit}`).join('\n');
+          return [
+            r.id,
+            itemsStr,
+            r.priority || 'Normal',
+            (r.status || 'pending').toUpperCase(),
+            r.requestDate || r.date || '—',
+            r.requestedBy || 'Storage Committee'
+          ];
+        });
+        exportPDF(headers, rows, 'SMC GEC Palanpur — Storage Procurement Requests Report', 'SMC_Storage_Requests');
+      };
+
       return (
         <div className="space-y-6">
           <div className="bg-gradient-to-r from-primary-700 to-indigo-800 rounded-2xl p-6 text-white shadow-lg flex flex-wrap justify-between items-center gap-4">
@@ -1912,14 +1950,21 @@
               <h2 className="text-xl font-bold">Welcome, {currentUser.name}!</h2>
               <p className="text-primary-100 text-xs mt-1">Hostel Students Mess Committee · {role.toUpperCase()} Workspace</p>
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               {role === 'storage' && (
                 <>
                   <button onClick={() => setView('requests')} className="btn-primary bg-white text-primary-800 hover:bg-primary-50 text-xs font-semibold">+ New Grouped Request</button>
                   <button onClick={() => setView('grn')} className="btn-primary bg-white/20 text-white hover:bg-white/30 text-xs font-semibold">🚚 Create GRN</button>
                 </>
               )}
-              {role === 'procurement' && <button onClick={() => setView('bills')} className="btn-primary bg-white text-primary-800 hover:bg-primary-50 text-xs font-semibold">📁 Upload Bill File</button>}
+              {role === 'procurement' && (
+                <>
+                  <button onClick={handleExportRequestsPDF} className="btn-primary bg-white/20 text-white hover:bg-white/30 text-xs font-semibold flex items-center gap-1.5">
+                    📄 Export Requests PDF
+                  </button>
+                  <button onClick={() => setView('bills')} className="btn-primary bg-white text-primary-800 hover:bg-primary-50 text-xs font-semibold">📁 Upload Bill File</button>
+                </>
+              )}
               {role === 'account' && <button onClick={() => setView('bills')} className="btn-primary bg-white text-primary-800 hover:bg-primary-50 text-xs font-semibold">🛡️ Verify Bills & Print</button>}
               {role === 'admin' && <button onClick={() => setView('payments')} className="btn-primary bg-white text-primary-800 hover:bg-primary-50 text-xs font-semibold">💳 Disburse Payments</button>}
             </div>
@@ -3039,6 +3084,27 @@
         onUpdate();
       };
 
+      const handleExportRequestsPDF = () => {
+        if (!requests || requests.length === 0) {
+          showToast('No requests to export', 'warning');
+          return;
+        }
+        const headers = ['Request ID', 'Items (Quantity)', 'Priority', 'Status', 'Date', 'Requested By'];
+        const rows = requests.map(r => {
+          const norm = normalizeItems(r);
+          const itemsStr = norm.map(it => `${it.itemName}: ${it.requiredQty} ${it.unit}`).join('\n');
+          return [
+            r.id,
+            itemsStr,
+            r.priority || 'Normal',
+            (r.status || 'pending').toUpperCase(),
+            r.requestDate || r.date || '—',
+            r.requestedBy || 'Storage Committee'
+          ];
+        });
+        exportPDF(headers, rows, 'SMC GEC Palanpur — Storage Procurement Requests Report', 'SMC_Storage_Requests');
+      };
+
       return (
         <div className="space-y-4">
           <div className="flex justify-between items-center">
@@ -3046,9 +3112,14 @@
               <h3 className="font-bold text-slate-800 text-sm">Procurement Requests (Grouped Multi-Item)</h3>
               <p className="text-xs text-slate-500">Multiple items remain together under one Request ID.</p>
             </div>
-            {role === 'storage' && (
-              <button onClick={() => setIsCreating(true)} className="btn-primary text-xs">+ Create Grouped Request (Multi-Item)</button>
-            )}
+            <div className="flex items-center gap-2">
+              <button onClick={handleExportRequestsPDF} className="btn-secondary text-xs flex items-center gap-1.5 shadow-sm">
+                📄 Export PDF
+              </button>
+              {role === 'storage' && (
+                <button onClick={() => setIsCreating(true)} className="btn-primary text-xs">+ Create Grouped Request (Multi-Item)</button>
+              )}
+            </div>
           </div>
 
           <div className="card overflow-x-auto">

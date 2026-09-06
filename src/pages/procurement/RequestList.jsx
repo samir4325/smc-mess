@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import toast from 'react-hot-toast'
 import { format } from 'date-fns'
-import { Eye, ShoppingCart, Check, X } from 'lucide-react'
+import { Eye, ShoppingCart, Check, X, FileText } from 'lucide-react'
 import { useData } from '../../contexts/DataContext'
 import { useAuth } from '../../contexts/AuthContext'
 import { useNotifications } from '../../contexts/NotificationContext'
@@ -12,6 +12,7 @@ import { DataTable } from '../../components/shared/DataTable'
 import { StatusBadge } from '../../components/shared/StatusBadge'
 import { Modal } from '../../components/shared/Modal'
 import { ConfirmDialog } from '../../components/shared/ConfirmDialog'
+import { exportToPDF } from '../../utils/exportUtils'
 
 const purchaseSchema = z.object({
   vendorId:         z.string().min(1, 'Select a vendor'),
@@ -116,13 +117,37 @@ export function RequestList() {
     }
   ]
 
+  const handleExportPDF = () => {
+    if (!requests || requests.length === 0) {
+      toast.error('No requests to export')
+      return
+    }
+    const cols = [
+      { header: 'Request ID', accessor: 'id' },
+      { header: 'Item Name', accessor: 'itemName' },
+      { header: 'Category', accessor: 'categoryName' },
+      { header: 'Quantity', render: r => `${r.requiredQty} ${r.unit}` },
+      { header: 'Priority', accessor: 'priority' },
+      { header: 'Status', accessor: 'status' },
+      { header: 'Date', render: r => r.requestDate ? format(new Date(r.requestDate), 'dd MMM yyyy') : '—' }
+    ]
+    exportToPDF(requests, cols, 'SMC_Storage_Requests_Report', 'SMC GEC Palanpur — Storage Requests Report')
+  }
+
   return (
     <div className="space-y-5">
-      <div className="flex items-center gap-3">
+      <div className="flex items-center justify-between gap-3">
         <select value={statusFilter} onChange={e => setStatus(e.target.value)} className="form-select w-44">
           <option value="">All Statuses</option>
           {STATUSES.map(s => <option key={s} value={s}>{s.replace(/_/g,' ')}</option>)}
         </select>
+        <button
+          onClick={handleExportPDF}
+          className="btn-secondary text-xs flex items-center gap-1.5 shadow-sm"
+        >
+          <FileText className="w-3.5 h-3.5 text-primary-600" />
+          Export PDF
+        </button>
       </div>
       <DataTable columns={columns} data={requests} emptyMessage="No storage requests." />
 

@@ -247,15 +247,16 @@ public class MainActivity extends AppCompatActivity {
                     fos.flush();
                     fos.close();
 
-                    Toast.makeText(MainActivity.this, "Excel downloaded: " + file.getName(), Toast.LENGTH_LONG).show();
+                    String typeLabel = (mimeType != null && mimeType.contains("pdf")) ? "PDF" : "File";
+                    Toast.makeText(MainActivity.this, typeLabel + " downloaded: " + file.getName(), Toast.LENGTH_LONG).show();
 
-                    // Open file chooser or Excel viewer app
+                    // Open file chooser or viewer app
                     try {
                         Uri fileUri = FileProvider.getUriForFile(MainActivity.this, getPackageName() + ".fileprovider", file);
                         Intent openIntent = new Intent(Intent.ACTION_VIEW);
-                        openIntent.setDataAndType(fileUri, mimeType != null ? mimeType : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                        openIntent.setDataAndType(fileUri, mimeType != null ? mimeType : "*/*");
                         openIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        startActivity(Intent.createChooser(openIntent, "Open Excel with..."));
+                        startActivity(Intent.createChooser(openIntent, "Open " + typeLabel + " with..."));
                     } catch (Exception ignored) {}
 
                 } catch (Exception e) {
