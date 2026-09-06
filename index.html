@@ -1082,9 +1082,10 @@
     }
 
     // Helper: Normalize items list for multi-item support & backward compatibility
+    // Items are always returned sorted A-Z by name for consistent display
     function normalizeItems(entity) {
       if (entity && Array.isArray(entity.items) && entity.items.length > 0) {
-        return entity.items;
+        return [...entity.items].sort((a, b) => (a.itemName || '').localeCompare(b.itemName || ''));
       }
       if (entity && entity.itemName) {
         return [{
@@ -3013,7 +3014,7 @@
         const id = getNextId('REQ');
         const newReq = {
           id,
-          items: validRows,
+          items: validRows.sort((a, b) => a.itemName.localeCompare(b.itemName)),
           priority,
           reason,
           status: 'pending',
