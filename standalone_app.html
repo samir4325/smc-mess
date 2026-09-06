@@ -1130,7 +1130,7 @@
         });
       } catch(e) {}
 
-      const FORCE_VERSION = 'v9_with_stock_items';
+      const FORCE_VERSION = 'v10_clean_requests';
       if (localStorage.getItem(PREFIX + 'db_clean_version') !== FORCE_VERSION) {
         localStorage.setItem(PREFIX + 'users', JSON.stringify(INITIAL_USERS));
         localStorage.setItem(PREFIX + 'categories', JSON.stringify(INITIAL_CATEGORIES));
@@ -2907,6 +2907,22 @@
 
       // View Request Details modal
       const [viewingReq, setViewingReq] = useState(null);
+      const [deleteModalReq, setDeleteModalReq] = useState(null);
+
+      const confirmDeleteRequest = () => {
+        if (!deleteModalReq) return;
+        const r = deleteModalReq;
+        const norm = normalizeItems(r);
+        const itemSummary = norm.map(it => `${it.itemName} (${it.requiredQty} ${it.unit})`).join(', ');
+        const updated = requests.filter(x => x.id !== r.id);
+        ls_set('requests', updated);
+        setRequests(updated);
+        moveToTrash('requests', r, `Request: ${r.id} - ${itemSummary}`, currentUser);
+        logActivity('Deleted Request', 'STORAGE', `${r.id}`, `Items: ${itemSummary} (Deleted by ${currentUser?.name || 'User'})`);
+        showToast(`Request ${r.id} deleted! (Moved to Trash Bin)`, 'success');
+        setDeleteModalReq(null);
+        if (onUpdate) onUpdate();
+      };
 
       const handleAddReqRow = () => {
         setReqItems([...reqItems, { itemId: '', requiredQty: '', unit: 'kg' }]);
@@ -3049,7 +3065,13 @@
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {requests.length === 0 ? (
-                  <tr><td colSpan={6} className="text-center py-6 text-slate-400">No procurement requests yet.</td></tr>
+                  <tr>
+                    <td colSpan={6} className="text-center py-10 text-slate-400">
+                      <div className="text-3xl mb-2">ðŸ“‹</div>
+                      <p className="font-semibold text-slate-700 text-sm">No procurement requests</p>
+                      <p className="text-xs text-slate-400 mt-1">Request list is completely clean. Click "+ Create Grouped Request" to submit a requirement.</p>
+                    </td>
+                  </tr>
                 ) : (
                   requests.map(r => {
                     const norm = normalizeItems(r);
@@ -3086,6 +3108,13 @@
                                 🛒 Order Purchase
                               </button>
                             )}
+                            <button 
+                              onClick={() => setDeleteModalReq(r)} 
+                              className="px-2 py-1 text-xs font-semibold text-rose-600 bg-rose-50 hover:bg-rose-100 hover:text-rose-700 border border-rose-200 rounded-md transition-colors inline-flex items-center gap-1"
+                              title="Delete Request"
+                            >
+                              🗑️ Delete
+                            </button>
                             {r.purchaseId && <span className="font-mono text-slate-500 font-medium">Order: {r.purchaseId}</span>}
                           </div>
                         </td>
@@ -3282,6 +3311,45 @@
 
                 <div className="flex justify-end pt-2">
                   <button onClick={() => setViewingReq(null)} className="btn-secondary text-xs">Close</button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Delete Request Confirmation Modal */}
+          {deleteModalReq && (
+            <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
+              <div className="bg-white rounded-xl p-6 max-w-sm w-full space-y-4 shadow-2xl">
+                <div className="flex items-center gap-3 text-rose-600">
+                  <span className="text-2xl">âš ï¸</span>
+                  <h3 className="font-bold text-slate-900 text-sm">Delete Procurement Request?</h3>
+                </div>
+                <div className="bg-slate-50 rounded-lg p-3 border border-slate-200 text-xs space-y-1">
+                  <p className="font-bold font-mono text-primary-700">{deleteModalReq.id}</p>
+                  <p className="text-slate-600 font-medium">Requested By: {deleteModalReq.requestedBy}</p>
+                  <p className="text-slate-500">Date: {deleteModalReq.requestDate} | Priority: {deleteModalReq.priority}</p>
+                  <div className="pt-1 text-[11px] text-slate-700">
+                    <strong>Items:</strong> {normalizeItems(deleteModalReq).map(i => `${i.itemName} (${i.requiredQty} ${i.unit})`).join(', ')}
+                  </div>
+                </div>
+                <p className="text-xs text-slate-500">
+                  This request will be removed from the list and archived safely in the <strong>Trash Bin</strong> (Admin can restore it anytime).
+                </p>
+                <div className="flex justify-end gap-2 pt-2 border-t">
+                  <button 
+                    type="button" 
+                    onClick={() => setDeleteModalReq(null)} 
+                    className="btn-secondary text-xs"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    type="button" 
+                    onClick={confirmDeleteRequest} 
+                    className="btn-danger bg-rose-600 hover:bg-rose-700 text-xs px-3"
+                  >
+                    Confirm Delete
+                  </button>
                 </div>
               </div>
             </div>
