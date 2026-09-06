@@ -65,7 +65,10 @@
       padding-left: env(safe-area-inset-left);
       padding-right: env(safe-area-inset-right);
       -webkit-tap-highlight-color: transparent;
+      overscroll-behavior: none;
+      overscroll-behavior-y: none;
     }
+    html { overscroll-behavior: none; }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #f1f5f9; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
@@ -157,12 +160,6 @@
 
   <script type="text/babel">
     const { useState, useEffect, useMemo, useCallback } = React;
-
-    // --- SECURE SESSION CLEANUP (NEVER AUTO-LOGIN) ---
-    try {
-      localStorage.removeItem('smc_gec_live_v2_session');
-      localStorage.removeItem('session');
-    } catch(e) {}
 
     // --- FIREBASE REALTIME CLOUD DATABASE ---
     const HARDCODED_FIREBASE_URL = "https://smc-gecpl-default-rtdb.firebaseio.com";
@@ -1065,6 +1062,65 @@
       }
     }
 
+    // --- FIREBASE REAL-TIME NOTIFICATIONS ---
+    function sendNotification(toRole, message, type, icon) {
+      if (!firebaseDb || !toRole) return;
+      try {
+        const id = 'NOTIF-' + Date.now() + '-' + Math.random().toString(36).slice(2,6);
+        firebaseDb.ref(`smc_master_db/notifications/${toRole}/${id}`).set({
+          id, toRole, message, type: type || 'info', icon: icon || '🔔',
+          createdAt: new Date().toISOString(), isRead: false
+        });
+      } catch(e) {}
+    }
+
+    let _notifListenerRole = null;
+    let _notifStartTime = null;
+    function subscribeNotifications(role, onNew) {
+      if (!firebaseDb || !role || _notifListenerRole === role) return;
+      _notifListenerRole = role;
+      _notifStartTime = new Date().toISOString();
+      firebaseDb.ref(`smc_master_db/notifications/${role}`)
+        .orderByChild('createdAt').limitToLast(50)
+        .on('child_added', snap => {
+          const n = snap.val();
+          if (n && onNew) onNew(n);
+        });
+    }
+
+    function markNotifRead(role, id) {
+      if (!firebaseDb) return;
+      try { firebaseDb.ref(`smc_master_db/notifications/${role}/${id}/isRead`).set(true); } catch(e) {}
+    }
+
+    function markAllNotifsRead(role, ids) {
+      if (!firebaseDb) return;
+      try {
+        const updates = {};
+        (ids || []).forEach(id => { updates[`${id}/isRead`] = true; });
+        if (Object.keys(updates).length > 0)
+          firebaseDb.ref(`smc_master_db/notifications/${role}`).update(updates);
+      } catch(e) {}
+    }
+
+    // --- AUTO-REFRESH FROM FIREBASE (called on app reopen / visibility change) ---
+    window.smcRefreshFromCloud = function() {
+      if (!firebaseDb) return;
+      try {
+        firebaseDb.ref('smc_master_db').once('value', snap => {
+          const val = snap.val() || {};
+          const allKeys = ['users','categories','items','vendors','requests','purchases','grns','stockIns','stockOuts','shortSupplies','bills','payments','activityLogs','trash','counters','procurements','gdrive_script_url'];
+          const PREFIX2 = 'smc_v8_clean_';
+          allKeys.forEach(k => {
+            if (val[k] !== undefined && val[k] !== null) {
+              localStorage.setItem(PREFIX2 + k, JSON.stringify(val[k]));
+            }
+          });
+          window.dispatchEvent(new CustomEvent('smc_cloud_refreshed'));
+        });
+      } catch(e) {}
+    };
+
     const PREFIX = 'smc_v8_clean_';
     function ls_get(key, fallback = null) {
       try {
@@ -1104,19 +1160,19 @@
       return [];
     }
 
-    // Session-only storage: Destroyed automatically when browser tab is closed
+    // Persistent session: Stays logged in until user manually logs out
     function getSessionUser() {
       try {
-        const s = sessionStorage.getItem('smc_auth_session');
+        const s = localStorage.getItem('smc_auth_session');
         return s ? JSON.parse(s) : null;
       } catch { return null; }
     }
     function setSessionUser(u) {
       try {
         if (u) {
-          sessionStorage.setItem('smc_auth_session', JSON.stringify(u));
+          localStorage.setItem('smc_auth_session', JSON.stringify(u));
         } else {
-          sessionStorage.removeItem('smc_auth_session');
+          localStorage.removeItem('smc_auth_session');
         }
       } catch(e) {}
     }
@@ -1412,6 +1468,144 @@
       return <span className={`badge ${styles[status] || 'bg-gray-100 text-gray-700'}`}>{label}</span>;
     }
 
+    // --- NOTIFICATION BELL COMPONENT ---
+    function NotificationBell({ role, currentUser }) {
+      const [notifications, setNotifications] = useState([]);
+      const [isOpen, setIsOpen] = useState(false);
+      const dropdownRef = React.useRef(null);
+
+      useEffect(() => {
+        if (!role || !firebaseDb) return;
+        const ref = firebaseDb.ref(`smc_master_db/notifications/${role}`);
+        const handler = (snap) => {
+          const val = snap.val() || {};
+          const list = Object.values(val).sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+          setNotifications(list);
+        };
+        ref.on('value', handler);
+        return () => ref.off('value', handler);
+      }, [role]);
+
+      // Realtime popup toast for new incoming notifications
+      useEffect(() => {
+        if (!role) return;
+        subscribeNotifications(role, (n) => {
+          if (!n.isRead && _notifStartTime && new Date(n.createdAt) >= new Date(_notifStartTime)) {
+            showToast(`${n.icon || '🔔'} ${n.message}`, n.type || 'info');
+          }
+        });
+      }, [role]);
+
+      // Click outside listener
+      useEffect(() => {
+        const handleClickOutside = (e) => {
+          if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+            setIsOpen(false);
+          }
+        };
+        if (isOpen) document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+      }, [isOpen]);
+
+      const unreadCount = notifications.filter(n => !n.isRead).length;
+
+      const handleMarkAllRead = () => {
+        const unreadIds = notifications.filter(n => !n.isRead).map(n => n.id);
+        markAllNotifsRead(role, unreadIds);
+      };
+
+      const handleItemClick = (n) => {
+        if (!n.isRead) markNotifRead(role, n.id);
+      };
+
+      const formatTime = (ts) => {
+        if (!ts) return '';
+        const diffMs = Date.now() - new Date(ts).getTime();
+        const diffMins = Math.floor(diffMs / 60000);
+        if (diffMins < 1) return 'Just now';
+        if (diffMins < 60) return `${diffMins}m ago`;
+        const diffHours = Math.floor(diffMins / 60);
+        if (diffHours < 24) return `${diffHours}h ago`;
+        return new Date(ts).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
+      };
+
+      return (
+        <div className="relative" ref={dropdownRef}>
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="relative p-2 rounded-xl text-slate-600 hover:text-primary-700 hover:bg-slate-100 transition-colors focus:outline-none"
+            title="Notifications"
+          >
+            <span className="text-lg">🔔</span>
+            {unreadCount > 0 && (
+              <span className="absolute top-1 right-1 min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center animate-pulse shadow-sm">
+                {unreadCount > 99 ? '99+' : unreadCount}
+              </span>
+            )}
+          </button>
+
+          {isOpen && (
+            <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-slate-200 z-50 overflow-hidden flex flex-col max-h-[460px] animate-in fade-in duration-150">
+              <div className="px-4 py-3 bg-gradient-to-r from-primary-700 to-indigo-800 text-white flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-base">🔔</span>
+                  <span className="font-bold text-sm">Notifications</span>
+                  {unreadCount > 0 && (
+                    <span className="bg-white/20 text-white text-[11px] font-bold px-2 py-0.5 rounded-full">
+                      {unreadCount} new
+                    </span>
+                  )}
+                </div>
+                {unreadCount > 0 && (
+                  <button
+                    onClick={handleMarkAllRead}
+                    className="text-[11px] text-primary-100 hover:text-white underline font-medium"
+                  >
+                    Mark all read
+                  </button>
+                )}
+              </div>
+
+              <div className="overflow-y-auto divide-y divide-slate-100 flex-1">
+                {notifications.length === 0 ? (
+                  <div className="p-8 text-center text-slate-400">
+                    <span className="text-3xl block mb-2">🔕</span>
+                    <p className="text-xs font-semibold text-slate-600">No notifications yet</p>
+                    <p className="text-[11px] text-slate-400 mt-0.5">Team updates & alerts will appear here in real-time.</p>
+                  </div>
+                ) : (
+                  notifications.slice(0, 30).map((n) => (
+                    <div
+                      key={n.id}
+                      onClick={() => handleItemClick(n)}
+                      className={`p-3.5 flex items-start gap-3 cursor-pointer transition-colors ${
+                        !n.isRead ? 'bg-indigo-50/70 hover:bg-indigo-50' : 'bg-white hover:bg-slate-50'
+                      }`}
+                    >
+                      <span className="text-lg shrink-0 mt-0.5">{n.icon || '📌'}</span>
+                      <div className="flex-1 min-w-0">
+                        <p className={`text-xs leading-snug ${!n.isRead ? 'font-bold text-slate-900' : 'text-slate-700'}`}>
+                          {n.message}
+                        </p>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className="text-[10px] text-slate-400 font-medium">
+                            {formatTime(n.createdAt)}
+                          </span>
+                          {!n.isRead && (
+                            <span className="w-1.5 h-1.5 rounded-full bg-primary-600"></span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
     // --- MAIN APP COMPONENT ---
     function App() {
       const [currentUser, setCurrentUser] = useState(() => getSessionUser());
@@ -1423,6 +1617,22 @@
       const refresh = useCallback(() => setVersion(v => v + 1), []);
 
       useEffect(() => { initCloud(() => refresh()); }, [refresh]);
+
+      // Auto-refresh Firebase data when app comes back to foreground
+      useEffect(() => {
+        const handleVisibility = () => {
+          if (document.visibilityState === 'visible') {
+            window.smcRefreshFromCloud && window.smcRefreshFromCloud();
+          }
+        };
+        const handleCloudRefresh = () => refresh();
+        document.addEventListener('visibilitychange', handleVisibility);
+        window.addEventListener('smc_cloud_refreshed', handleCloudRefresh);
+        return () => {
+          document.removeEventListener('visibilitychange', handleVisibility);
+          window.removeEventListener('smc_cloud_refreshed', handleCloudRefresh);
+        };
+      }, [refresh]);
 
       const [committeeName, setCommitteeName] = useState('');
       const [enrollment, setEnrollment] = useState('');
@@ -1549,6 +1759,7 @@
                 </div>
               </div>
               <div className="flex items-center gap-2">
+                <NotificationBell role={role} currentUser={currentUser} />
                 <div className="text-right hidden sm:block mr-1">
                   <p className="text-xs font-bold text-slate-800 leading-none">{currentUser.name}</p>
                   <p className="text-[11px] text-slate-400 font-mono mt-0.5">ADMIN</p>
@@ -1671,6 +1882,7 @@
             </div>
 
             <div className="flex items-center gap-2">
+              <NotificationBell role={role} currentUser={currentUser} />
               <div className="text-right hidden sm:block mr-1">
                 <p className="text-xs font-bold text-slate-800 leading-none">{currentUser.name}</p>
                 <p className="text-[11px] text-slate-400 font-mono mt-0.5">{currentUser.enrollmentNumber || 'MEMBER'}</p>
@@ -2427,6 +2639,11 @@
         ls_set('grns', updatedGrns);
         setGrns(updatedGrns);
 
+        sendNotification('procurement', `🚚 GRN ${grnId} generated for Purchase Order ${selPur.id} by Storage (${totalShortQty > 0 ? 'Partial: ' + totalShortQty + ' qty short' : 'Fully Received'})`, 'success', '🚚');
+        if (totalShortQty > 0) {
+          sendNotification('admin', `⚠️ Short Supply reported on GRN ${grnId} (PO: ${selPur.id}) — Total shortage: ${totalShortQty}`, 'warning', '⚠️');
+        }
+
         showToast(`GRN ${grnId} generated with ${grnItems.length} items! Warehouse stock updated.`, 'success');
         setIsCreating(false);
         setSelectedPurId('');
@@ -2690,6 +2907,8 @@
             id,
             `Storage member ${currentUser.name} requested issue of ${issuedItemsList.map(i => `${i.itemName} (${i.qty} ${i.unit})`).join(', ')}. Reason: ${approvalRemark.trim()}`
           );
+
+          sendNotification('admin', `🛡️ Stock Out ${id} exceeds Upper Limit (${issuedItemsList.map(i => `${i.itemName}: ${i.qty} ${i.unit}`).join(', ')}) — Approval required`, 'warning', '🛡️');
 
           showToast(`⚠️ Stock Out ${id} exceeds Upper Limit and has been submitted to Admin for approval! (Stock will be deducted after Admin approves)`, 'warning');
         } else {
@@ -3026,6 +3245,9 @@
         const updated = [...requests, newReq];
         ls_set('requests', updated);
         setRequests(updated);
+
+        sendNotification('procurement', `📋 New Grouped Request ${id} from Storage (${validRows.length} items)`, 'info', '📋');
+
         showToast(`Grouped Request ${id} with ${validRows.length} items submitted to Procurement!`, 'success');
         setIsCreating(false);
         setReqItems([{ itemId: '', requiredQty: '', unit: 'kg' }]);
@@ -3079,6 +3301,8 @@
         const updatedReqs = requests.map(r => r.id === purchaseModalReq.id ? { ...r, status: 'ordered', purchaseId: purId } : r);
         ls_set('requests', updatedReqs);
         setRequests(updatedReqs);
+
+        sendNotification('storage', `🛒 Purchase Order ${purId} placed by Procurement for your Request ${purchaseModalReq.id} (Vendor: ${selVendor?.name || 'Assigned'})`, 'success', '🛒');
 
         showToast(`Purchase Order ${purId} placed with ${selVendor?.name} for all items!`, 'success');
         setPurchaseModalReq(null);
@@ -3797,6 +4021,9 @@
         ls_set('bills', updated);
         setBills(updated);
         logActivity('Uploaded Bill & Invoice', 'PROCUREMENT', `${id} (Inv: ${billNo})`, `Vendor: ${selVendor.name}, Amount: ₹${Number(billAmt).toLocaleString()}`);
+
+        sendNotification('account', `🧾 New Bill ${billNo || id} uploaded by Procurement (Vendor: ${selVendor.name}, ₹${Number(billAmt).toLocaleString()})`, 'info', '🧾');
+
         showToast(`Bill ${id} with vendor ${selVendor.name} uploaded!`, 'success');
         setIsUploading(false);
         setSelectedVendorId('');
@@ -3809,19 +4036,28 @@
 
       // Verification & Forwarding (Account Committee)
       const handleVerifyAndForward = (billId) => {
+        const selBill = bills.find(b => b.id === billId);
         const updated = bills.map(b => b.id === billId ? { ...b, verificationStatus: 'verified' } : b);
         ls_set('bills', updated);
         setBills(updated);
         logActivity('Verified & Forwarded Bill', 'ACCOUNT', billId, 'Account Committee verified bill and approved for Super Admin payment disbursement');
+
+        sendNotification('procurement', `✅ Bill ${selBill?.billNumber || billId} verified and approved for payment by Account Committee`, 'success', '✅');
+        sendNotification('admin', `🛡️ Bill ${selBill?.billNumber || billId} (₹${Number(selBill?.billAmount || 0).toLocaleString()}) verified by Account — Ready for Disbursal`, 'info', '💳');
+
         showToast(`Bill ${billId} Verified & Marked Approved for Payment!`, 'success');
         onUpdate();
       };
 
       const handleReject = (billId) => {
+        const selBill = bills.find(b => b.id === billId);
         const updated = bills.map(b => b.id === billId ? { ...b, verificationStatus: 'rejected' } : b);
         ls_set('bills', updated);
         setBills(updated);
         logActivity('Rejected Bill', 'ACCOUNT', billId, 'Account Committee rejected bill verification');
+
+        sendNotification('procurement', `❌ Bill ${selBill?.billNumber || billId} was REJECTED by Account Committee`, 'error', '❌');
+
         showToast(`Bill ${billId} was Marked Rejected.`, 'error');
         onUpdate();
       };
@@ -4269,6 +4505,9 @@
         const updatedBills = bills.map(b => b.id === payModalBill.id ? { ...b, paymentStatus: newStatus } : b);
         ls_set('bills', updatedBills);
         setBills(updatedBills);
+
+        sendNotification('procurement', `💳 Payment ${payId} of ₹${payNum.toLocaleString()} disbursed to ${payModalBill.vendorName} (Bill: ${payModalBill.billNumber || payModalBill.id})`, 'success', '💳');
+        sendNotification('account', `💳 Payment ${payId} recorded: ₹${payNum.toLocaleString()} to ${payModalBill.vendorName}`, 'info', '💳');
 
         showToast(`Payment ${payId} of ₹${payNum.toLocaleString()} processed!`, 'success');
         setPayModalBill(null);
@@ -4861,6 +5100,9 @@
         setStockOuts(updatedStockOuts);
 
         logActivity('Approved Stock Out (Exceeded Limit)', 'ADMIN', so.id, `Admin ${currentUser.name} approved issue of ${soItems.map(i => `${i.itemName} (${i.qty} ${i.unit})`).join(', ')}`);
+
+        sendNotification('storage', `✅ Stock Out ${so.id} approved by Admin! Materials have been issued from store.`, 'success', '✅');
+
         showToast(`Stock Out ${so.id} approved! Quantities deducted from store.`, 'success');
         onUpdate();
       };
@@ -4883,6 +5125,9 @@
         setStockOuts(updatedStockOuts);
 
         logActivity('Rejected Stock Out', 'ADMIN', rejectModal.id, `Admin ${currentUser.name} rejected Stock Out. Reason: ${rejectReason || 'No remark'}`);
+
+        sendNotification('storage', `❌ Stock Out ${rejectModal.id} was REJECTED by Admin. Remark: ${rejectReason || 'No remark'}`, 'error', '❌');
+
         showToast(`Stock Out ${rejectModal.id} was rejected.`, 'error');
         setRejectModal(null);
         setRejectReason('');

@@ -139,10 +139,12 @@ public class MainActivity extends AppCompatActivity {
         // DownloadListener for standard URLs and data URIs
         webView.setDownloadListener(new SMCDownloadListener());
 
-        // Scroll listener to disable pull-to-refresh while scrolled down & toggle Scroll-To-Top FAB
+        // Disable pull-to-refresh reload so scrolling up never reloads or resets form/scroll position
+        swipeRefreshLayout.setEnabled(false);
+
+        // Scroll listener to toggle Scroll-To-Top FAB
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             webView.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-                swipeRefreshLayout.setEnabled(scrollY == 0);
                 if (scrollY > 300) {
                     if (fabScrollTop != null && fabScrollTop.getVisibility() != View.VISIBLE) {
                         fabScrollTop.show();
@@ -153,6 +155,15 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Auto-refresh Firebase data when user opens app from background
+        if (webView != null) {
+            webView.evaluateJavascript("if (typeof window.smcRefreshFromCloud === 'function') { window.smcRefreshFromCloud(); }", null);
         }
     }
 
